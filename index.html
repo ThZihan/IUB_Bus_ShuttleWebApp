@@ -2,9 +2,152 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IUB Smart Shuttle</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><i class="fas fa-bus-alt"></i> IUB Smart Shuttle</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#achievements">Achievements</a></li>
+                <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="#overview">System Overview</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="hero-section d-flex align-items-center">
+    <div class="hero-image">
+        <img src="images/logobg.png" alt="Hero Image" class="img-fluid">
+    </div>
+    <div class="hero-content text-end">
+        <h1>Welcome to IUB Smart Shuttle</h1>
+        <p>Track Your Shuttle in Real-Time, Anytime, Anywhere</p>
+        <button class="btn btn-primary btn-lg me-2">Live Tracking</button>
+
+        <a href="#about" class="btn btn-outline-light btn-lg">Learn More</a>
+    </div>
+</header>
+
+<!-- About Section -->
+<section id="about" class="py-5">
+    <div class="container text-center">
+        <h2 class="section-title">About the Project</h2>
+        <p class="section-description">The IUB Smart Shuttle project aims to provide a seamless transportation experience for IUB students and staff, featuring real-time GPS tracking, booking, and notifications.</p>
+    </div>
+</section>
+
+<!-- Achievements Section -->
+<section id="achievements" class="bg-light py-5">
+    <div class="container text-center">
+        <h2 class="section-title">Achievements</h2>
+
+        <!-- First Achievement Card with Image -->
+        <div class="achievement-card">
+            <div class="achievement-image" style="background-image: url('images/achievement.jpeg');"></div>
+            <i class="fas fa-trophy achievement-icon trophy"></i>
+            <p class="achievement-text">Best Project Display <br> at IUB TechFest 2024: <br> System Analysis Category</p>
+        </div>
+
+        <!-- Second Achievement Card without Image -->
+        <div class="achievement-card">
+            <i class="fas fa-award achievement-icon award"></i>
+            <p class="achievement-text">Awarded Vice Chancellor's Startup Fund in 2024</p>
+        </div>
+
+    </div>
+</section>
+
+
+
+<!-- Team Section -->
+<section id="team" class="py-5">
+    <div class="container text-center">
+        <h2 class="section-title">Meet the Developer Team</h2>
+        <div class="row justify-content-center">
+            <!-- Member 1 -->
+            <div class="col-md-3 text-center">
+                <a href="https://thzihan.github.io/portfolio"><img src="images/devimg.jpeg" alt="Team Member" class="rounded-circle mb-3" width="200"></a>
+                <a href="http://www.facebook.com/tahfijulhassan.jehan"><h5>Tahfizul Hasan Zihan</h5></a>
+                <p>Strategic Team Lead - <a href="https://www.facebook.com/bongomarine1">IUB Bongomarine</a> </p>
+                <p>Electronics and Sensor Subsystem Head - <a href="https://www.facebook.com/iubfabsat">IUB Fabsat</a></p>
+                <p>System Engineer - <a href="https://thzihan.github.io/waterQualityMonitor_Dashboard">Recirculating Aquaculture Monitoring System</a> a collaborative project of SAU and IUB</p>
+            </div>
+<!--            &lt;!&ndash; Member 2 &ndash;&gt;-->
+<!--            <div class="col-md-3 text-center team-member">-->
+<!--                <img src="images/placeholder.jpg" alt="Team Member" class="rounded-circle mb-3 shadow" width="150">-->
+<!--                <h5>Member 2</h5>-->
+<!--                <p>Software Developer</p>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Member 3 &ndash;&gt;-->
+<!--            <div class="col-md-3 text-center team-member">-->
+<!--                <img src="images/placeholder.jpg" alt="Team Member" class="rounded-circle mb-3 shadow" width="150">-->
+<!--                <h5>Member 3</h5>-->
+<!--                <p>Hardware Specialist</p>-->
+<!--            </div>-->
+            <!--            <div class="col-md-3 text-center team-member">-->
+            <!--                <img src="images/placeholder.jpg" alt="Team Member" class="rounded-circle mb-3 shadow" width="150">-->
+            <!--                <h5>Member 4</h5>-->
+            <!--                <p>Hardware Specialist</p>-->
+            <!--            </div>-->
+
+        </div>
+    </div>
+</section>
+
+<!-- System Overview Section -->
+<section id="overview" class="bg-light py-5">
+    <div class="container text-center">
+        <h2 class="section-title">System Overview</h2>
+        <p>The IUB Smart Shuttle system uses advanced hardware and software to provide real-time shuttle tracking and user notifications. It includes GPS, WiFi modules, RFID sensors, and a central cloud platform for data analysis.</p>
+        <img src="images/overviewFigure.png" alt="System Diagram" class="img-fluid shadow-lg rounded mt-4">
+   <p>Developer Team followed an Agile-Waterfall hybrid or Iterative Waterfall method</p>
+        <img src="images/method.png" alt="System Diagram" class="img-fluid shadow-lg rounded mt-4">
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4">
+    <p>&copy; 2024 IUB Smart Shuttle. All rights reserved.</p>
+    <p><i class="fas fa-envelope"></i> contact@iubshuttle.com</p>
+</footer>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+    // Smooth Scroll for Navigation Links
+    $(document).ready(function(){
+        $('a.nav-link').on('click', function(event){
+            if (this.hash !== "") {
+                event.preventDefault();
+                var hash = this.hash;
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top
+                }, 800, function(){
+                    window.location.hash = hash;
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>
