@@ -17,7 +17,7 @@ body {
 .hero-section {
     background: linear-gradient(to bottom right,  #c7c7c7, #444);
     color: white;
-    height: 90vh;
+    height: 80vh;
     padding: 40px;
     display: flex;
     justify-content: space-between;
@@ -120,18 +120,52 @@ body {
 }
 
 
+/* Team Section Styling */
+#team {
+    background-color: #f9f9f9;
+}
+
 #team img {
-    border: 4px solid  #c7c7c7;
-    transition: transform 0.3s ease;
+    border: 4px solid #c7c7c7;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #team img:hover {
     transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.team-member {
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
 .team-member h5 {
     font-weight: 700;
     margin-top: 10px;
+}
+
+.team-member p {
+    font-size: 0.9rem;
+    color: #555;
 }
 
 footer {
