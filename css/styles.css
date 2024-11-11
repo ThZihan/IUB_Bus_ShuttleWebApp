@@ -17,7 +17,7 @@ body {
 .hero-section {
     background: linear-gradient(to bottom right,  #c7c7c7, #444);
     color: white;
-    height: 80vh;
+    height: 60vh;
     padding: 40px;
     display: flex;
     justify-content: space-between;
@@ -140,6 +140,7 @@ body {
 
 
 .team-member {
+    width: 40%;
     padding: 20px;
     background: #fff;
     border-radius: 10px;
