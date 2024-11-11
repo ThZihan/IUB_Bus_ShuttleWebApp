@@ -17,13 +17,18 @@ body {
 .hero-section {
     background: linear-gradient(to bottom right,  #c7c7c7, #444);
     color: white;
-    height: 80vh;
+    height: 60vh;
     padding: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+@media (max-width: 600px) {
+    .hero-section {
+        height: 40vh;
+    }
+}
 .hero-content h1 {
     font-size: 3rem;
     font-weight: 700;
