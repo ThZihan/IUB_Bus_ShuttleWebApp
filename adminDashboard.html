@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IUB Smart Shuttle - Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts (Reused) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons (Reused) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Existing Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- Admin Dashboard Specific CSS -->
+    <link rel="stylesheet" href="css/adminDashboard.css">
+</head>
+<body>
+
+<div id="home" class="dashboard-container">
+
+    <!-- Sidebar -->
+    <nav id="sidebar" class="active">
+        <div class="sidebar-header">
+            <i class="fas fa-bus-alt fa-2x"></i>
+            <span style="display: none; " id="iconText">IUB Smart Bus Shuttle</span>
+        </div>
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="#home">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#userManagement" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#shuttleManagement" class="nav-link">
+                    <i class="fas fa-bus"></i>
+                    <span>Shuttle Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#bookingManagement" class="nav-link">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Booking Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#manageSchedules">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Manage Schedules</span>
+                </a>
+            </li>
+            <li>
+                <a href="#manageFeedback">
+                    <i class="fas fa-comments"></i>
+                    <span>Manage Feedback</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#reports" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li>
+                <a href="#settings" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="d-flex align-items-center ms-auto">
+                    <!-- Clock -->
+                    <div class="clock me-3" id="realtime-clock"></div>
+                    <!-- Notifications -->
+                    <div class="dropdown notifications">
+                        <button class="btn position-relative" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                    </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New user registered</a></li>
+                            <li><a class="dropdown-item" href="#">Shuttle schedule updated</a></li>
+                            <li><a class="dropdown-item" href="#">System maintenance scheduled</a></li>
+                        </ul>
+                    </div>
+                    <!-- User Profile -->
+                    <div class="dropdown ms-3">
+                        <button class="btn d-flex align-items-center" type="button" data-bs-toggle="dropdown">
+                            <img src="images/devimg.jpeg" class="rounded-circle me-2" alt="Profile">
+                            <span>Hi, Zihan!</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#profile">Profile</a></li>
+                            <li><a class="dropdown-item" href="#settings">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Content -->
+        <div class="container-fluid dashboard-content">
+            <!-- Quick Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Total Users</h6>
+                            <h3 id="total-users">150</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Active Shuttles</h6>
+                            <h3 id="active-shuttles">8</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-bus"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Pending Bookings</h6>
+                            <h3 id="pending-bookings">25</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Reports Generated</h6>
+                            <h3 id="reports-generated">12</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <section id="userManagement" class="mb-5">
+                <h2 class="section-title">User Management</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Manage Users</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Designation</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>U001</td>
+                                <td>Dr Mahady Hasan</td>
+                                <td>mahady@iub.edu.bd</td>
+                                <td>Professor</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" title="Edit User"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-danger" title="Delete User"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+
+                            </tr>
+                            <tr>
+
+                                <td>U002</td>
+                                <td>Md Mahamudul Hasan</td>
+                                <td>mhpeyal@iub.edu.bd</td>
+                                <td>R&D officer</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" title="Edit User"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-danger" title="Delete User"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+
+                            <tr>
+
+                                <td>U003</td>
+                                <td>Istiaqe Hossain</td>
+                                <td>202212@iub.edu.bd</td>
+                                <td>Student</td>
+                                <td><span class="badge bg-warning">RFID Pending</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" title="Edit User"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-danger" title="Delete User"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <!-- Additional user rows can be dynamically generated here -->
+                            </tbody>
+                        </table>
+                        <button class="btn btn-success mt-3"><i class="fas fa-user-plus"></i> Add New User</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shuttle Management Section -->
+            <section id="shuttleManagement" class="mb-5">
+                <h2 class="section-title">Shuttle Management</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Manage Shuttles</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Shuttle ID</th>
+                                <th>Route</th>
+                                <th>Status</th>
+                                <th>Driver</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>S001</td>
+                                <td>IUB Campus - Airport</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>Mohammad Ali</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" title="Edit Shuttle"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-sm btn-danger" title="Delete Shuttle"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <!-- Additional shuttle rows can be dynamically generated here -->
+                            </tbody>
+                        </table>
+                        <button class="btn btn-success mt-3"><i class="fas fa-plus"></i> Add New Shuttle</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Booking Management Section -->
+            <section id="bookingManagement" class="mb-5">
+                <h2 class="section-title">Booking Management</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Manage Bookings</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>User</th>
+                                <th>Shuttle</th>
+                                <th>Seat Number</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>B001</td>
+                                <td>Dr Mahady Hasan</td>
+                                <td>S001</td>
+                                <td>12A</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" title="Approve Booking"><i class="fas fa-check"></i></button>
+                                    <button class="btn btn-sm btn-danger" title="Reject Booking"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+                            <!-- Additional booking rows can be dynamically generated here -->
+                            </tbody>
+                        </table>
+                        <button class="btn btn-primary mt-3"><i class="fas fa-filter"></i> Filter Bookings</button>
+                    </div>
+                </div>
+            </section>
+            <!-- Manage Schedules Section -->
+            <section id="manageSchedules" class="py-4">
+                <h2 class="section-title">Manage Schedules</h2>
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">Add New Schedule</button>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="bg-gradient-primary text-white">
+                        <tr>
+                            <th>Shuttle ID</th>
+                            <th>Route</th>
+                            <th>Departure Time</th>
+                            <th>Arrival Time</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>S001</td>
+                            <td>Airport Bus Stop → IUB Campus</td>
+                            <td>08:00 AM</td>
+                            <td>08:45 AM</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editScheduleModal">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Add Schedule Modal -->
+            <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="addScheduleModalLabel">Add Schedule</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="shuttleId" class="form-label">Shuttle ID</label>
+                                    <input type="text" class="form-control" id="shuttleId" placeholder="Enter Shuttle ID" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="route" class="form-label">Route</label>
+                                    <input type="text" class="form-control" id="route" placeholder="Enter Route" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="departureTime" class="form-label">Departure Time</label>
+                                    <input type="time" class="form-control" id="departureTime" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="arrivalTime" class="form-label">Arrival Time</label>
+                                    <input type="time" class="form-control" id="arrivalTime" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Add Schedule</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section id="manageFeedback" class="py-4">
+                <h2 class="section-title">Manage Feedback & Complaints</h2>
+
+                <!-- Feedback Table -->
+                <div class="table-responsive">
+                    <h5>All Feedback & Complaints</h5>
+                    <table class="table table-striped">
+                        <thead class="bg-gradient-primary text-white">
+                        <tr>
+                            <th>Date</th>
+                            <th>User ID</th>
+                            <th>Type</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>2024-11-14</td>
+                            <td>U001</td>
+                            <td>Complaint</td>
+                            <td>Shuttle S002 arrived late.</td>
+                            <td><span class="badge bg-warning">Pending</span></td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Resolve</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2024-11-10</td>
+                            <td>U002</td>
+                            <td>Feedback</td>
+                            <td>Excellent service on Shuttle S001!</td>
+                            <td><span class="badge bg-success">Resolved</span></td>
+                            <td>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="mb-5">
+                <h2 class="section-title">Reports</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Generate Reports</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card report-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">User Activity</h5>
+                                        <p class="card-text">View and analyze user engagement and activity within the shuttle system.</p>
+                                        <a href="userActivityReport.html" class="btn btn-outline-primary"><i class="fas fa-chart-pie"></i> View Report</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card report-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Shuttle Performance</h5>
+                                        <p class="card-text">Assess shuttle utilization, punctuality, and overall performance metrics.</p>
+                                        <a href="shuttlePerformance.html" class="btn btn-outline-primary"><i class="fas fa-chart-bar"></i> View Report</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Additional report cards can be added here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="mb-5">
+                <h2 class="section-title">Settings</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Admin Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="adminName" class="form-label">Admin Name</label>
+                                <input type="text" class="form-control" id="adminName" value="Admin Name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="adminEmail" class="form-label">Admin Email</label>
+                                <input type="email" class="form-control" id="adminEmail" value="admin@iub.edu.bd">
+                            </div>
+                            <div class="mb-3">
+                                <label for="adminPassword" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="adminPassword" value="********" readonly>
+                                    <button class="btn btn-outline-secondary" type="button" id="toggleAdminPassword">
+                                        <i class="far fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary">Update Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and jQuery (Reused) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Existing Scripts -->
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

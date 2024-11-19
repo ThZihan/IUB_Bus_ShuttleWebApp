@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Shuttle Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+<div id="home" class="dashboard-container">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="active">
+        <div class="sidebar-header">
+            <i class="fas fa-bus-alt fa-2x"></i>
+            <span style="display: none; " id="iconText">IUB Smart Bus Shuttle</span>
+        </div>
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="#home">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#scheduleBooking">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Schedule & Booking</span>
+                </a>
+            </li>
+            <li>
+                <a href="#feedbackComplaints">
+                    <i class="fas fa-comments"></i>
+                    <span>Feedback & Complaints</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="profile.html">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="#settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="d-flex align-items-center ms-auto">
+                    <!-- Clock -->
+                    <div class="clock me-3" id="realtime-clock"></div>
+                    <!-- Notifications -->
+                    <div class="dropdown notifications">
+                        <button class="btn position-relative" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                    </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Shuttle arriving in 5 minutes</a></li>
+                            <li><a class="dropdown-item" href="#">Booking confirmed</a></li>
+                            <li><a class="dropdown-item" href="#">Schedule updated</a></li>
+                        </ul>
+                    </div>
+                    <!-- User Profile -->
+                    <div class="dropdown ms-3">
+                        <button class="btn d-flex align-items-center" type="button" data-bs-toggle="dropdown">
+                            <img src="https://helo.health/images/specialist/mahady.jpg" class="rounded-circle me-2" alt="Profile">
+                            <span>Mahady Hasan</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a href="profile.html" class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+
+        <!-- Dashboard Content -->
+        <div class="container-fluid dashboard-content">
+            <!-- Quick Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Today's Rides</h6>
+                            <h3>2</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-bus-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Available Seats in Upcoming Trip</h6>
+                            <h3>15</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-chair"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Next Shuttle Arrival</h6>
+                            <h3 id="next-shuttle-time">08:30 AM</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Total Trips</h6>
+                            <h3>48</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Tracking Map -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Live Shuttle Tracking</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="google-map"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Upcoming Rides & Notifications -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Upcoming Rides</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="upcoming-ride">
+                                <div class="ride-info">
+                                    <div class="time">08:30 AM</div>
+                                    <div class="route">
+                                        <span>Airport Bus Stop</span>
+                                        <i class="fas fa-arrow-right"></i>
+                                        <span>IUB Campus</span>
+                                    </div>
+                                </div>
+                                <div class="ride-status">
+                                    <span class="badge bg-success">Confirmed</span>
+                                </div>
+                            </div>
+                            <div class="upcoming-ride">
+                                <div class="ride-info">
+                                    <div class="time">05:30 PM</div>
+                                    <div class="route">
+                                        <span>IUB Campus</span>
+                                        <i class="fas fa-arrow-right"></i>
+                                        <span>Uttara Housebuilding</span>
+                                    </div>
+                                </div>
+                                <div class="ride-status">
+                                    <span class="badge bg-warning">Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Recent Notifications</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>Your shuttle will arrive in 5 minutes</p>
+                                    <small>3 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>Booking confirmed for tomorrow</p>
+                                    <small>1 hour ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Schedule & Booking Section -->
+                <section id="scheduleBooking" class="py-4">
+                    <h2 class="section-title">Schedule & Booking</h2>
+                    <div class="table-responsive mb-4">
+                        <h5>Your Upcoming Rides</h5>
+                        <table class="table table-striped">
+                            <thead class="bg-gradient-primary text-white">
+                            <tr>
+                                <th>Shuttle ID</th>
+                                <th>Route</th>
+                                <th>Departure Time</th>
+                                <th>Arrival Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>S001</td>
+                                <td>Airport Bus Stop → IUB Campus</td>
+                                <td>08:00 AM</td>
+                                <td>08:45 AM</td>
+                                <td><span class="badge bg-success">Confirmed</span></td>
+                                <td><button class="btn btn-danger btn-sm">Cancel</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-responsive">
+                        <h5>Available Schedules</h5>
+                        <table class="table table-striped">
+                            <thead class="bg-gradient-primary text-white">
+                            <tr>
+                                <th>Shuttle ID</th>
+                                <th>Route</th>
+                                <th>Departure Time</th>
+                                <th>Arrival Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>S002</td>
+                                <td>Uttara Housebuilding → IUB Campus</td>
+                                <td>09:00 AM</td>
+                                <td>09:45 AM</td>
+                                <td><span class="badge bg-warning">Few Seats</span></td>
+                                <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Booking Modal -->
+                <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-gradient-primary text-white">
+                                <h5 class="modal-title" id="bookingModalLabel">Book Your Seat</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="userId" class="form-label">User ID</label>
+                                        <input type="text" class="form-control" id="userId" placeholder="Enter your User ID" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="shuttleId" class="form-label">Shuttle ID</label>
+                                        <input type="text" class="form-control" id="shuttleId" value="S002" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="seatNumber" class="form-label">Preferred Seat Number</label>
+                                        <input type="text" class="form-control" id="seatNumber" placeholder="Enter Seat Number" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section id="feedbackComplaints" class="py-4">
+                    <h2 class="section-title">Feedback & Complaints</h2>
+                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#feedbackModal">Submit Feedback</button>
+
+                    <!-- Submitted Feedback Table -->
+                    <div class="table-responsive">
+                        <h5>Your Submitted Feedback</h5>
+                        <table class="table table-striped">
+                            <thead class="bg-gradient-primary text-white">
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>2024-11-14</td>
+                                <td>Complaint</td>
+                                <td>Shuttle S002 arrived late.</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-11-10</td>
+                                <td>Feedback</td>
+                                <td>Excellent service on Shuttle S001!</td>
+                                <td><span class="badge bg-success">Resolved</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Feedback Modal -->
+                <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-gradient-primary text-white">
+                                <h5 class="modal-title" id="feedbackModalLabel">Submit Feedback or Complaint</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="feedbackType" class="form-label">Type</label>
+                                        <select id="feedbackType" class="form-select" required>
+                                            <option value="">Select...</option>
+                                            <option value="Feedback">Feedback</option>
+                                            <option value="Complaint">Complaint</option>
+                                            <option value="Suggestion">Suggestion</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="feedbackMessage" class="form-label">Message</label>
+                                        <textarea id="feedbackMessage" class="form-control" rows="4" placeholder="Write your message..." required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-NqajIvj_EVijypCm-4UVztEhWk135xI&callback=initMap"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

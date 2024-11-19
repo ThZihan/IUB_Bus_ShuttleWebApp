@@ -1,0 +1,26 @@
+.dashboard-content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.report-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s;
+}
+
+.report-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.report-card .card-title {
+    color: #2D3391; /* Primary color */
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}

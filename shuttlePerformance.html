@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shuttle Performance Report | IUB Smart Shuttle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html"><i class="fas fa-bus-alt"></i> IUB Smart Shuttle</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="adminDashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Shuttle Performance Report</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Shuttle Performance Report</h2>
+
+
+    <!-- Filter Section -->
+    <div class="mb-4">
+        <h5>Filter Reports</h5>
+        <form class="row g-3">
+            <div class="col-md-3">
+                <label for="shuttleId" class="form-label">Shuttle ID</label>
+                <input type="text" class="form-control" id="shuttleId" placeholder="Enter Shuttle ID">
+            </div>
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="startDate">
+            </div>
+            <div class="col-md-3">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="endDate">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="button" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Data Import/Export -->
+    <div class="mb-4 d-flex justify-content-between">
+        <button class="btn btn-secondary" id="importCsvBtn">Import CSV</button>
+        <button class="btn btn-success" id="exportCsvBtn">Export CSV</button>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <canvas id="punctualityChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="occupancyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Detailed Report Table -->
+    <div class="table-responsive">
+        <h5>Detailed Performance Report</h5>
+        <table class="table table-striped" id="performanceTable">
+            <thead class="bg-gradient-primary text-white">
+            <tr>
+                <th>
+                    Shuttle ID
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Unique identifier for each shuttle."></i>
+                </th>
+                <th>
+                    Total Trips
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Number of trips completed in the given period."></i>
+                </th>
+                <th>
+                    Punctuality Rate
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Percentage of trips adhering to the schedule (±5 minutes)."></i>
+                </th>
+                <th>
+                    Average Occupancy
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Average seat occupancy percentage across trips."></i>
+                </th>
+                <th>
+                    Maintenance Status
+                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="Current operational condition of the shuttle."></i>
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>S001</td>
+                <td>25</td>
+                <td>95%</td>
+                <td>80%</td>
+                <td><span class="badge bg-success">Operational</span></td>
+            </tr>
+            <tr>
+                <td>S002</td>
+                <td>30</td>
+                <td>90%</td>
+                <td>85%</td>
+                <td><span class="badge bg-warning">Scheduled Maintenance</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- About Metrics Section -->
+    <div class="accordion my-4" id="metricsAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingMetrics">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#metricsDetails" aria-expanded="true" aria-controls="metricsDetails">
+                    About Metrics
+                </button>
+            </h2>
+            <div id="metricsDetails" class="accordion-collapse collapse show" aria-labelledby="headingMetrics">
+                <div class="accordion-body">
+                    <ul>
+                        <li><strong>Punctuality Rate:</strong> Measures how often shuttles adhere to scheduled times (±5 minutes).</li>
+                        <div class="container my-5">
+                            <h2 class="text-center mb-4">Punctuality Rating System</h2>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped text-center">
+                                    <thead class="bg-gradient-primary text-white">
+                                    <tr>
+                                        <th>Punctuality Percentage</th>
+                                        <th>Rating</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>95% - 100%</td>
+                                        <td><span class="badge bg-success">Excellent</span></td>
+                                        <td>Consistently on time.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>85% - 94%</td>
+                                        <td><span class="badge bg-info">Good</span></td>
+                                        <td>Generally punctual with minor delays.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>70% - 84%</td>
+                                        <td><span class="badge bg-warning">Average</span></td>
+                                        <td>Frequent delays, improvement needed.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Below 70%</td>
+                                        <td><span class="badge bg-danger">Poor</span></td>
+                                        <td>Major punctuality issues.</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <li><strong>Total Trips:</strong> The total number of trips a shuttle has completed.</li>
+                        <li><strong>Average Occupancy:</strong> Average percentage of seats occupied during trips.</li>
+                        <li><strong>Maintenance Status:</strong>
+                            <ul>
+                                <li><strong>Operational:</strong> Shuttle is fully functional.</li>
+                                <li><strong>Scheduled Maintenance:</strong> Routine servicing scheduled but currently operational.</li>
+                                <li><strong>Under Maintenance:</strong> Shuttle is not operational due to repairs.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4">
+    <p>&copy; 2024 IUB Smart Shuttle. All rights reserved.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/shuttlePerformanceReport.js"></script>
+</body>
+</html>

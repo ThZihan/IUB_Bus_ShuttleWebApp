@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule & Booking | IUB Smart Shuttle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html"><i class="fas fa-bus-alt"></i> IUB Smart Shuttle</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Schedule & Booking</a></li>
+                <li class="nav-item"><a class="nav-link" href="live-tracking.html">Live Tracking</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Schedule Section -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Shuttle Schedule</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="bg-gradient-primary text-white">
+            <tr>
+                <th>Shuttle ID</th>
+                <th>Route</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Example Entry -->
+            <tr>
+                <td>S001</td>
+                <td>Airport Bus Stop → IUB Campus</td>
+                <td>08:00 AM</td>
+                <td>08:45 AM</td>
+                <td><span class="badge bg-success">Available</span></td>
+                <td><button class="btn btn-primary btn-sm book-btn" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button></td>
+            </tr>
+            <tr>
+                <td>S002</td>
+                <td>Uttara Housebuilding → IUB Campus</td>
+                <td>09:00 AM</td>
+                <td>09:45 AM</td>
+                <td><span class="badge bg-warning">Few Seats</span></td>
+                <td><button class="btn btn-primary btn-sm book-btn" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title" id="bookingModalLabel">Book Your Seat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="userId" class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="userId" placeholder="Enter your User ID" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="shuttleId" class="form-label">Shuttle ID</label>
+                        <input type="text" class="form-control" id="shuttleId" value="S001" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="seatNumber" class="form-label">Preferred Seat Number</label>
+                        <input type="text" class="form-control" id="seatNumber" placeholder="Enter Seat Number" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4">
+    <p>&copy; 2024 IUB Smart Shuttle. All rights reserved.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
