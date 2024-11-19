@@ -255,8 +255,12 @@ $(document).ready(function() {
     $('.btn-primary[data-bs-target="#editScheduleModal"]').on('click', function () {
         const shuttleId = $(this).data('id');
         const route = $(this).data('route');
-        const departureTime = $(this).data('departure');
-        const arrivalTime = $(this).data('arrival');
+        let departureTime = $(this).data('departure');
+        let arrivalTime = $(this).data('arrival');
+
+        // Convert times from "08:00 AM" format to "08:00" format for input[type="time"]
+        departureTime = convertToTimeInputFormat(departureTime);
+        arrivalTime = convertToTimeInputFormat(arrivalTime);
 
         // Populate modal fields
         $('#editSchedule_ShuttleIdInput').val(shuttleId);
@@ -264,7 +268,21 @@ $(document).ready(function() {
         $('#editDepartureTimeInput').val(departureTime);
         $('#editArrivalTimeInput').val(arrivalTime);
     });
-    
+
+// Helper function to convert "HH:mm AM/PM" to "HH:mm" (24-hour format)
+    function convertToTimeInputFormat(timeString) {
+        const [time, modifier] = timeString.split(' ');
+        let [hours, minutes] = time.split(':');
+        if (modifier === 'PM' && hours !== '12') {
+            hours = String(Number(hours) + 12);
+        }
+        if (modifier === 'AM' && hours === '12') {
+            hours = '00';
+        }
+        return `${hours.padStart(2, '0')}:${minutes}`;
+    }
+
+
 });
 function updateClock() {
     const options = { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
