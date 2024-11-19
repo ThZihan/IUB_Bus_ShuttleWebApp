@@ -66,6 +66,19 @@ $(document).ready(function() {
 
     // Initialize map placeholder
     $('#map').html('<i class="fas fa-map-marked-alt"></i> Interactive Map Coming Soon');
+
+    $('input[name="nfcOption"]').on('change', function () {
+        if ($('#scanNFC').is(':checked')) {
+            $('#nfcGif').show(); // Show the NFC GIF
+            $('#nfcCodeInput').hide(); // Hide the NFC code input
+        } else if ($('#enterNFCCode').is(':checked')) {
+            $('#nfcGif').hide(); // Hide the NFC GIF
+            $('#nfcCodeInput').show(); // Show the NFC code input
+        }
+    });
+
+    // Trigger change event on page load to set the initial state
+    $('input[name="nfcOption"]').trigger('change');
 });
 function updateClock() {
     const options = { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };

@@ -22,5 +22,6 @@ $(document).ready(function(){
         $(this).trigger("reset"); // Reset the form using jQuery
     });
    
+    
 
 });

@@ -46,6 +46,13 @@
                 </a>
             </li>
             <li>
+                <a href="#driverManagement" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Driver Management</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="#bookingManagement" class="nav-link">
                     <i class="fas fa-ticket-alt"></i>
                     <span>Booking Management</span>
@@ -202,7 +209,6 @@
                                     <button class="btn btn-sm btn-primary" title="Edit User"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-sm btn-danger" title="Delete User"><i class="fas fa-trash-alt"></i></button>
                                 </td>
-
                             </tr>
                             <tr>
 
@@ -229,15 +235,81 @@
                                     <button class="btn btn-sm btn-danger" title="Delete User"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
-                            <!-- Additional user rows can be dynamically generated here -->
+
                             </tbody>
                         </table>
-                        <button class="btn btn-success mt-3"><i class="fas fa-user-plus"></i> Add New User</button>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#registerUserModal"><i class="fas fa-user-plus"></i> Add New User</button>
                     </div>
                 </div>
             </section>
 
-            <!-- Shuttle Management Section -->
+            <!-- Register User Modal -->
+            <div id="registerUserModal" class="modal fade" tabindex="-1" aria-labelledby="registerUserModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="registerUserModalLabel">Create New User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="registration-form">
+                                <div class="form-group mb-3">
+                                    <label for="studentId" class="form-label">Student ID</label>
+                                    <input type="text" class="form-control" id="studentId" placeholder="Enter your student ID" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" placeholder="Enter full name" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="your.name@iub.edu.bd" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" placeholder="Create a strong password" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">NFC Registration Method</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="nfcOption" id="scanNFC">
+                                        <label class="form-check-label" for="scanNFC">
+                                            Scan NFC Card
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="nfcOption" id="enterNFCCode"  checked>
+                                        <label class="form-check-label" for="enterNFCCode">
+                                            Enter NFC Code Manually
+                                        </label>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <img src="images/place_nfc.gif" alt="Place NFC Card" id="nfcGif" class="img-fluid">
+                                    </div>
+                                    <div id="nfcCodeInput" class="mt-3" style="display: none;">
+                                        <label for="nfcCode" class="form-label">NFC Code</label>
+                                        <input type="text" class="form-control" id="nfcCode" placeholder="Enter NFC Code">
+                                    </div>
+                                </div>
+                                <div class="modal__footer mt-4">
+                                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                                    <button id="CreateAccountbtn" type="submit" class="btn btn-primary">Create Account</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <!-- Shuttle Management Section -->
             <section id="shuttleManagement" class="mb-5">
                 <h2 class="section-title">Shuttle Management</h2>
                 <div class="card">
@@ -266,13 +338,163 @@
                                     <button class="btn btn-sm btn-danger" title="Delete Shuttle"><i class="fas fa-trash-alt"></i></button>
                                 </td>
                             </tr>
-                            <!-- Additional shuttle rows can be dynamically generated here -->
                             </tbody>
                         </table>
-                        <button class="btn btn-success mt-3"><i class="fas fa-plus"></i> Add New Shuttle</button>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#placeNewShuttleModal"><i class="fas fa-plus"></i> Add New Shuttle</button>
+                    </div>
+                    <div id="placeNewShuttleModal" class="modal fade" tabindex="-1" aria-labelledby="placeNewShuttleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-gradient-primary text-white">
+                                    <h5 class="modal-title" id="placeNewShuttleModalLabel">Add New Shuttle</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="shuttleIdInput" class="form-label">Shuttle ID</label>
+                                            <input type="text" class="form-control" id="shuttleIdInput" placeholder="Enter Shuttle ID" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="routeInput" class="form-label">Route</label>
+                                            <input type="text" class="form-control" id="routeInput" placeholder="Enter Route" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="statusInput" class="form-label">Status</label>
+                                            <select class="form-control" id="statusInput" required>
+                                                <option value="">Select Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="driverInput" class="form-label">Driver Name</label>
+                                            <input type="text" class="form-control" id="driverInput" placeholder="Enter Driver Name" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Add Shuttle</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
+            <!-- Driver Management Section -->
+            <section id="driverManagement" class="mb-5">
+                <h2 class="section-title">Driver Management</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Manage Drivers</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Driver ID</th>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>D001</td>
+                                <td>Mohammad Ali</td>
+                                <td>+880123456789</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editDriverModal" title="Edit Driver">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" title="Delete Driver">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Additional driver rows can be dynamically generated here -->
+                            </tbody>
+                        </table>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#addDriverModal">
+                            <i class="fas fa-user-plus"></i> Add New Driver
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Driver Modal -->
+            <div class="modal fade" id="addDriverModal" tabindex="-1" aria-labelledby="addDriverModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="addDriverModalLabel">Add New Driver</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="driverIdInput" class="form-label">Driver ID</label>
+                                    <input type="text" class="form-control" id="driverIdInput" placeholder="Enter Driver ID" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverNameInput" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="driverNameInput" placeholder="Enter Driver Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverContactInput" class="form-label">Contact</label>
+                                    <input type="tel" class="form-control" id="driverContactInput" placeholder="Enter Contact Number" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverStatusInput" class="form-label">Status</label>
+                                    <select class="form-control" id="driverStatusInput" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Add Driver</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Driver Modal -->
+            <div class="modal fade" id="editDriverModal" tabindex="-1" aria-labelledby="editDriverModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="editDriverModalLabel">Edit Driver</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="editDriverIdInput" class="form-label">Driver ID</label>
+                                    <input type="text" class="form-control" id="editDriverIdInput" placeholder="Enter Driver ID" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverNameInput" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="editDriverNameInput" placeholder="Enter Driver Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverContactInput" class="form-label">Contact</label>
+                                    <input type="tel" class="form-control" id="editDriverContactInput" placeholder="Enter Contact Number" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverStatusInput" class="form-label">Status</label>
+                                    <select class="form-control" id="editDriverStatusInput" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Booking Management Section -->
             <section id="bookingManagement" class="mb-5">
@@ -305,41 +527,84 @@
                                     <button class="btn btn-sm btn-danger" title="Reject Booking"><i class="fas fa-times"></i></button>
                                 </td>
                             </tr>
-                            <!-- Additional booking rows can be dynamically generated here -->
+
                             </tbody>
                         </table>
-                        <button class="btn btn-primary mt-3"><i class="fas fa-filter"></i> Filter Bookings</button>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#placeNewBookingModal"><i class="fas fa-plus"></i> Place a New Booking</button>
+                    </div>
+                    <div id="placeNewBookingModal" class="modal fade" tabindex="-1" aria-labelledby="placeNewBookingModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-gradient-primary text-white">
+                                    <h5 class="modal-title" id="placeNewBookingModalLabel">Place New Booking</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="bookingIdInput" class="form-label">Booking ID</label>
+                                            <input type="text" class="form-control" id="bookingIdInput" placeholder="Enter Booking ID" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="userIdInput" class="form-label">User</label>
+                                            <input type="text" class="form-control" id="userIdInput" placeholder="Enter User ID or Name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="shuttleIdBookingInput" class="form-label">Shuttle ID</label>
+                                            <input type="text" class="form-control" id="shuttleIdBookingInput" placeholder="Enter Shuttle ID" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="seatNumberInput" class="form-label">Seat Number</label>
+                                            <input type="text" class="form-control" id="seatNumberInput" placeholder="Enter Seat Number" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Place Booking</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
             <!-- Manage Schedules Section -->
-            <section id="manageSchedules" class="py-4">
+            <section id="manageSchedules" class="mb-5">
                 <h2 class="section-title">Manage Schedules</h2>
-                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addScheduleModal">Add New Schedule</button>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead class="bg-gradient-primary text-white">
-                        <tr>
-                            <th>Shuttle ID</th>
-                            <th>Route</th>
-                            <th>Departure Time</th>
-                            <th>Arrival Time</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>S001</td>
-                            <td>Airport Bus Stop → IUB Campus</td>
-                            <td>08:00 AM</td>
-                            <td>08:45 AM</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editScheduleModal">Edit</button>
-                                <button class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Shuttle Schedules</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Shuttle ID</th>
+                                <th>Route</th>
+                                <th>Departure Time</th>
+                                <th>Arrival Time</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>S001</td>
+                                <td>Airport Bus Stop → IUB Campus</td>
+                                <td>08:00 AM</td>
+                                <td>08:45 AM</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editScheduleModal" title="Edit Schedule">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" title="Delete Schedule">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Additional schedule rows can be dynamically generated here -->
+                            </tbody>
+                        </table>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                            <i class="fas fa-plus"></i> Add New Schedule
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -354,20 +619,20 @@
                         <div class="modal-body">
                             <form>
                                 <div class="mb-3">
-                                    <label for="shuttleId" class="form-label">Shuttle ID</label>
-                                    <input type="text" class="form-control" id="shuttleId" placeholder="Enter Shuttle ID" required>
+                                    <label for="shuttleIdInputSchedule" class="form-label">Shuttle ID</label>
+                                    <input type="text" class="form-control" id="shuttleIdInputSchedule" placeholder="Enter Shuttle ID" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="route" class="form-label">Route</label>
-                                    <input type="text" class="form-control" id="route" placeholder="Enter Route" required>
+                                    <label for="routeInputSchedule" class="form-label">Route</label>
+                                    <input type="text" class="form-control" id="routeInputSchedule" placeholder="Enter Route" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="departureTime" class="form-label">Departure Time</label>
-                                    <input type="time" class="form-control" id="departureTime" required>
+                                    <label for="departureTimeInput" class="form-label">Departure Time</label>
+                                    <input type="time" class="form-control" id="departureTimeInput" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="arrivalTime" class="form-label">Arrival Time</label>
-                                    <input type="time" class="form-control" id="arrivalTime" required>
+                                    <label for="arrivalTimeInput" class="form-label">Arrival Time</label>
+                                    <input type="time" class="form-control" id="arrivalTimeInput" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Add Schedule</button>
                             </form>
@@ -375,12 +640,49 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Edit Schedule Modal -->
+            <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="editScheduleModalLabel">Edit Schedule</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="editShuttleIdInput" class="form-label">Shuttle ID</label>
+                                    <input type="text" class="form-control" id="editShuttleIdInput" placeholder="Enter Shuttle ID" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editRouteInput" class="form-label">Route</label>
+                                    <input type="text" class="form-control" id="editRouteInput" placeholder="Enter Route" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDepartureTimeInput" class="form-label">Departure Time</label>
+                                    <input type="time" class="form-control" id="editDepartureTimeInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editArrivalTimeInput" class="form-label">Arrival Time</label>
+                                    <input type="time" class="form-control" id="editArrivalTimeInput" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <section id="manageFeedback" class="py-4">
                 <h2 class="section-title">Manage Feedback & Complaints</h2>
 
                 <!-- Feedback Table -->
                 <div class="table-responsive">
-                    <h5>All Feedback & Complaints</h5>
+
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">All Feedback & Complaints</h5>
+                    </div>
                     <table class="table table-striped">
                         <thead class="bg-gradient-primary text-white">
                         <tr>

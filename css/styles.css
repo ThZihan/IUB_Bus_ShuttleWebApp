@@ -46,13 +46,13 @@ a{
 
 /* Button Styles */
 .btn-outline-light:hover {
-    background-color: #f7941d;
+    background-color: #f7711d;
     border-color: #f7941d;
     color: #fff;
 }
 
 .orangebtn {
-    background-color: #f7941d;
+    background-color: #f7711d;
     border: 1px solid #f7941d;
     color: #fff;
     transition: all 0.3s ease;
@@ -63,7 +63,8 @@ a{
     border-color: #812990;
     color: #fff;
 }
-.modal {
+/* Rename custom modal styles to avoid conflicts */
+.custom-modal {
     visibility: hidden;
     opacity: 0;
     position: fixed;
@@ -78,13 +79,16 @@ a{
     transition: all 0.4s ease;
     z-index: 9999;
 }
-.loginModal {
-    background: rgba(45, 51, 145, 0.8);
-}
-.modal:target {
+
+.custom-modal:target {
     visibility: visible;
     opacity: 1;
 }
+
+.loginModal {
+    background: rgba(45, 51, 145, 0.8);
+}
+
 
 .modal__content {
     text-align: left;
