@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Shuttle Dashboard - Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Navbar -->
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top">
+        <div class="container-fluid  container-width90">
+            <a class="navbar-brand" href="index.html"><i class="fas fa-bus-alt"></i> IUB Smart Shuttle</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="userDashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Settings</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Settings Content -->
+    <div class="content-section">
+        <h2 class="centered-section-title">Settings</h2>
+        <div class="grid-container">
+            <!-- Notifications -->
+            <div class="contact-card card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Push Notifications</h5>
+                </div>
+                <div class="card-body">
+                    <label for="notificationsToggle" class="form-label">Enable Notifications</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="notificationsToggle" checked>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Units of Measurement -->
+            <div class="contact-card card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Units of Measurement</h5>
+                </div>
+                <div class="card-body">
+                    <select class="form-select" id="unitsSelect">
+                        <option value="metric" selected>Metric (Kilometers)</option>
+                        <option value="imperial">Imperial (Miles)</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Location Sharing -->
+            <div class="contact-card card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Location Sharing</h5>
+                </div>
+                <div class="card-body">
+                    <label for="locationToggle" class="form-label">Enable Location Sharing</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="locationToggle">
+                    </div>
+                </div>
+            </div>
+            <!-- Account Management -->
+            <div class="contact-card card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Account Management</h5>
+                </div>
+                <div class="card-body">
+                    <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#passwordResetModal">Reset Password</button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Delete Account</button>
+                </div>
+            </div>
+
+            <!-- Default Stops -->
+            <div class="contact-card card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Default Stops</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="pickupStop" class="form-label">Pickup Stop</label>
+                            <input type="text" class="form-control" id="pickupStop" placeholder="Enter Pickup Stop">
+                        </div>
+                        <div class="mb-3">
+                            <label for="dropOffStop" class="form-label">Drop-Off Stop</label>
+                            <input type="text" class="form-control" id="dropOffStop" placeholder="Enter Drop-Off Stop">
+                        </div>
+                        <button type="submit" class="btn orangebtn">Save Stops</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Offline Mode -->
+            <div class="contact-card card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Offline Mode</h5>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-secondary">Download Data Package</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Password Reset Modal -->
+<div class="modal fade" id="passwordResetModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Reset Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account? This action is irreversible.</p>
+                <button type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

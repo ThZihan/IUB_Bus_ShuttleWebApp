@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Shuttle Dashboard - Profile</title>
+    <title>Smart Shuttle - My Profile</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for Icons -->
@@ -15,7 +15,7 @@
 <div class="dashboard-container">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top">
-        <div class="container-fluid  container-width90">
+        <div class="container-fluid container-width90">
             <a class="navbar-brand" href="index.html"><i class="fas fa-bus-alt"></i> IUB Smart Shuttle</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -31,77 +31,173 @@
     </nav>
 
     <!-- Profile Content -->
-    <div class="content-section">
-        <h2 class="centered-section-title">My Profile</h2>
-        <div class="grid-container">
-            <!-- Profile Information -->
-            <div class="contact-card card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Profile Information</h5>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="fullName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="fullName" value="Mahady Hasan" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label for="userId" class="form-label">User ID</label>
-                            <input type="text" class="form-control" id="userId" value="4432" disabled>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">IUB Email</label>
-                            <input type="email" class="form-control" id="email" value="mahady@iub.edu.bd">
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone" value="+8801779673292">
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <textarea class="form-control" id="address" rows="3">FabLab IUB, Aftabuddin Road, Bashundhara R/A, Dhaka, Bangladesh</textarea>
-                        </div>
-                        <button id="editProfileBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                            <i class="fas fa-edit me-2"></i> Edit Profile
-                        </button>
-                    </form>
+    <div class="container mt-4">
+        <h2 class="centered-section-title text-center mb-4">My Profile</h2>
+
+        <!-- Profile Details Card -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-gradient-primary text-white">
+                <h5 class="card-title mb-0">Personal Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Full Name:</strong> <span id="displayFullName">Mahady Hasan</span></p>
+                <p><strong>Email:</strong> <span id="displayEmail">mahady@iub.edu.bd</span></p>
+                <p><strong>Phone:</strong> <span id="displayPhone">+8801779673292</span></p>
+                <p><strong>Designation:</strong> <span id="displayDesignation">Student</span></p>
+                <p><strong>Gender:</strong> <span id="displayGender">Male</span></p>
+                <p><strong>Address:</strong> <span id="displayAddress">FabLab IUB, Aftabuddin Road, Bashundhara R/A, Dhaka</span></p>
+                <div class="text-end">
+                    <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        <i class="fas fa-edit me-2"></i> Edit Profile
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Change Password -->
-            <div class="contact-card card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Change Password</h5>
-                </div>
-                <div class="card-body">
-                    <form id="passwordForm">
-                        <div class="mb-3">
-                            <label for="currentPassword" class="form-label">Current Password</label>
-                            <input type="password" class="form-control" id="currentPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label">New Password</label>
-                            <input type="password" class="form-control" id="newPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" required>
-                        </div>
-                        <button type="submit" class="btn btn-success"><i class="fas fa-key me-2"></i> Change Password</button>
-                    </form>
+        <!-- Commute History Section -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-gradient-primary text-white">
+                <h5 class="card-title mb-0">Commute History</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Pickup Stop</th>
+                        <th>Pickup Time</th>
+                        <th>Drop-Off Stop</th>
+                        <th>Drop-Off Time</th>
+                        <th>Duration</th>
+                        <th>Internet Usage</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>2024-11-19</td>
+                        <td>IUB Campus</td>
+                        <td>08:00 AM</td>
+                        <td>Airport</td>
+                        <td>08:45 AM</td>
+                        <td>45 mins</td>
+                        <td>15 MB</td>
+                    </tr>
+                    <tr>
+                        <td>2024-11-18</td>
+                        <td>Airport</td>
+                        <td>10:00 AM</td>
+                        <td>IUB Campus</td>
+                        <td>10:50 AM</td>
+                        <td>50 mins</td>
+                        <td>18 MB</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="text-end">
+                    <button class="btn btn-danger mt-3">
+                        <i class="fas fa-trash me-2"></i> Clear History
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-primary text-white">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editFullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="editFullName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="editPhone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDesignation" class="form-label">Designation</label>
+                            <input type="text" class="form-control" id="editDesignation">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGender" class="form-label">Gender</label>
+                            <select class="form-select" id="editGender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="editAddress" rows="2"></textarea>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+        <p>&copy; 2024 IUB Smart Shuttle. All rights reserved.</p>
 
+    </div>
+</footer>
 <!-- Bootstrap JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Custom JS -->
-<script src="js/dashboard.js"></script>
-<script src="js/main.js"></script>
+<script>
+    // Pre-fill modal with existing profile data
+    $('#editProfileModal').on('show.bs.modal', function () {
+        const modal = $(this);
+
+        // Retrieve current profile values
+        const fullName = $('#displayFullName').text().trim();
+        const email = $('#displayEmail').text().trim();
+        const phone = $('#displayPhone').text().trim();
+        const designation = $('#displayDesignation').text().trim();
+        const gender = $('#displayGender').text().trim();
+        const address = $('#displayAddress').text().trim();
+
+        // Pre-fill modal fields
+        modal.find('#editFullName').val(fullName);
+        modal.find('#editEmail').val(email);
+        modal.find('#editPhone').val(phone);
+        modal.find('#editDesignation').val(designation);
+        modal.find('#editGender').val(gender);
+        modal.find('#editAddress').val(address);
+    });
+
+    // Handle form submission (example: save changes and update displayed data)
+    $('#editProfileForm').on('submit', function (event) {
+        event.preventDefault();
+
+        // Update display values with new inputs
+        $('#displayFullName').text($('#editFullName').val().trim());
+        $('#displayEmail').text($('#editEmail').val().trim());
+        $('#displayPhone').text($('#editPhone').val().trim());
+        $('#displayDesignation').text($('#editDesignation').val().trim());
+        $('#displayGender').text($('#editGender').val());
+        $('#displayAddress').text($('#editAddress').val().trim());
+
+        // Close the modal
+        $('#editProfileModal').modal('hide');
+    });
+</script>
 </body>
 </html>

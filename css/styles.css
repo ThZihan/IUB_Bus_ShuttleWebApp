@@ -429,3 +429,8 @@ footer {
     max-width: 500px;
     border: none;
 }
+
+.form-switch .form-check-input {
+    width: 100px;
+    height: 40px;
+}
