@@ -107,18 +107,19 @@
                             <h3>2</h3>
                         </div>
                         <div class="stat-card-icon">
-                            <i class="fas fa-bus-alt"></i>
+                            <i class="fas fa-bus"></i>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-3">
                     <div class="stat-card">
                         <div class="stat-card-info">
-                            <h6>Available Seats in Upcoming Trip</h6>
-                            <h3>15</h3>
+                            <h6>Your shuttle ETA:</h6>
+                            <h3 id="estimatedTime"></h3>
                         </div>
                         <div class="stat-card-icon">
-                            <i class="fas fa-chair"></i>
+                            <i class="fas fa-hourglass-half"></i>
                         </div>
                     </div>
                 </div>
@@ -136,7 +137,7 @@
                 <div class="col-md-3">
                     <div class="stat-card">
                         <div class="stat-card-info">
-                            <h6>Total Trips</h6>
+                            <h6>Your Total Trips</h6>
                             <h3>48</h3>
                         </div>
                         <div class="stat-card-icon">
@@ -166,7 +167,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Upcoming Rides</h5>
+                            <h5 class="card-title mb-0">Your Upcoming Rides</h5>
                         </div>
                         <div class="card-body">
                             <div class="upcoming-ride">
@@ -299,7 +300,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="shuttleId" class="form-label">Shuttle ID</label>
-                                        <input type="text" class="form-control" id="shuttleId" value="S002" readonly>
+                                        <input type="text" class="form-control" id="shuttleId" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="seatNumber" class="form-label">Preferred Seat Number</label>
@@ -378,6 +379,37 @@
 
 
             </div>
+            <!-- Settings Section -->
+            <section id="settings" class="mb-5">
+                <h2 class="section-title">Settings</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">User Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="UserName" class="form-label">User Name</label>
+                                <input type="text" class="form-control" id="userName" value="User Name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="UserEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="userEmail" value="mahady@iub.edu.bd">
+                            </div>
+                            <div class="mb-3">
+                                <label for="UserPassword" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="userPassword" value="********" readonly>
+                                    <button class="btn btn-outline-secondary" type="button" id="toggleUserPassword">
+                                        <i class="far fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary">Update Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 </div>

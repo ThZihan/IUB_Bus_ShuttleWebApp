@@ -113,6 +113,7 @@ body {
     align-items: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s;
+    border: 1px solid #e3e3e3;
 }
 
 .stat-card:hover {
@@ -251,8 +252,15 @@ body {
 }
 /* Responsive Design */
 @media (max-width: 768px) {
+    #sidebarCollapse {
+        display: none;
+    }
+    .stat-card, .navbar {
+        width: 100vw;
+    }
     #sidebar {
         width: var(--sidebar-collapsed-width);
+        height: 100%;
     }
 
     #content {
