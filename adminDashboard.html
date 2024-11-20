@@ -88,9 +88,8 @@
 
     <!-- Main Content -->
     <div id="content">
-
         <!-- Topbar -->
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg navbar-fixed-top">
             <div class="container-fluid">
                 <button type="button" id="sidebarCollapse" class="btn">
                     <i class="fas fa-bars"></i>
@@ -102,9 +101,7 @@
                     <div class="dropdown notifications">
                         <button class="btn position-relative" type="button" data-bs-toggle="dropdown">
                             <i class="fas fa-bell"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        3
-                    </span>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">New user registered</a></li>
@@ -119,7 +116,7 @@
                             <span>Hi, Zihan!</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                            <li><a href="profile.html" class="dropdown-item">Profile</a></li>
                             <li><a class="dropdown-item" href="settings.html">Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="index.html">Logout</a></li>
@@ -129,6 +126,13 @@
             </div>
         </nav>
 
+        <div class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Welcome to IUB Smart Shuttle Dashboard</h1>
+                <p>Your shuttle schedules and bookings Assistant.</p>
+            </div>
+        </div>
         <!-- Dashboard Content -->
         <div class="container-fluid dashboard-content">
             <!-- Quick Stats -->
@@ -877,7 +881,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Additional report cards can be added here -->
                         </div>
                     </div>
                 </div>

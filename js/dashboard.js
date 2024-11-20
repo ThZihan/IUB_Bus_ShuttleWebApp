@@ -292,60 +292,89 @@ function updateClock() {
 setInterval(updateClock, 1000); // Update every second
 updateClock(); // Initialize immediately
 
-const markers = [
-    {
-        busNumber: 'S001',
-        routeNo: '5',
-        latitude: 23.819019,
-        longitude: 90.429707,
-        destination: 'IUB'
-    },
-    {
-        busNumber: '5231',
-        routeNo: '1',
-        latitude: 23.816817,
-        longitude: 90.435492,
-        destination: 'Badda'
-    },
-    {
-        busNumber: '2233',
-        routeNo: '2',
-        latitude: 23.814666,
-        longitude: 90.421198,
-        destination: 'Mirpur'
-    },
-    {
-        busNumber: '1234',
-        routeNo: '5',
-        latitude: 23.8158287,
-        longitude: 90.428023,
-        destination: 'Mohakhali'
-    }
-];
+$(document).ready(function() {
+    // Initialize the map with markers
+    let map;
+    let markers = [];
 
-function initMap() {
-    const centerMap = { lat: 23.8158287, lng: 90.428023 };
-    const mapOptions = {
-        center: centerMap,
-        zoom: 16,
-        disableDefaultUI: true,
-    };
+    function initMap() {
+        const centerMap = { lat: 23.8158287, lng: 90.428023 };
+        const mapOptions = {
+            center: centerMap,
+            zoom: 16,
+            disableDefaultUI: true,
+        };
 
-    const map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
+        map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
 
-    // Add bus markers to the map
-    markers.forEach(markerData => {
-        new google.maps.Marker({
-            position: { lat: markerData.latitude, lng: markerData.longitude },
-            map: map,
-            title: `Bus: ${markerData.busNumber} - Route: ${markerData.routeNo} - Destination: ${markerData.destination}`,
-            icon: {
-                url: "https://freesvg.org/img/Bus-Icon.png",
-                scaledSize: new google.maps.Size(35, 32),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(16, 16)
-            }
+        // Add bus markers to the map
+        markers = markersData.map(markerData => {
+            return new google.maps.Marker({
+                position: { lat: markerData.latitude, lng: markerData.longitude },
+                map: map,
+                title: `Bus: ${markerData.shuttleID} - Route: ${markerData.routeNo} - Destination: ${markerData.destination}`,
+                icon: {
+                    url: "https://freesvg.org/img/Bus-Icon.png",
+                    scaledSize: new google.maps.Size(35, 32),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(16, 16)
+                }
+            });
         });
+    }
+
+    // Marker data for shuttles
+    const markersData = [
+        {
+            shuttleID: 'S001',
+            routeNo: '5',
+            latitude: 23.819019,
+            longitude: 90.429707,
+            destination: 'IUB'
+        },
+        {
+            shuttleID: 'S002',
+            routeNo: '1',
+            latitude: 23.816817,
+            longitude: 90.435492,
+            destination: 'Badda'
+        },
+        {
+            shuttleID: 'S003',
+            routeNo: '2',
+            latitude: 23.814666,
+            longitude: 90.421198,
+            destination: 'Mirpur'
+        },
+        {
+            shuttleID: 'S004',
+            routeNo: '5',
+            latitude: 23.8158287,
+            longitude: 90.428023,
+            destination: 'Mohakhali'
+        }
+    ];
+
+    // Initialize map
+    initMap();
+
+    // Search shuttle by ID
+    $('#search-shuttle-btn').on('click', function() {
+        const shuttleId = $('#shuttle-search-input').val().trim();
+        if (!shuttleId) {
+            alert('Please enter a valid Shuttle ID.');
+            return;
+        }
+
+        // Find the shuttle in the markers data
+        const shuttle = markersData.find(marker => marker.shuttleID === shuttleId);
+        if (shuttle) {
+            // Center the map on the found shuttle
+            map.setCenter({ lat: shuttle.latitude, lng: shuttle.longitude });
+            map.setZoom(18);
+        } else {
+            alert('Shuttle ID not found.');
+        }
     });
-}
+});
 
