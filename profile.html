@@ -45,7 +45,8 @@
                 <p><strong>Phone:</strong> <span id="displayPhone">+8801779673292</span></p>
                 <p><strong>Designation:</strong> <span id="displayDesignation">Student</span></p>
                 <p><strong>Gender:</strong> <span id="displayGender">Male</span></p>
-                <p><strong>Address:</strong> <span id="displayAddress">FabLab IUB, Aftabuddin Road, Bashundhara R/A, Dhaka</span></p>
+                <p><strong>Default Pickup:</strong> <span id="displaypickUpAddress">Uttara</span></p>
+                <p><strong>Default Drop off:</strong> <span id="displayDropAddress">Uttara</span></p>
                 <div class="text-end">
                     <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                         <i class="fas fa-edit me-2"></i> Edit Profile
@@ -137,8 +138,20 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="editAddress" class="form-label">Address</label>
-                            <textarea class="form-control" id="editAddress" rows="2"></textarea>
+                            <label for="editPickup" class="form-label">Favourable PickUp Location</label>
+                            <select class="form-select" id="editPickup">
+                                <option value="Male">Mohakhali</option>
+                                <option value="Female">Mirpur</option>
+                                <option value="Other">Uttara</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDrop" class="form-label">Favourable Drop Location</label>
+                            <select class="form-select" id="editDrop">
+                                <option value="Male">Mohakhali</option>
+                                <option value="Female">Mirpur</option>
+                                <option value="Other">Uttara</option>
+                            </select>
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn btn-primary">

@@ -124,13 +124,14 @@
         <a href="#register-modal" class="btn btn-outline-light btn-lg">Register Now!</a>
 
 
+        <!-- Login Modal -->
         <div id="login-modal" class="custom-modal loginModal">
             <div class="modal__content">
                 <h2 class="modal__title">Login to Your Account</h2>
-                <form class="login-form">
+                <form class="login-form" id="loginForm">
                     <div class="form-group mb-3">
-                        <label for="studentId" class="form-label">User ID</label>
-                        <input type="text" class="form-control" id="studentId" placeholder="Enter your User ID" required>
+                        <label for="userId" class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="userId" placeholder="Enter your User ID" required>
                     </div>
 
                     <div class="form-group mb-3">
@@ -147,64 +148,78 @@
 
                     <div class="modal__footer">
                         <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='#'">Cancel</button>
-<!--                        <button type="submit" class="btn btn-primary">Submit</button>-->
-                        <a href="userDashboard.html" class="btn btn-primary">Submit</a>
+                        <button type="submit" class="btn btn-primary" id="loginBtn">Submit</button>
                     </div>
                 </form>
                 <a href="#" class="modal__close" aria-label="Close">×</a>
             </div>
+        </div>
+
+    </div>
+
+    <!-- Registration Form -->
+    <div id="register-modal" class="custom-modal">
+        <div class="modal__content">
+            <h2 class="modal__title">Create Your Account</h2>
+            <form class="registration-form" id="registration-form">
+                <div class="form-group mb-3">
+                    <label for="registerUserId" class="form-label">User ID</label>
+                    <input type="text" class="form-control" id="registerUserId" name="user_id" placeholder="Enter your User ID" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="registerFullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="registerFullName" name="full_name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="registerEmail" class="form-label">IUB Email</label>
+                    <input type="email" class="form-control" id="registerEmail" name="iub_email" placeholder="your.credentials@iub.edu.bd" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="registerPassword" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="registerPassword" name="password" placeholder="Create a strong password" required>
+                        <button class="btn btn-outline-secondary" type="button" id="toggleRegisterPassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="designation" class="form-label">Designation/Identity Type:</label>
+                    <select id="designation" name="designation" class="form-control" required>
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Student">Student</option>
+                        <option value="Faculty">Faculty</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Moderator">Moderator</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="registerPhone" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="registerPhone" name="phone_number" placeholder="Enter your phone number" required>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="registerTerms" required>
+                    <label class="form-check-label" for="registerTerms">
+                        <span style="color:#a12626;">I agree to the</span>  <a href="terms.html" class="terms-link">Terms & Conditions</a>
+                    </label>
+                </div>
+
+                <div class="modal__footer">
+                    <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='#'">Cancel</button>
+                    <button id="CreateAccountbtn" type="submit" class="btn btn-primary">Create Account</button>
+                </div>
+            </form>
+            <a href="#" class="modal__close" aria-label="Close">×</a>
         </div>
     </div>
 
-        <div id="register-modal" class="custom-modal">
-            <div class="modal__content">
-                <h2 class="modal__title">Create Your Account</h2>
-                <form class="registration-form">
-                    <div class="form-group mb-3">
-                        <label for="studentId" class="form-label">Student ID</label>
-                        <input type="text" class="form-control" id="studentId" placeholder="Enter your student ID" required>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="email" class="form-label">IUB Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="your.name@iub.edu.bd" required>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="password" placeholder="Create a strong password" required>
-                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                <i class="far fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
-                    </div>
-
-                    <div class="form-check mb-3">
-                        <input type="checkbox" class="form-check-input" id="terms" required>
-                        <label class="form-check-label" for="terms">
-                           <span style="color:#a12626;">I agree to the</span>  <a href="terms.html" class="terms-link">Terms & Conditions</a>
-                        </label>
-                    </div>
-
-                    <div class="modal__footer">
-                        <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='#'">Cancel</button>
-                        <button id="CreateAccountbtn" type="submit" class="btn btn-primary">Create Account</button>
-                    </div>
-                </form>
-                <a href="#" class="modal__close" aria-label="Close">×</a>
-            </div>
-        </div>
 
 </header>
 
@@ -471,6 +486,95 @@
             }
         });
     });
+
+    document.getElementById('CreateAccountbtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        const userId = document.getElementById('registerUserId').value.trim();
+        const fullName = document.getElementById('registerFullName').value.trim();
+        const email = document.getElementById('registerEmail').value.trim();
+        const password = document.getElementById('registerPassword').value;
+        const designation = document.getElementById('designation').value;
+        const phone = document.getElementById('registerPhone').value.trim();
+
+        const userData = {
+            user_id: userId,
+            full_name: fullName,
+            iub_email: email,
+            password: password,
+            designation: designation,
+            phone_number: phone
+        };
+
+        // Send a POST request to the backend
+        fetch('http://localhost:3000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message); // User created successfully
+                    document.getElementById('registration-form').reset(); // Clear the form
+                    // Optionally, close the modal or redirect the user
+                } else if (data.error) {
+                    alert(data.error); // Show error if validation fails
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+    });
+
+    // Toggle Password Visibility for Registration Form
+    document.getElementById('toggleRegisterPassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('registerPassword');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        // Toggle the eye icon
+        this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
+    });
+
+
+    // JavaScript to handle login form submission
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const userId = document.getElementById('userId').value;
+        const password = document.getElementById('password').value;
+
+        const loginData = {
+            user_id: userId,
+            password: password
+        };
+
+        // Send login data to the backend for validation
+        fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(loginData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Login successful") {
+                    // Redirect to the dashboard if login is successful
+                    window.location.href = 'userDashboard.html';
+                } else {
+                    alert(data.error || 'Login failed. Please check your credentials.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+    });
+
 </script>
 </body>
 </html>

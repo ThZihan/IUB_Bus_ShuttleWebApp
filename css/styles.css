@@ -460,3 +460,8 @@ footer {
     width: 100px;
     height: 40px;
 }
+
+.bg-gradient-primary {
+    background: linear-gradient(90deg, #007bff, #0056b3); /* Replace with your desired gradient colors */
+    color: white; /* Ensure text is readable on the gradient background */
+}
