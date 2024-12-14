@@ -556,8 +556,12 @@
             .then(response => response.json())
             .then(data => {
                 if (data.message === "Login successful") {
-                    // Redirect to the dashboard if login is successful
-                    window.location.href = 'userDashboard.html';
+                    // Redirect based on designation
+                    if (data.designation === "Admin" || data.designation === "Moderator") {
+                        window.location.href = 'adminDashboard.html';
+                    } else {
+                        window.location.href = 'userDashboard.html';
+                    }
                 } else {
                     alert(data.error || 'Login failed. Please check your credentials.');
                 }
@@ -567,7 +571,6 @@
                 alert('An error occurred. Please try again later.');
             });
     });
-
 </script>
 </body>
 </html>

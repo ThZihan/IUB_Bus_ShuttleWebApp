@@ -125,15 +125,16 @@ app.post('/login', (req, res) => {
                 // If the password matches, create a session
                 req.session.user = {
                     user_id: user.user_id,
-                    iub_email:user.iub_email,
+                    iub_email: user.iub_email,
                     full_name: user.full_name,
                     designation: user.designation,
                     phone_number: user.phone_number,
-                    gender:user.gender,
+                    gender: user.gender,
                     account_status: user.account_status,
                     profile_picture: user.profile_picture
                 };
-                res.status(200).json({ message: 'Login successful' });
+                // Include designation in the response
+                res.status(200).json({ message: 'Login successful', designation: user.designation });
             } else {
                 // If the password doesn't match, return error
                 res.status(401).json({ error: 'Invalid credentials' });
@@ -142,6 +143,7 @@ app.post('/login', (req, res) => {
     });
 });
 
+
 // POST route for logging out
 app.post('/logout', (req, res) => {
     if (req.session.user) {
@@ -149,13 +151,14 @@ app.post('/logout', (req, res) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to log out' });
             }
-            res.clearCookie('session_cookie_name');
+            res.clearCookie('iub_bus_cookie'); // Correct cookie name
             res.status(200).json({ message: 'Logout successful' });
         });
     } else {
         res.status(400).json({ error: 'No active session' });
     }
 });
+
 
 // GET route to fetch user info
 app.get('/user', (req, res) => {
