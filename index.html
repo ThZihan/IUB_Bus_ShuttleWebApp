@@ -530,14 +530,6 @@
             });
     });
 
-    // Toggle Password Visibility for Registration Form
-    document.getElementById('toggleRegisterPassword').addEventListener('click', function() {
-        const passwordInput = document.getElementById('registerPassword');
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        // Toggle the eye icon
-        this.innerHTML = type === 'password' ? '<i class="far fa-eye"></i>' : '<i class="far fa-eye-slash"></i>';
-    });
 
 
     // JavaScript to handle login form submission

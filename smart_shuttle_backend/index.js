@@ -125,9 +125,11 @@ app.post('/login', (req, res) => {
                 // If the password matches, create a session
                 req.session.user = {
                     user_id: user.user_id,
+                    iub_email:user.iub_email,
                     full_name: user.full_name,
                     designation: user.designation,
                     phone_number: user.phone_number,
+                    gender:user.gender,
                     account_status: user.account_status,
                     profile_picture: user.profile_picture
                 };
@@ -162,6 +164,44 @@ app.get('/user', (req, res) => {
     } else {
         res.status(401).json({ error: 'Unauthorized' });
     }
+});
+
+// POST route for updating profile picture via URL
+app.post('/update-profile-picture-url', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { profile_picture } = req.body;
+
+    // Validate the incoming URL
+    if (!profile_picture) {
+        return res.status(400).json({ error: 'Profile picture URL is required' });
+    }
+
+    // Simple URL validation (server-side)
+    const urlPattern = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$/i;
+    if (!urlPattern.test(profile_picture)) {
+        return res.status(400).json({ error: 'Please provide a valid image URL (png, jpg, jpeg, gif, svg).' });
+    }
+
+    // Update the user's profile_picture in the database
+    const updateQuery = `
+        UPDATE user_accounts 
+        SET profile_picture = ? 
+        WHERE user_id = ?
+    `;
+    conn.query(updateQuery, [profile_picture, req.session.user.user_id], (err, result) => {
+        if (err) {
+            console.error('Error updating profile picture:', err);
+            return res.status(500).json({ error: 'Failed to update profile picture' });
+        }
+
+        // Update the session data
+        req.session.user.profile_picture = profile_picture;
+
+        res.status(200).json({ message: 'Profile picture updated successfully', profile_picture_url: profile_picture });
+    });
 });
 
 
