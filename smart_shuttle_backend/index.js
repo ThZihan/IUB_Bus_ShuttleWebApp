@@ -4,15 +4,21 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session); // Import the session store
 
 const app = express();
 const port = 3000;
 
-// Enable CORS
-app.use(cors());
+// Enable CORS and allow credentials
+app.use(cors({
+    origin: 'http://localhost:63342', // Replace with your frontend URL and port
+    credentials: true
+}));
 
-// Parse JSON requests
+// Parse JSON and URL-encoded requests
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // MySQL connection
 const conn = mysql.createConnection({
@@ -29,6 +35,23 @@ conn.connect(function(err) {
     }
     console.log('Connected to the database!');
 });
+
+// Configure session store
+const sessionStore = new MySQLStore({}, conn);
+
+// Configure session middleware
+app.use(session({
+    key: 'iub_bus_cookie',
+    secret: 'fabbersxbus', // Replace with a strong secret
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+        httpOnly: true,
+        secure: false // Set to true if using HTTPS
+    }
+}));
 
 // POST route for creating a new account
 app.post('/register', (req, res) => {
@@ -90,14 +113,24 @@ app.post('/login', (req, res) => {
             return res.status(401).json({ error: 'User not found' });
         }
 
+        const user = result[0];
+
         // Compare the password with the hashed password stored in the database
-        bcrypt.compare(password, result[0].password, (err, isMatch) => {
+        bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) {
                 return res.status(500).json({ error: 'Error comparing password' });
             }
 
             if (isMatch) {
-                // If the password matches, return success message
+                // If the password matches, create a session
+                req.session.user = {
+                    user_id: user.user_id,
+                    full_name: user.full_name,
+                    designation: user.designation,
+                    phone_number: user.phone_number,
+                    account_status: user.account_status,
+                    profile_picture: user.profile_picture
+                };
                 res.status(200).json({ message: 'Login successful' });
             } else {
                 // If the password doesn't match, return error
@@ -106,6 +139,31 @@ app.post('/login', (req, res) => {
         });
     });
 });
+
+// POST route for logging out
+app.post('/logout', (req, res) => {
+    if (req.session.user) {
+        req.session.destroy(err => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to log out' });
+            }
+            res.clearCookie('session_cookie_name');
+            res.status(200).json({ message: 'Logout successful' });
+        });
+    } else {
+        res.status(400).json({ error: 'No active session' });
+    }
+});
+
+// GET route to fetch user info
+app.get('/user', (req, res) => {
+    if (req.session.user) {
+        res.status(200).json({ user: req.session.user });
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+});
+
 
 // Sample route to check server
 app.get('/', (req, res) => {

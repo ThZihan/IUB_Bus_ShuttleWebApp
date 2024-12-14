@@ -81,16 +81,17 @@
                     <!-- User Profile -->
                     <div class="dropdown ms-3">
                         <button class="btn d-flex align-items-center" type="button" data-bs-toggle="dropdown">
-                            <img src="https://helo.health/images/specialist/mahady.jpg" class="rounded-circle me-2" alt="Profile">
-                            <span>Mahady Hasan</span>
+                            <img id="userPicture" src="" class="rounded-circle me-2" alt="Profile">
+                            <span id="userFullName">User</span> <!-- Updated dynamically -->
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a href="profile.html" class="dropdown-item">Profile</a></li>
                             <li><a class="dropdown-item" href="settings.html">Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="index.html">Logout</a></li>
+                            <li><a href="#" id="logoutBtn" class="dropdown-item">Logout</a></li>
                         </ul>
                     </div>
+
                 </div>
             </div>
         </nav>
@@ -390,10 +391,127 @@
         </div>
     </div>
 </div>
-
+<!-- Existing scripts -->
 <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-NqajIvj_EVijypCm-4UVztEhWk135xI&callback=initMap"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/dashboard.js"></script>
+
+<!-- New Script for Session Management -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to fetch user information from the backend
+        function fetchUserInfo() {
+            fetch('http://localhost:3000/user', {
+                method: 'GET',
+                credentials: 'include', // Include cookies in the request
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    if (response.status === 401) {
+                        // If not authenticated, redirect to login
+                        window.location.href = 'index.html';
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.user) {
+                        // Update the user's full name in the navbar
+                        const userFullNameElement = document.getElementById('userFullName');
+                        if (userFullNameElement) {
+                            userFullNameElement.textContent = data.user.full_name;
+                        }
+                        // Update the user's profile picture
+                        const userProfileImage = document.getElementById('userPicture');
+                        if (userProfileImage && data.user.profile_picture) {
+                            userProfileImage.src = data.user.profile_picture;
+                        } else if (userProfileImage) {
+                            // Set a default image if profile_picture is null
+                            userProfileImage.src = 'https://themindfulaimanifesto.org/wp-content/uploads/2020/09/male-placeholder-image.jpeg'; // Replace with your default image URL
+                        }
+
+                        // Update the account status badge
+                        const accountStatusElement = document.getElementById('account_status');
+                        if (accountStatusElement) {
+                            accountStatusElement.textContent = data.user.account_status;
+
+                            // Update badge color based on account status
+                            switch(data.user.account_status) {
+                                case 'Active':
+                                    accountStatusElement.className = 'badge bg-success';
+                                    break;
+                                case 'Inactive':
+                                    accountStatusElement.className = 'badge bg-secondary';
+                                    break;
+                                case 'Suspended':
+                                    accountStatusElement.className = 'badge bg-danger';
+                                    break;
+                                case 'Pending':
+                                    accountStatusElement.className = 'badge bg-warning';
+                                    break;
+                                default:
+                                    accountStatusElement.className = 'badge bg-primary';
+                            }
+                        }
+
+                        // Optionally, update other user-specific elements on the dashboard
+                        // For example, updating the user's profile picture if available
+                        // const userProfileImage = document.querySelector('.dropdown button img');
+                        // if (userProfileImage && data.user.profile_image_url) {
+                        //     userProfileImage.src = data.user.profile_image_url;
+                        // }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user info:', error);
+                    alert('An error occurred while fetching user information. Please try again.');
+                    // Optionally, redirect to login page
+                    window.location.href = 'index.html';
+                });
+        }
+
+        // Function to handle logout
+        function handleLogout() {
+            fetch('http://localhost:3000/logout', {
+                method: 'POST',
+                credentials: 'include', // Include cookies in the request
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Logout successful') {
+                        // Redirect to login page after successful logout
+                        window.location.href = 'index.html';
+                    } else {
+                        alert(data.error || 'Failed to log out. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during logout:', error);
+                    alert('An error occurred during logout. Please try again.');
+                });
+        }
+
+        // Fetch user info when the dashboard loads
+        fetchUserInfo();
+
+        // Attach event listener to the logout button
+        const logoutButton = document.getElementById('logoutBtn');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                // Confirm logout action (optional)
+                if (confirm('Are you sure you want to logout?')) {
+                    handleLogout();
+                }
+            });
+        }
+    });
+</script>
+
 </body>
 </html>

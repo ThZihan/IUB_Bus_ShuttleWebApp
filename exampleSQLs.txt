@@ -13,3 +13,10 @@ CREATE TABLE iub_smart_shuttle_db.user_accounts (
 //to delete entry from a table
 USE iub_smart_shuttle_db;
 DELETE FROM `user_accounts` WHERE `user_id` = '1921629';
+
+//update any data
+USE iub_smart_shuttle_db;
+
+UPDATE user_accounts
+SET profile_picture = 'http://fablabiub.com/wp-content/uploads/2024/11/Tahfizul-Hasan-Zihan.png'
+WHERE user_id = '1921629';
