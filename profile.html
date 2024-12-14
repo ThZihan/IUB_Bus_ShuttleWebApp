@@ -22,9 +22,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="userDashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="settings.html">Settings</a></li>
                     <li class="nav-item"><a class="nav-link active" href="#">Profile</a></li>
+                    <li class="nav-item"> <a href="#" id="logoutBtn" class="nav-link">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -40,13 +41,46 @@
                 <h5 class="card-title mb-0">Personal Information</h5>
             </div>
             <div class="card-body">
-                <p><strong>Full Name:</strong> <span id="displayFullName">Mahady Hasan</span></p>
-                <p><strong>Email:</strong> <span id="displayEmail">mahady@iub.edu.bd</span></p>
-                <p><strong>Phone:</strong> <span id="displayPhone">+8801779673292</span></p>
-                <p><strong>Designation:</strong> <span id="displayDesignation">Student</span></p>
-                <p><strong>Gender:</strong> <span id="displayGender">Male</span></p>
-                <p><strong>Default Pickup:</strong> <span id="displaypickUpAddress">Uttara</span></p>
-                <p><strong>Default Drop off:</strong> <span id="displayDropAddress">Uttara</span></p>
+                <p><strong>Full Name:</strong> <span id="displayFullName">Loading...</span></p>
+                <p><strong>Email:</strong> <span id="displayEmail">Loading...</span></p>
+                <p><strong>Phone:</strong> <span id="displayPhone">Loading...</span></p>
+                <p><strong>Designation:</strong> <span id="displayDesignation">Loading...</span></p>
+                <p><strong>Gender:</strong> <span id="displayGender">Loading...</span></p>
+                <p><strong>Default Pickup:</strong> <span id="displayPickUpLocation">Loading...</span></p>
+                <p><strong>Default Drop off:</strong> <span id="displayDropLocation">Loading...</span></p>
+                <!-- Add this inside the Profile Details Card -->
+                <div class="text-left mb-4">
+                    <button class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#uploadPictureModal">
+                        <i class="fas fa-camera me-2"></i> Change Picture
+                    </button>
+                </div>
+
+                <!-- New Modal: Update Profile Picture via URL -->
+                <div class="modal fade" id="uploadPictureModal" tabindex="-1" aria-labelledby="uploadPictureModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-gradient-primary text-white">
+                                <h5 class="modal-title" id="uploadPictureModalLabel">Update Profile Picture</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="updatePictureForm">
+                                    <div class="mb-3">
+                                        <label for="profilePictureURL" class="form-label">Profile Picture URL:</label>
+                                        <input type="url" class="form-control" id="profilePictureURL" placeholder="https://example.com/image.jpg" required>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-2"></i> Update
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="text-end">
                     <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                         <i class="fas fa-edit me-2"></i> Edit Profile
@@ -73,29 +107,12 @@
                         <th>Internet Usage</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>2024-11-19</td>
-                        <td>IUB Campus</td>
-                        <td>08:00 AM</td>
-                        <td>Airport</td>
-                        <td>08:45 AM</td>
-                        <td>45 mins</td>
-                        <td>15 MB</td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-18</td>
-                        <td>Airport</td>
-                        <td>10:00 AM</td>
-                        <td>IUB Campus</td>
-                        <td>10:50 AM</td>
-                        <td>50 mins</td>
-                        <td>18 MB</td>
-                    </tr>
+                    <tbody id="commuteHistoryBody">
+                    <!-- Dynamic Commute History Rows -->
                     </tbody>
                 </table>
                 <div class="text-end">
-                    <button class="btn btn-danger mt-3">
+                    <button class="btn btn-danger mt-3" id="clearHistoryBtn">
                         <i class="fas fa-trash me-2"></i> Clear History
                     </button>
                 </div>
@@ -115,42 +132,27 @@
                     <form id="editProfileForm">
                         <div class="mb-3">
                             <label for="editFullName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="editFullName">
+                            <input type="text" class="form-control" id="editFullName" required>
                         </div>
                         <div class="mb-3">
                             <label for="editEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="editEmail">
+                            <input type="email" class="form-control" id="editEmail" required>
                         </div>
                         <div class="mb-3">
                             <label for="editPhone" class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" id="editPhone">
+                            <input type="tel" class="form-control" id="editPhone" required>
                         </div>
                         <div class="mb-3">
                             <label for="editDesignation" class="form-label">Designation</label>
-                            <input type="text" class="form-control" id="editDesignation">
+                            <input type="text" class="form-control" id="editDesignation" required>
                         </div>
                         <div class="mb-3">
                             <label for="editGender" class="form-label">Gender</label>
-                            <select class="form-select" id="editGender">
+                            <select class="form-select" id="editGender" required>
+                                <option value="">Select Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editPickup" class="form-label">Favourable PickUp Location</label>
-                            <select class="form-select" id="editPickup">
-                                <option value="Male">Mohakhali</option>
-                                <option value="Female">Mirpur</option>
-                                <option value="Other">Uttara</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editDrop" class="form-label">Favourable Drop Location</label>
-                            <select class="form-select" id="editDrop">
-                                <option value="Male">Mohakhali</option>
-                                <option value="Female">Mirpur</option>
-                                <option value="Other">Uttara</option>
                             </select>
                         </div>
                         <div class="text-end">
@@ -164,53 +166,219 @@
         </div>
     </div>
 </div>
+
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4">
     <div class="container">
         <p>&copy; 2024 IUB Smart Shuttle. All rights reserved.</p>
-
     </div>
 </footer>
+
 <!-- Bootstrap JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Pre-fill modal with existing profile data
-    $('#editProfileModal').on('show.bs.modal', function () {
-        const modal = $(this);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to handle profile picture URL update
+        function updateProfilePicture(event) {
+            event.preventDefault(); // Prevent default form submission
 
-        // Retrieve current profile values
-        const fullName = $('#displayFullName').text().trim();
-        const email = $('#displayEmail').text().trim();
-        const phone = $('#displayPhone').text().trim();
-        const designation = $('#displayDesignation').text().trim();
-        const gender = $('#displayGender').text().trim();
-        const address = $('#displayAddress').text().trim();
+            const profilePictureURL = document.getElementById('profilePictureURL').value.trim();
 
-        // Pre-fill modal fields
-        modal.find('#editFullName').val(fullName);
-        modal.find('#editEmail').val(email);
-        modal.find('#editPhone').val(phone);
-        modal.find('#editDesignation').val(designation);
-        modal.find('#editGender').val(gender);
-        modal.find('#editAddress').val(address);
+            if (!profilePictureURL) {
+                alert('Please enter a valid URL.');
+                return;
+            }
+
+            // Simple URL validation
+            const urlPattern = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$/i;
+            if (!urlPattern.test(profilePictureURL)) {
+                alert('Please enter a valid image URL (png, jpg, jpeg, gif, svg).');
+                return;
+            }
+
+            const updatedData = {
+                profile_picture: profilePictureURL
+            };
+
+            // Send the updated profile_picture to the backend
+            fetch('http://localhost:3000/update-profile-picture-url', { // New route
+                method: 'POST',
+                credentials: 'include', // Include cookies in the request
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        // Update the displayed profile picture
+                        document.getElementById('displayProfilePicture').src = data.profile_picture_url + '?t=' + new Date().getTime(); // Cache busting
+                        // Optionally, close the modal
+                        $('#uploadPictureModal').modal('hide');
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating profile picture:', error);
+                    alert('An error occurred while updating the profile picture. Please try again.');
+                });
+        }
+
+// Attach event listener to the update picture form
+        document.getElementById('updatePictureForm').addEventListener('submit', updateProfilePicture);
+
+        // Function to fetch user information from the backend
+        function fetchUserInfo() {
+            fetch('http://localhost:3000/user', {
+                method: 'GET',
+                credentials: 'include', // Include cookies in the request
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    if (response.status === 401) {
+                        // If not authenticated, redirect to login
+                        window.location.href = 'index.html';
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.user) {
+                        // Update the user's profile information in the display
+                        document.getElementById('displayFullName').textContent = data.user.full_name;
+                        document.getElementById('displayEmail').textContent = data.user.iub_email;
+                        document.getElementById('displayPhone').textContent = data.user.phone_number;
+                        document.getElementById('displayDesignation').textContent = data.user.designation;
+                        document.getElementById('displayGender').textContent = data.user.gender;
+
+                        // Populate the edit form fields with current data
+                        document.getElementById('editFullName').value = data.user.full_name;
+                        document.getElementById('editEmail').value = data.user.iub_email;
+                        document.getElementById('editPhone').value = data.user.phone_number;
+                        document.getElementById('editDesignation').value = data.user.designation;
+                        document.getElementById('editGender').value = data.user.gender || '';
+
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user info:', error);
+                    alert('An error occurred while fetching user information. Please try again.');
+                    // Optionally, redirect to login page
+                    window.location.href = 'index.html';
+                });
+        }
+
+        // Function to handle profile update
+        function updateProfile(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Gather updated profile data from the form
+            const full_name = document.getElementById('editFullName').value.trim();
+            const iub_email = document.getElementById('editEmail').value.trim();
+            const phone_number = document.getElementById('editPhone').value.trim();
+            const designation = document.getElementById('editDesignation').value.trim();
+            const gender = document.getElementById('editGender').value;
+            const pickup_location = document.getElementById('editPickUpLocation').value;
+            const drop_location = document.getElementById('editDropLocation').value;
+
+            const updatedData = {
+                full_name,
+                iub_email,
+                phone_number,
+                designation,
+                gender,
+                pickup_location,
+                drop_location
+            };
+
+            // Send updated data to the backend
+            fetch('http://localhost:3000/update-profile', {
+                method: 'POST',
+                credentials: 'include', // Include cookies in the request
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        // Update the displayed profile information
+                        document.getElementById('displayFullName').textContent = data.user.full_name;
+                        document.getElementById('displayEmail').textContent = data.user.iub_email;
+                        document.getElementById('displayPhone').textContent = data.user.phone_number;
+                        document.getElementById('displayDesignation').textContent = data.user.designation;
+                        document.getElementById('displayGender').textContent = data.user.gender;
+
+                        // Optionally, close the modal
+                        $('#editProfileModal').modal('hide');
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating profile:', error);
+                    alert('An error occurred while updating your profile. Please try again.');
+                });
+        }
+        // Function to handle clearing commute history (Optional)
+        function clearCommuteHistory() {
+            if (confirm('Are you sure you want to clear your commute history? This action cannot be undone.')) {
+                // Implement backend endpoint to clear history if needed
+                // For now, we'll just clear the table body
+                document.getElementById('commuteHistoryBody').innerHTML = '';
+                alert('Commute history cleared.');
+            }
+        }
+
+        // Attach event listeners
+        document.getElementById('editProfileForm').addEventListener('submit', updateProfile);
+        document.getElementById('clearHistoryBtn').addEventListener('click', clearCommuteHistory);
+
+        // Fetch user info when the page loads
+        fetchUserInfo();
     });
+    // Function to handle logout
+    function handleLogout() {
+        fetch('http://localhost:3000/logout', {
+            method: 'POST',
+            credentials: 'include', // Include cookies in the request
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Logout successful') {
+                    // Redirect to login page after successful logout
+                    window.location.href = 'index.html';
+                } else {
+                    alert(data.error || 'Failed to log out. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+                alert('An error occurred during logout. Please try again.');
+            });
+    }
+    // Attach event listener to the logout button
+    const logoutButton = document.getElementById('logoutBtn');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            // Confirm logout action (optional)
+            if (confirm('Are you sure you want to logout?')) {
+                handleLogout();
+            }
+        });
+    }
 
-    // Handle form submission (example: save changes and update displayed data)
-    $('#editProfileForm').on('submit', function (event) {
-        event.preventDefault();
-
-        // Update display values with new inputs
-        $('#displayFullName').text($('#editFullName').val().trim());
-        $('#displayEmail').text($('#editEmail').val().trim());
-        $('#displayPhone').text($('#editPhone').val().trim());
-        $('#displayDesignation').text($('#editDesignation').val().trim());
-        $('#displayGender').text($('#editGender').val());
-        $('#displayAddress').text($('#editAddress').val().trim());
-
-        // Close the modal
-        $('#editProfileModal').modal('hide');
-    });
 </script>
 </body>
 </html>
