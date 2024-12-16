@@ -191,72 +191,28 @@
                         <h5 class="card-title mb-0">Manage Users</h5>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="usersTable">
                             <thead>
                             <tr>
                                 <th>User ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Designation</th>
+                                <th>Phone Number</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>U001</td>
-                                <td>Dr Mahady Hasan</td>
-                                <td>mahady@iub.edu.bd</td>
-                                <td>Professor</td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" title="Edit User" data-bs-toggle="modal" data-bs-target="#editUserModal">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" title="Delete User">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>U002</td>
-                                <td>Md Mahamudul Hasan</td>
-                                <td>mhpeyal@iub.edu.bd</td>
-                                <td>R&D officer</td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" title="Edit User" data-bs-toggle="modal" data-bs-target="#editUserModal">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" title="Delete User">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>U003</td>
-                                <td>Istiaqe Hossain</td>
-                                <td>202212@iub.edu.bd</td>
-                                <td>Student</td>
-                                <td><span class="badge bg-warning">RFID Pending</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" title="Edit User" data-bs-toggle="modal" data-bs-target="#editUserModal">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" title="Delete User">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <!-- Dynamic User Rows Will Be Injected Here -->
                             </tbody>
-
                         </table>
                         <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#registerUserModal"><i class="fas fa-user-plus"></i> Add New User</button>
                     </div>
                 </div>
             </section>
+
+            <!-- Edit User Modal -->
             <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -272,35 +228,58 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="editUserNameInput" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="editUserNameInput">
+                                    <input type="text" class="form-control" id="editUserNameInput" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editUserEmailInput" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="editUserEmailInput">
+                                    <input type="email" class="form-control" id="editUserEmailInput" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editUserDesignationInput" class="form-label">Designation</label>
-                                    <input type="text" class="form-control" id="editUserDesignationInput">
+                                    <select class="form-control" id="editUserDesignationInput" required>
+                                        <option value="">Select Designation</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Student">Student</option>
+                                        <option value="Faculty">Faculty</option>
+                                        <option value="Staff">Staff</option>
+                                        <option value="Moderator">Moderator</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserGenderInput" class="form-label">Gender</label>
+                                    <select class="form-control" id="editUserGenderInput">
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserPhoneInput" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="editUserPhoneInput" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editUserStatusInput" class="form-label">Status</label>
-                                    <select class="form-control" id="editUserStatusInput">
+                                    <select class="form-control" id="editUserStatusInput" required>
+                                        <option value="">Select Status</option>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
-                                        <option value="RFID Pending">RFID Pending</option>
+                                        <option value="Suspended">Suspended</option>
+                                        <option value="Pending">Pending</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">NFC Status</label>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="nfcOptionEdit" id="nfcAssigned" value="assigned">
-                                        <label class="form-check-label" for="nfcAssigned">
+                                        <input class="form-check-input" type="radio" name="nfcOptionEdit" id="editNfcAssigned" value="assigned">
+                                        <label class="form-check-label" for="editNfcAssigned">
                                             RFID Already Registered
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="nfcOptionEdit" id="nfcAssign" value="assign">
-                                        <label class="form-check-label" for="nfcAssign">
+                                        <input class="form-check-input" type="radio" name="nfcOptionEdit" id="editNfcAssign" value="assign">
+                                        <label class="form-check-label" for="editNfcAssign">
                                             Register RFID
                                         </label>
                                     </div>
@@ -308,8 +287,17 @@
                                         <img src="images/place_nfc.gif" alt="Place NFC Card" class="img-fluid">
                                     </div>
                                     <div id="editNfcCodeInput" class="mt-3" style="display: none;">
-                                        <label for="nfcCodeEdit" class="form-label">RFID Code</label>
-                                        <input type="text" class="form-control" id="nfcCodeEdit" placeholder="Enter RFID Code">
+                                        <label for="editUserRFIDInput" class="form-label">RFID Code</label>
+                                        <input type="text" class="form-control" id="editUserRFIDInput" placeholder="Enter RFID Code">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserPasswordInput" class="form-label">Password (Leave blank to keep unchanged)</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="editUserPasswordInput" placeholder="Enter new password if changing">
+                                        <button class="btn btn-outline-secondary" type="button" id="toggleEditPassword">
+                                            <i class="far fa-eye"></i>
+                                        </button>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Save Changes</button>
@@ -318,6 +306,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Register User Modal -->
             <div id="registerUserModal" class="modal fade" tabindex="-1" aria-labelledby="registerUserModalLabel" aria-hidden="true">
@@ -330,8 +319,8 @@
                         <div class="modal-body">
                             <form class="registration-form">
                                 <div class="form-group mb-3">
-                                    <label for="studentId" class="form-label">Student ID</label>
-                                    <input type="text" class="form-control" id="studentId" placeholder="Enter your student ID" required>
+                                    <label for="studentId" class="form-label">User ID</label>
+                                    <input type="text" class="form-control" id="studentId" placeholder="Enter User ID" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="fullName" class="form-label">Full Name</label>
@@ -351,13 +340,34 @@
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">
+                                    <label for="designationSelect" class="form-label">Designation</label>
+                                    <select class="form-control" id="designationSelect" required>
+                                        <option value="">Select Designation</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Student">Student</option>
+                                        <option value="Faculty">Faculty</option>
+                                        <option value="Staff">Staff</option>
+                                        <option value="Moderator">Moderator</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="genderSelect" class="form-label">Gender</label>
+                                    <select class="form-control" id="genderSelect">
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
                                     <label for="phone" class="form-label">Phone Number</label>
                                     <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="form-label">NFC Registration Method</label>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="nfcOption" id="scanNFC"  checked>
+                                        <input class="form-check-input" type="radio" name="nfcOption" id="scanNFC" checked>
                                         <label class="form-check-label" for="scanNFC">
                                             Scan NFC Card
                                         </label>
@@ -385,6 +395,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Shuttle Management Section -->
             <section id="shuttleManagement" class="mb-5">
                 <h2 class="section-title">Shuttle Management</h2>
@@ -892,12 +903,280 @@
         </div>
     </div>
 </div>
-
 <!-- Bootstrap JS and jQuery (Reused) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Existing Scripts -->
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>
+<script>
+    // dashboard.js
+    $(document).ready(function() {
+        const apiBaseUrl = 'http://localhost:3000'; // Update if different
+
+        // Function to fetch and display users
+        function loadUsers() {
+            $.ajax({
+                url: `${apiBaseUrl}/users`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const users = response.users;
+                    const tbody = $('#usersTable tbody');
+                    tbody.empty(); // Clear existing rows
+
+                    users.forEach(user => {
+                        const statusBadge = getStatusBadge(user.account_status);
+                        const row = `
+                        <tr>
+                            <td>${user.user_id}</td>
+                            <td>${user.full_name}</td>
+                            <td>${user.iub_email}</td>
+                            <td>${user.designation}</td>
+                            <td>${user.phone_number}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary edit-user-btn" data-user-id="${user.user_id}" title="Edit User">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-user-btn" data-user-id="${user.user_id}" title="Delete User">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        alert('Unauthorized access. Please log in as an admin.');
+                        window.location.href = 'index.html'; // Redirect to login
+                    } else {
+                        alert('Failed to fetch users.');
+                    }
+                }
+            });
+        }
+
+        // Function to get status badge HTML
+        function getStatusBadge(status) {
+            let badgeClass = 'bg-secondary';
+            switch(status) {
+                case 'Active':
+                    badgeClass = 'bg-success';
+                    break;
+                case 'Inactive':
+                    badgeClass = 'bg-secondary';
+                    break;
+                case 'Suspended':
+                    badgeClass = 'bg-danger';
+                    break;
+                case 'Pending':
+                    badgeClass = 'bg-warning';
+                    break;
+                default:
+                    badgeClass = 'bg-primary';
+            }
+            return `<span class="badge ${badgeClass}">${status}</span>`;
+        }
+
+        // Load users on page load
+        loadUsers();
+
+        // Handle Add New User Form Submission
+        $('#registerUserModal form').on('submit', function(e) {
+            e.preventDefault();
+
+            const userData = {
+                user_id: $('#studentId').val().trim(),
+                full_name: $('#fullName').val().trim(),
+                iub_email: $('#email').val().trim(),
+                password: $('#password').val(),
+                designation: $('#designationSelect').val(), // Add a select input for designation
+                phone_number: $('#phone').val().trim(),
+                gender: $('#genderSelect').val(), // Add a select input for gender
+                rfID_code: $('#nfcCode').val().trim() || null,
+                account_status: 'Active' // Default status; can be modified as needed
+            };
+
+            // Validate required fields
+            if (!userData.user_id || !userData.full_name || !userData.iub_email || !userData.password || !userData.designation || !userData.phone_number) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to add a new user
+            $.ajax({
+                url: `${apiBaseUrl}/users`,
+                method: 'POST',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(userData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#registerUserModal').modal('hide');
+                    loadUsers(); // Refresh the user list
+                    $('#registerUserModal form')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to add user.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit User Button Click
+        $(document).on('click', '.edit-user-btn', function() {
+            const userId = $(this).data('user-id');
+
+            // Fetch user details
+            $.ajax({
+                url: `${apiBaseUrl}/users/${userId}`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const user = response.user;
+
+                    // Populate the Edit User Modal fields
+                    $('#editUserIdInput').val(user.user_id);
+                    $('#editUserNameInput').val(user.full_name);
+                    $('#editUserEmailInput').val(user.iub_email);
+                    $('#editUserDesignationInput').val(user.designation);
+                    $('#editUserPhoneInput').val(user.phone_number);
+                    $('#editUserStatusInput').val(user.account_status);
+                    $('#editUserGenderInput').val(user.gender);
+                    $('#editUserRFIDInput').val(user.rfID_code || '');
+
+                    // Show or hide NFC-related fields based on account status
+                    if (user.account_status === 'Pending' || user.rfID_code === null) {
+                        $('#editNfcAssign').prop('checked', true).trigger('change');
+                    } else {
+                        $('#editNfcAssigned').prop('checked', true).trigger('change');
+                    }
+
+                    // Show the modal
+                    $('#editUserModal').modal('show');
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch user details.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit User Form Submission
+        $('#editUserModal form').on('submit', function(e) {
+            e.preventDefault();
+
+            const userId = $('#editUserIdInput').val().trim();
+            const updatedData = {
+                full_name: $('#editUserNameInput').val().trim(),
+                iub_email: $('#editUserEmailInput').val().trim(),
+                designation: $('#editUserDesignationInput').val().trim(),
+                phone_number: $('#editUserPhoneInput').val().trim(),
+                account_status: $('#editUserStatusInput').val().trim(),
+                gender: $('#editUserGenderInput').val().trim(),
+                rfID_code: $('#editUserRFIDInput').val().trim() || null
+            };
+
+            const password = $('#editUserPasswordInput').val();
+            if (password) {
+                updatedData.password = password;
+            }
+
+            // Validate required fields
+            if (!updatedData.full_name || !updatedData.iub_email || !updatedData.designation || !updatedData.phone_number || !updatedData.account_status) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to update the user
+            $.ajax({
+                url: `${apiBaseUrl}/users/${userId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(updatedData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#editUserModal').modal('hide');
+                    loadUsers(); // Refresh the user list
+                    $('#editUserModal form')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to update user.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Delete User Button Click
+        $(document).on('click', '.delete-user-btn', function() {
+            const userId = $(this).data('user-id');
+
+            if (confirm(`Are you sure you want to delete user ${userId}? This action cannot be undone.`)) {
+                // AJAX request to delete the user
+                $.ajax({
+                    url: `${apiBaseUrl}/users/${userId}`,
+                    method: 'DELETE',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        loadUsers(); // Refresh the user list
+                    },
+                    error: function(xhr) {
+                        const error = xhr.responseJSON?.error || 'Failed to delete user.';
+                        alert(error);
+                    }
+                });
+            }
+        });
+
+        // Helper function to initialize Edit User Modal's NFC Options
+        function initializeEditUserModal() {
+            $('input[name="nfcOptionEdit"]').on('change', function () {
+                if ($('#editNfcAssign').is(':checked')) {
+                    $('#editNfcGif').show(); // Show the NFC GIF
+                    $('#editNfcCodeInput').show(); // Show the NFC code input
+                } else {
+                    $('#editNfcGif').hide(); // Hide the NFC GIF
+                    $('#editNfcCodeInput').hide(); // Hide the NFC code input
+                }
+            });
+        }
+
+        // Initialize NFC options in Edit User Modal
+        initializeEditUserModal();
+
+        // Function to reset Add User Modal upon closing
+        $('#registerUserModal').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+            $('#nfcGif').show();
+            $('#nfcCodeInput').hide();
+        });
+
+        // Function to reset Edit User Modal upon closing
+        $('#editUserModal').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+            $('#editNfcGif').hide();
+            $('#editNfcCodeInput').hide();
+        });
+
+        // Additional functions and event handlers can be added here as needed
+    });
+
+</script>
+
 </body>
 </html>

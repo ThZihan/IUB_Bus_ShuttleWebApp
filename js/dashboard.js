@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
         function calculateEstimatedTime() {
             const realTimeClock = $('#realtime-clock').text();
             const nextShuttleTime = $('#next-shuttle-time').text();
@@ -106,11 +107,6 @@ $(document).ready(function() {
 
         $('.notification-item').first().before(newNotification);
     }
-
-    // Simulate incoming notifications
-    setTimeout(() => {
-        addNotification('Your shuttle is arriving in 2 minutes');
-    }, 5000);
 
     // Handle notification click
     $('.notifications .dropdown-item').click(function(e) {
@@ -293,6 +289,8 @@ setInterval(updateClock, 1000); // Update every second
 updateClock(); // Initialize immediately
 
 $(document).ready(function() {
+
+
     // Initialize the map with markers
     let map;
     let markers = [];

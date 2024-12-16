@@ -138,9 +138,6 @@
                         <label for="password" class="form-label">Password</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
-                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                <i class="far fa-eye"></i>
-                            </button>
                         </div>
                     </div>
 
@@ -474,6 +471,21 @@
 <script>
     // Smooth Scroll for Navigation Links
     $(document).ready(function(){
+        const loginBtn = document.getElementById("loginBtn")
+        loginBtn.addEventListener('click', () => {
+            Notification.requestPermission().then(perm => {
+                if(perm === "granted"){
+                    const notification = new Notification("Example Notification", {
+                        body:"Hello World",
+                        data:{hello: "world"},
+                    })
+                    notification.addEventListener('show', e => {
+                        console.log(e)
+                    })
+                }
+            })
+        })
+
         $('a.nav-link').on('click', function(event){
             if (this.hash !== "") {
                 event.preventDefault();
