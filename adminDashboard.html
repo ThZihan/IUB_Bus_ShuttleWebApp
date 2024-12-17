@@ -519,47 +519,21 @@
                         <h5 class="card-title mb-0">Manage Drivers</h5>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="driversTable">
                             <thead>
                             <tr>
                                 <th>Driver ID</th>
                                 <th>Name</th>
-                                <th>Contact</th>
+                                <th>Phone Number</th>
+                                <th>License Number</th>
+                                <th>Experience (Years)</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>D001</td>
-                                <td>Mohammad Ali</td>
-                                <td>+880123456789</td>
-                                <td>Active</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary edit-driver-btn" data-bs-toggle="modal" data-bs-target="#editDriverModal" title="Edit Driver">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" title="Delete Driver">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>D002</td>
-                                <td>Remon Hawladar</td>
-                                <td>+8809998922221</td>
-                                <td>Active</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary edit-driver-btn" data-bs-toggle="modal" data-bs-target="#editDriverModal" title="Edit Driver">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" title="Delete Driver">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <!-- Dynamic Driver Rows Will Be Injected Here -->
                             </tbody>
-
                         </table>
                         <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#addDriverModal">
                             <i class="fas fa-user-plus"></i> Add New Driver
@@ -568,8 +542,9 @@
                 </div>
             </section>
 
+
             <!-- Add Driver Modal -->
-            <div class="modal fade" id="addDriverModal" tabindex="-1" aria-labelledby="addDriverModalLabel" aria-hidden="true">
+            <div id="addDriverModal" class="modal fade" tabindex="-1" aria-labelledby="addDriverModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header bg-gradient-primary text-white">
@@ -577,25 +552,33 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form id="addDriverForm">
                                 <div class="mb-3">
                                     <label for="driverIdInput" class="form-label">Driver ID</label>
                                     <input type="text" class="form-control" id="driverIdInput" placeholder="Enter Driver ID" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="driverNameInput" class="form-label">Name</label>
+                                    <label for="driverNameInput" class="form-label">Driver Name</label>
                                     <input type="text" class="form-control" id="driverNameInput" placeholder="Enter Driver Name" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="driverContactInput" class="form-label">Contact</label>
-                                    <input type="tel" class="form-control" id="driverContactInput" placeholder="Enter Contact Number" required>
+                                    <label for="driverPhoneInput" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="driverPhoneInput" placeholder="Enter Phone Number" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverLicenseInput" class="form-label">License Number</label>
+                                    <input type="text" class="form-control" id="driverLicenseInput" placeholder="Enter License Number" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverExperienceInput" class="form-label">Experience (Years)</label>
+                                    <input type="number" class="form-control" id="driverExperienceInput" min="0" placeholder="Enter Years of Experience" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="driverStatusInput" class="form-label">Status</label>
                                     <select class="form-control" id="driverStatusInput" required>
-                                        <option value="">Select Status</option>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
+                                        <option value="Suspended">Suspended</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Add Driver</button>
@@ -606,7 +589,7 @@
             </div>
 
             <!-- Edit Driver Modal -->
-            <div class="modal fade" id="editDriverModal" tabindex="-1" aria-labelledby="editDriverModalLabel" aria-hidden="true">
+            <div id="editDriverModal" class="modal fade" tabindex="-1" aria-labelledby="editDriverModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header bg-gradient-primary text-white">
@@ -614,25 +597,33 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form id="editDriverForm">
                                 <div class="mb-3">
                                     <label for="editDriverIdInput" class="form-label">Driver ID</label>
-                                    <input type="text" class="form-control" id="editDriverIdInput" placeholder="Enter Driver ID" required>
+                                    <input type="text" class="form-control" id="editDriverIdInput" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="editDriverNameInput" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="editDriverNameInput" placeholder="Enter Driver Name" required>
+                                    <label for="editDriverNameInput" class="form-label">Driver Name</label>
+                                    <input type="text" class="form-control" id="editDriverNameInput" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="editDriverContactInput" class="form-label">Contact</label>
-                                    <input type="tel" class="form-control" id="editDriverContactInput" placeholder="Enter Contact Number" required>
+                                    <label for="editDriverPhoneInput" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="editDriverPhoneInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverLicenseInput" class="form-label">License Number</label>
+                                    <input type="text" class="form-control" id="editDriverLicenseInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverExperienceInput" class="form-label">Experience (Years)</label>
+                                    <input type="number" class="form-control" id="editDriverExperienceInput" min="0" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editDriverStatusInput" class="form-label">Status</label>
                                     <select class="form-control" id="editDriverStatusInput" required>
-                                        <option value="">Select Status</option>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
+                                        <option value="Suspended">Suspended</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Save Changes</button>
@@ -641,6 +632,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Booking Management Section -->
             <section id="bookingManagement" class="mb-5">
@@ -1173,7 +1165,214 @@
             $('#editNfcCodeInput').hide();
         });
 
-        // Additional functions and event handlers can be added here as needed
+
+
+        // Function to fetch and display drivers
+        function loadDrivers() {
+            $.ajax({
+                url: `${apiBaseUrl}/drivers`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const drivers = response.drivers;
+                    const tbody = $('#driversTable tbody');
+                    tbody.empty(); // Clear existing rows
+
+                    drivers.forEach(driver => {
+                        const statusBadge = getDriverStatusBadge(driver.status);
+                        const row = `
+                        <tr>
+                            <td>${driver.driver_id}</td>
+                            <td>${driver.driver_name}</td>
+                            <td>${driver.phone_number}</td>
+                            <td>${driver.license_number}</td>
+                            <td>${driver.experience_years}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary edit-driver-btn" data-driver-id="${driver.driver_id}" title="Edit Driver">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-driver-btn" data-driver-id="${driver.driver_id}" title="Delete Driver">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        alert('Unauthorized access. Please log in as an admin.');
+                        window.location.href = 'index.html'; // Redirect to login
+                    } else {
+                        alert('Failed to fetch drivers.');
+                    }
+                }
+            });
+        }
+
+        // Function to get driver status badge HTML
+        function getDriverStatusBadge(status) {
+            let badgeClass = 'bg-secondary';
+            switch(status) {
+                case 'Active':
+                    badgeClass = 'bg-success';
+                    break;
+                case 'Inactive':
+                    badgeClass = 'bg-secondary';
+                    break;
+                case 'Suspended':
+                    badgeClass = 'bg-danger';
+                    break;
+                default:
+                    badgeClass = 'bg-primary';
+            }
+            return `<span class="badge ${badgeClass}">${status}</span>`;
+        }
+
+        // Load drivers on page load
+        loadDrivers();
+
+        // Handle Add New Driver Form Submission
+        $('#addDriverForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const driverData = {
+                driver_id: $('#driverIdInput').val().trim(),
+                driver_name: $('#driverNameInput').val().trim(),
+                phone_number: $('#driverPhoneInput').val().trim(),
+                license_number: $('#driverLicenseInput').val().trim(),
+                experience_years: parseInt($('#driverExperienceInput').val(), 10),
+                status: $('#driverStatusInput').val()
+            };
+
+            // Validate required fields
+            if (!driverData.driver_id || !driverData.driver_name || !driverData.phone_number || !driverData.license_number || isNaN(driverData.experience_years) || !driverData.status) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to add a new driver
+            $.ajax({
+                url: `${apiBaseUrl}/drivers`,
+                method: 'POST',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(driverData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#addDriverModal').modal('hide');
+                    loadDrivers(); // Refresh the driver list
+                    $('#addDriverForm')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to add driver.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit Driver Button Click
+        $(document).on('click', '.edit-driver-btn', function() {
+            const driverId = $(this).data('driver-id');
+
+            // Fetch driver details
+            $.ajax({
+                url: `${apiBaseUrl}/drivers/${driverId}`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const driver = response.driver;
+
+                    // Populate the Edit Driver Modal fields
+                    $('#editDriverIdInput').val(driver.driver_id);
+                    $('#editDriverNameInput').val(driver.driver_name);
+                    $('#editDriverPhoneInput').val(driver.phone_number);
+                    $('#editDriverLicenseInput').val(driver.license_number);
+                    $('#editDriverExperienceInput').val(driver.experience_years);
+                    $('#editDriverStatusInput').val(driver.status);
+
+                    // Show the modal
+                    $('#editDriverModal').modal('show');
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch driver details.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit Driver Form Submission
+        $('#editDriverForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const driverId = $('#editDriverIdInput').val().trim();
+            const updatedData = {
+                driver_name: $('#editDriverNameInput').val().trim(),
+                phone_number: $('#editDriverPhoneInput').val().trim(),
+                license_number: $('#editDriverLicenseInput').val().trim(),
+                experience_years: parseInt($('#editDriverExperienceInput').val(), 10),
+                status: $('#editDriverStatusInput').val()
+            };
+
+            // Validate required fields
+            if (!updatedData.driver_name || !updatedData.phone_number || !updatedData.license_number || isNaN(updatedData.experience_years) || !updatedData.status) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to update the driver
+            $.ajax({
+                url: `${apiBaseUrl}/drivers/${driverId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(updatedData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#editDriverModal').modal('hide');
+                    loadDrivers(); // Refresh the driver list
+                    $('#editDriverForm')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to update driver.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Delete Driver Button Click
+        $(document).on('click', '.delete-driver-btn', function() {
+            const driverId = $(this).data('driver-id');
+
+            if (confirm(`Are you sure you want to delete driver ${driverId}? This action cannot be undone.`)) {
+                // AJAX request to delete the driver
+                $.ajax({
+                    url: `${apiBaseUrl}/drivers/${driverId}`,
+                    method: 'DELETE',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        loadDrivers(); // Refresh the driver list
+                    },
+                    error: function(xhr) {
+                        const error = xhr.responseJSON?.error || 'Failed to delete driver.';
+                        alert(error);
+                    }
+                });
+            }
+        });
     });
 
 </script>

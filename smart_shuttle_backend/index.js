@@ -373,6 +373,153 @@ app.delete('/users/:id', isAuthenticated, isAdmin, (req, res) => {
     });
 });
 
+// GET /drivers - Retrieve all drivers (Admin only)
+app.get('/drivers', isAuthenticated, isAdmin, (req, res) => {
+    const query = 'SELECT driver_id, driver_name, phone_number, license_number, experience_years, status FROM driver_info';
+    conn.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching drivers:', err);
+            return res.status(500).json({ error: 'Failed to retrieve drivers' });
+        }
+        res.status(200).json({ drivers: results });
+    });
+});
+
+// GET /drivers/:id - Retrieve a specific driver (Admin only)
+app.get('/drivers/:id', isAuthenticated, isAdmin, (req, res) => {
+    const driverId = req.params.id;
+    const query = 'SELECT driver_id, driver_name, phone_number, license_number, experience_years, status FROM driver_info WHERE driver_id = ?';
+    conn.query(query, [driverId], (err, results) => {
+        if (err) {
+            console.error('Error fetching driver:', err);
+            return res.status(500).json({ error: 'Failed to retrieve driver' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Driver not found' });
+        }
+        res.status(200).json({ driver: results[0] });
+    });
+});
+
+// POST /drivers - Add a new driver (Admin only)
+app.post('/drivers', isAuthenticated, isAdmin, (req, res) => {
+    const { driver_id, driver_name, phone_number, license_number, experience_years, status } = req.body;
+
+    // Validate required fields
+    if (!driver_id || !driver_name || !phone_number || !license_number || !experience_years) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Check if the driver_id or license_number already exists
+    const checkQuery = 'SELECT * FROM driver_info WHERE driver_id = ? OR license_number = ?';
+    conn.query(checkQuery, [driver_id, license_number], (err, result) => {
+        if (err) {
+            console.error('Error checking existing driver:', err);
+            return res.status(500).json({ error: 'Failed to check for existing driver' });
+        }
+
+        if (result.length > 0) {
+            return res.status(400).json({ error: 'Driver ID or License Number already exists' });
+        }
+
+        // Insert the new driver into the database
+        const insertQuery = `
+            INSERT INTO driver_info 
+            (driver_id, driver_name, phone_number, license_number, experience_years, status) 
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+        conn.query(insertQuery, [driver_id, driver_name, phone_number, license_number, experience_years, status || 'Active'], (err, result) => {
+            if (err) {
+                console.error('Error adding driver:', err);
+                return res.status(500).json({ error: 'Failed to add driver' });
+            }
+
+            res.status(201).json({ message: 'Driver added successfully!' });
+        });
+    });
+});
+
+// PUT /drivers/:id - Update an existing driver (Admin only)
+app.put('/drivers/:id', isAuthenticated, isAdmin, (req, res) => {
+    const driverId = req.params.id;
+    const { driver_name, phone_number, license_number, experience_years, status } = req.body;
+
+    // Validate required fields
+    if (!driver_name || !phone_number || !license_number || !experience_years || !status) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Check if the driver exists
+    const checkQuery = 'SELECT * FROM driver_info WHERE driver_id = ?';
+    conn.query(checkQuery, [driverId], (err, result) => {
+        if (err) {
+            console.error('Error fetching driver:', err);
+            return res.status(500).json({ error: 'Failed to retrieve driver' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Driver not found' });
+        }
+
+        // Check if the new license_number is unique (if changed)
+        const existingLicense = 'SELECT * FROM driver_info WHERE license_number = ? AND driver_id != ?';
+        conn.query(existingLicense, [license_number, driverId], (err, licenseResult) => {
+            if (err) {
+                console.error('Error checking license number:', err);
+                return res.status(500).json({ error: 'Failed to verify license number' });
+            }
+
+            if (licenseResult.length > 0) {
+                return res.status(400).json({ error: 'License Number already exists for another driver' });
+            }
+
+            // Update the driver in the database
+            const updateQuery = `
+                UPDATE driver_info 
+                SET driver_name = ?, phone_number = ?, license_number = ?, experience_years = ?, status = ?
+                WHERE driver_id = ?
+            `;
+            conn.query(updateQuery, [driver_name, phone_number, license_number, experience_years, status, driverId], (err, result) => {
+                if (err) {
+                    console.error('Error updating driver:', err);
+                    return res.status(500).json({ error: 'Failed to update driver' });
+                }
+
+                res.status(200).json({ message: 'Driver updated successfully!' });
+            });
+        });
+    });
+});
+
+// DELETE /drivers/:id - Delete a driver (Admin only)
+app.delete('/drivers/:id', isAuthenticated, isAdmin, (req, res) => {
+    const driverId = req.params.id;
+
+    // Check if the driver exists
+    const checkQuery = 'SELECT * FROM driver_info WHERE driver_id = ?';
+    conn.query(checkQuery, [driverId], (err, result) => {
+        if (err) {
+            console.error('Error fetching driver:', err);
+            return res.status(500).json({ error: 'Failed to retrieve driver' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Driver not found' });
+        }
+
+        // Delete the driver
+        const deleteQuery = 'DELETE FROM driver_info WHERE driver_id = ?';
+        conn.query(deleteQuery, [driverId], (err, result) => {
+            if (err) {
+                console.error('Error deleting driver:', err);
+                return res.status(500).json({ error: 'Failed to delete driver' });
+            }
+
+            res.status(200).json({ message: 'Driver deleted successfully!' });
+        });
+    });
+});
+
 // Sample route to check server
 app.get('/', (req, res) => {
     res.send('IUB Smart Shuttle Backend is running!');
