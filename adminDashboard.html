@@ -182,6 +182,75 @@
                     </div>
                 </div>
             </div>
+            <!-- Booking Management Section -->
+            <section id="bookingManagement" class="mb-5">
+                <h2 class="section-title">Booking Management</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Manage Bookings</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>User</th>
+                                <th>Shuttle</th>
+                                <th>Seat Number</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>B001</td>
+                                <td>Dr Mahady Hasan</td>
+                                <td>S001</td>
+                                <td>12A</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" title="Approve Booking"><i class="fas fa-check"></i></button>
+                                    <button class="btn btn-sm btn-danger" title="Reject Booking"><i class="fas fa-times"></i></button>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#placeNewBookingModal"><i class="fas fa-plus"></i> Place a New Booking</button>
+                    </div>
+                    <div id="placeNewBookingModal" class="modal fade" tabindex="-1" aria-labelledby="placeNewBookingModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-gradient-primary text-white">
+                                    <h5 class="modal-title" id="placeNewBookingModalLabel">Place New Booking</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="bookingIdInput" class="form-label">Booking ID</label>
+                                            <input type="text" class="form-control" id="bookingIdInput" placeholder="Enter Booking ID" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="userIdInput" class="form-label">User</label>
+                                            <input type="text" class="form-control" id="userIdInput" placeholder="Enter User ID or Name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="shuttleIdBookingInput" class="form-label">Shuttle ID</label>
+                                            <input type="text" class="form-control" id="shuttleIdBookingInput" placeholder="Enter Shuttle ID" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="seatNumberInput" class="form-label">Seat Number</label>
+                                            <input type="text" class="form-control" id="seatNumberInput" placeholder="Enter Seat Number" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Place Booking</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <!-- User Management Section -->
             <section id="userManagement" class="mb-5">
@@ -653,75 +722,7 @@
             </div>
 
 
-            <!-- Booking Management Section -->
-            <section id="bookingManagement" class="mb-5">
-                <h2 class="section-title">Booking Management</h2>
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Manage Bookings</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>Booking ID</th>
-                                <th>User</th>
-                                <th>Shuttle</th>
-                                <th>Seat Number</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>B001</td>
-                                <td>Dr Mahady Hasan</td>
-                                <td>S001</td>
-                                <td>12A</td>
-                                <td><span class="badge bg-warning">Pending</span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-success" title="Approve Booking"><i class="fas fa-check"></i></button>
-                                    <button class="btn btn-sm btn-danger" title="Reject Booking"><i class="fas fa-times"></i></button>
-                                </td>
-                            </tr>
 
-                            </tbody>
-                        </table>
-                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#placeNewBookingModal"><i class="fas fa-plus"></i> Place a New Booking</button>
-                    </div>
-                    <div id="placeNewBookingModal" class="modal fade" tabindex="-1" aria-labelledby="placeNewBookingModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-gradient-primary text-white">
-                                    <h5 class="modal-title" id="placeNewBookingModalLabel">Place New Booking</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label for="bookingIdInput" class="form-label">Booking ID</label>
-                                            <input type="text" class="form-control" id="bookingIdInput" placeholder="Enter Booking ID" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="userIdInput" class="form-label">User</label>
-                                            <input type="text" class="form-control" id="userIdInput" placeholder="Enter User ID or Name" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="shuttleIdBookingInput" class="form-label">Shuttle ID</label>
-                                            <input type="text" class="form-control" id="shuttleIdBookingInput" placeholder="Enter Shuttle ID" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="seatNumberInput" class="form-label">Seat Number</label>
-                                            <input type="text" class="form-control" id="seatNumberInput" placeholder="Enter Seat Number" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary w-100">Place Booking</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <!-- Manage Schedules Section -->
             <section id="manageSchedules" class="mb-5">
