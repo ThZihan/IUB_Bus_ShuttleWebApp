@@ -1235,6 +1235,404 @@ app.delete('/shuttles/:id', isAuthenticated, isAdmin, (req, res) => {
     });
 });
 
+// GET /shuttle-schedules - Retrieve all shuttle schedules (Admin only)
+app.get('/shuttle-schedules', isAuthenticated, isAdmin, (req, res) => {
+    const query = `
+        SELECT 
+            ss.schedule_id, 
+            ss.shuttle_id, 
+            s.shuttle_number,
+            ss.route_id, 
+            r.route_name,
+            ss.departure_time, 
+            ss.arrival_time, 
+            ss.days_of_operation,
+            ss.created_at
+        FROM 
+            shuttle_schedules ss
+        JOIN 
+            shuttle_info s ON ss.shuttle_id = s.shuttle_id
+        JOIN 
+            route_info r ON ss.route_id = r.route_id
+    `;
+    conn.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching shuttle schedules:', err);
+            return res.status(500).json({ error: 'Failed to retrieve shuttle schedules' });
+        }
+        res.status(200).json({ shuttleSchedules: results });
+    });
+});
+
+// GET /shuttle-schedules/:id - Retrieve a specific shuttle schedule (Admin only)
+app.get('/shuttle-schedules/:id', isAuthenticated, isAdmin, (req, res) => {
+    const scheduleId = req.params.id;
+    const query = `
+        SELECT 
+            ss.schedule_id, 
+            ss.shuttle_id, 
+            s.shuttle_number,
+            ss.route_id, 
+            r.route_name,
+            ss.departure_time, 
+            ss.arrival_time, 
+            ss.days_of_operation,
+            ss.created_at
+        FROM 
+            shuttle_schedules ss
+        JOIN 
+            shuttle_info s ON ss.shuttle_id = s.shuttle_id
+        JOIN 
+            route_info r ON ss.route_id = r.route_id
+        WHERE 
+            ss.schedule_id = ?
+    `;
+    conn.query(query, [scheduleId], (err, results) => {
+        if (err) {
+            console.error('Error fetching shuttle schedule:', err);
+            return res.status(500).json({ error: 'Failed to retrieve shuttle schedule' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Shuttle schedule not found' });
+        }
+        res.status(200).json({ shuttleSchedule: results[0] });
+    });
+});
+
+// POST /shuttle-schedules - Add a new shuttle schedule (Admin only)
+app.post('/shuttle-schedules', isAuthenticated, isAdmin, (req, res) => {
+    const {shuttle_id, route_id, departure_time, arrival_time, days_of_operation} = req.body;
+
+    // Validate required fields
+    if (!shuttle_id || !route_id || !departure_time || !arrival_time || !days_of_operation || days_of_operation.length === 0) {
+        return res.status(400).json({error: 'Missing required fields'});
+    }
+
+    // Convert days_of_operation array to comma-separated string
+    const days = days_of_operation.join(',');
+
+    // Validate time format
+    const timePattern = /^([0-1]\d|2[0-3]):([0-5]\d)$/;
+    if (!timePattern.test(departure_time) || !timePattern.test(arrival_time)) {
+        return res.status(400).json({error: 'Invalid time format. Use HH:MM in 24-hour format.'});
+    }
+
+    // Check if shuttle exists
+    const shuttleCheck = 'SELECT * FROM shuttle_info WHERE shuttle_id = ?';
+    conn.query(shuttleCheck, [shuttle_id], (err, shuttleResult) => {
+        if (err) {
+            console.error('Error checking shuttle:', err);
+            return res.status(500).json({error: 'Failed to verify shuttle'});
+        }
+
+        if (shuttleResult.length === 0) {
+            return res.status(400).json({error: 'Shuttle does not exist'});
+        }
+
+        // Check if route exists
+        const routeCheck = 'SELECT * FROM route_info WHERE route_id = ?';
+        conn.query(routeCheck, [route_id], (err, routeResult) => {
+            if (err) {
+                console.error('Error checking route:', err);
+                return res.status(500).json({error: 'Failed to verify route'});
+            }
+
+            if (routeResult.length === 0) {
+                return res.status(400).json({error: 'Route does not exist'});
+            }
+
+            // Prevent scheduling conflicts
+            const conflictQuery = `
+                SELECT * FROM shuttle_schedules
+                WHERE shuttle_id = ? 
+                AND (
+                    (departure_time < ? AND arrival_time > ?)
+                    OR
+                    (departure_time < ? AND arrival_time > ?)
+                    OR
+                    (departure_time >= ? AND departure_time < ?)
+                )
+                AND (
+                    FIND_IN_SET('Monday', days_of_operation) OR
+                    FIND_IN_SET('Tuesday', days_of_operation) OR
+                    FIND_IN_SET('Wednesday', days_of_operation) OR
+                    FIND_IN_SET('Thursday', days_of_operation) OR
+                    FIND_IN_SET('Friday', days_of_operation) OR
+                    FIND_IN_SET('Saturday', days_of_operation) OR
+                    FIND_IN_SET('Sunday', days_of_operation)
+                )
+            `;
+            conn.query(conflictQuery, [
+                shuttle_id,
+                arrival_time, departure_time,
+                departure_time, arrival_time,
+                departure_time, arrival_time
+            ], (err, conflictResult) => {
+                if (err) {
+                    console.error('Error checking schedule conflicts:', err);
+                    return res.status(500).json({error: 'Failed to check schedule conflicts'});
+                }
+
+                if (conflictResult.length > 0) {
+                    return res.status(400).json({error: 'Scheduling conflict detected for this shuttle.'});
+                }
+
+                // Additional validation to prevent driver conflicts
+                // Fetch the driver assigned to this shuttle
+                const driverQuery = 'SELECT driver_id FROM shuttle_info WHERE shuttle_id = ?';
+                conn.query(driverQuery, [shuttle_id], (err, driverResult) => {
+                    if (err) {
+                        console.error('Error fetching driver:', err);
+                        return res.status(500).json({error: 'Failed to fetch driver for shuttle'});
+                    }
+
+                    if (driverResult.length === 0) {
+                        return res.status(400).json({error: 'Driver not assigned to this shuttle'});
+                    }
+
+                    const driver_id = driverResult[0].driver_id;
+
+                    // Check if driver is available at the given times on the selected days
+                    const driverConflictQuery = `
+                        SELECT ss.* FROM shuttle_schedules ss
+                        JOIN shuttle_info s ON ss.shuttle_id = s.shuttle_id
+                        WHERE s.driver_id = ?
+                        AND (
+                            (ss.departure_time < ? AND ss.arrival_time > ?)
+                            OR
+                            (ss.departure_time < ? AND ss.arrival_time > ?)
+                            OR
+                            (ss.departure_time >= ? AND ss.departure_time < ?)
+                        )
+                        AND (
+                            FIND_IN_SET('Monday', ss.days_of_operation) OR
+                            FIND_IN_SET('Tuesday', ss.days_of_operation) OR
+                            FIND_IN_SET('Wednesday', ss.days_of_operation) OR
+                            FIND_IN_SET('Thursday', ss.days_of_operation) OR
+                            FIND_IN_SET('Friday', ss.days_of_operation) OR
+                            FIND_IN_SET('Saturday', ss.days_of_operation) OR
+                            FIND_IN_SET('Sunday', ss.days_of_operation)
+                        )
+                    `;
+                    conn.query(driverConflictQuery, [
+                        driver_id,
+                        arrival_time, departure_time,
+                        departure_time, arrival_time,
+                        departure_time, arrival_time
+                    ], (err, driverConflictResult) => {
+                        if (err) {
+                            console.error('Error checking driver schedule conflicts:', err);
+                            return res.status(500).json({error: 'Failed to check driver schedule conflicts'});
+                        }
+
+                        if (driverConflictResult.length > 0) {
+                            return res.status(400).json({error: 'Driver is already assigned to another shuttle at these times.'});
+                        }
+
+                        // All validations passed, insert the new schedule
+                        const insertQuery = `
+                            INSERT INTO shuttle_schedules 
+                            (shuttle_id, route_id, departure_time, arrival_time, days_of_operation)
+                            VALUES (?, ?, ?, ?, ?)
+                        `;
+                        conn.query(insertQuery, [shuttle_id, route_id, departure_time, arrival_time, days], (err, insertResult) => {
+                            if (err) {
+                                console.error('Error adding shuttle schedule:', err);
+                                return res.status(500).json({error: 'Failed to add shuttle schedule'});
+                            }
+
+                            res.status(201).json({message: 'Shuttle schedule added successfully!'});
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+// PUT /shuttle-schedules/:id - Update an existing shuttle schedule (Admin only)
+    app.put('/shuttle-schedules/:id', isAuthenticated, isAdmin, (req, res) => {
+        const scheduleId = req.params.id;
+        const {shuttle_id, route_id, departure_time, arrival_time, days_of_operation} = req.body;
+
+        // Validate required fields
+        if (!shuttle_id || !route_id || !departure_time || !arrival_time || !days_of_operation || days_of_operation.length === 0) {
+            return res.status(400).json({error: 'Missing required fields'});
+        }
+
+        // Convert days_of_operation array to comma-separated string
+        const days = days_of_operation.join(',');
+
+        // Validate time format
+        const timePattern = /^([0-1]\d|2[0-3]):([0-5]\d)$/;
+        if (!timePattern.test(departure_time) || !timePattern.test(arrival_time)) {
+            return res.status(400).json({error: 'Invalid time format. Use HH:MM in 24-hour format.'});
+        }
+
+        // Check if shuttle exists
+        const shuttleCheck = 'SELECT * FROM shuttle_info WHERE shuttle_id = ?';
+        conn.query(shuttleCheck, [shuttle_id], (err, shuttleResult) => {
+            if (err) {
+                console.error('Error checking shuttle:', err);
+                return res.status(500).json({error: 'Failed to verify shuttle'});
+            }
+
+            if (shuttleResult.length === 0) {
+                return res.status(400).json({error: 'Shuttle does not exist'});
+            }
+
+            // Check if route exists
+            const routeCheck = 'SELECT * FROM route_info WHERE route_id = ?';
+            conn.query(routeCheck, [route_id], (err, routeResult) => {
+                if (err) {
+                    console.error('Error checking route:', err);
+                    return res.status(500).json({error: 'Failed to verify route'});
+                }
+
+                if (routeResult.length === 0) {
+                    return res.status(400).json({error: 'Route does not exist'});
+                }
+
+                // Prevent scheduling conflicts
+                const conflictQuery = `
+                SELECT * FROM shuttle_schedules
+                WHERE shuttle_id = ? 
+                AND schedule_id != ?
+                AND (
+                    (departure_time < ? AND arrival_time > ?)
+                    OR
+                    (departure_time < ? AND arrival_time > ?)
+                    OR
+                    (departure_time >= ? AND departure_time < ?)
+                )
+                AND (
+                    FIND_IN_SET('Monday', days_of_operation) OR
+                    FIND_IN_SET('Tuesday', days_of_operation) OR
+                    FIND_IN_SET('Wednesday', days_of_operation) OR
+                    FIND_IN_SET('Thursday', days_of_operation) OR
+                    FIND_IN_SET('Friday', days_of_operation) OR
+                    FIND_IN_SET('Saturday', days_of_operation) OR
+                    FIND_IN_SET('Sunday', days_of_operation)
+                )
+            `;
+                conn.query(conflictQuery, [
+                    shuttle_id,
+                    scheduleId,
+                    arrival_time, departure_time,
+                    departure_time, arrival_time,
+                    departure_time, arrival_time
+                ], (err, conflictResult) => {
+                    if (err) {
+                        console.error('Error checking schedule conflicts:', err);
+                        return res.status(500).json({error: 'Failed to check schedule conflicts'});
+                    }
+
+                    if (conflictResult.length > 0) {
+                        return res.status(400).json({error: 'Scheduling conflict detected for this shuttle.'});
+                    }
+
+                    // Additional validation to prevent driver conflicts
+                    // Fetch the driver assigned to this shuttle
+                    const driverQuery = 'SELECT driver_id FROM shuttle_info WHERE shuttle_id = ?';
+                    conn.query(driverQuery, [shuttle_id], (err, driverResult) => {
+                        if (err) {
+                            console.error('Error fetching driver:', err);
+                            return res.status(500).json({error: 'Failed to fetch driver for shuttle'});
+                        }
+
+                        if (driverResult.length === 0) {
+                            return res.status(400).json({error: 'Driver not assigned to this shuttle'});
+                        }
+
+                        const driver_id = driverResult[0].driver_id;
+
+                        // Check if driver is available at the given times on the selected days
+                        const driverConflictQuery = `
+                        SELECT ss.* FROM shuttle_schedules ss
+                        JOIN shuttle_info s ON ss.shuttle_id = s.shuttle_id
+                        WHERE s.driver_id = ?
+                        AND ss.schedule_id != ?
+                        AND (
+                            (ss.departure_time < ? AND ss.arrival_time > ?)
+                            OR
+                            (ss.departure_time < ? AND ss.arrival_time > ?)
+                            OR
+                            (ss.departure_time >= ? AND ss.departure_time < ?)
+                        )
+                        AND (
+                            FIND_IN_SET('Monday', ss.days_of_operation) OR
+                            FIND_IN_SET('Tuesday', ss.days_of_operation) OR
+                            FIND_IN_SET('Wednesday', ss.days_of_operation) OR
+                            FIND_IN_SET('Thursday', ss.days_of_operation) OR
+                            FIND_IN_SET('Friday', ss.days_of_operation) OR
+                            FIND_IN_SET('Saturday', ss.days_of_operation) OR
+                            FIND_IN_SET('Sunday', ss.days_of_operation)
+                        )
+                    `;
+                        conn.query(driverConflictQuery, [
+                            driver_id,
+                            scheduleId,
+                            arrival_time, departure_time,
+                            departure_time, arrival_time,
+                            departure_time, arrival_time
+                        ], (err, driverConflictResult) => {
+                            if (err) {
+                                console.error('Error checking driver schedule conflicts:', err);
+                                return res.status(500).json({error: 'Failed to check driver schedule conflicts'});
+                            }
+
+                            if (driverConflictResult.length > 0) {
+                                return res.status(400).json({error: 'Driver is already assigned to another shuttle at these times.'});
+                            }
+
+                            // All validations passed, update the schedule
+                            const updateQuery = `
+                            UPDATE shuttle_schedules 
+                            SET shuttle_id = ?, route_id = ?, departure_time = ?, arrival_time = ?, days_of_operation = ?
+                            WHERE schedule_id = ?
+                        `;
+                            conn.query(updateQuery, [shuttle_id, route_id, departure_time, arrival_time, days, scheduleId], (err, updateResult) => {
+                                if (err) {
+                                    console.error('Error updating shuttle schedule:', err);
+                                    return res.status(500).json({error: 'Failed to update shuttle schedule'});
+                                }
+
+                                res.status(200).json({message: 'Shuttle schedule updated successfully!'});
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+// DELETE /shuttle-schedules/:id - Delete a shuttle schedule (Admin only)
+        app.delete('/shuttle-schedules/:id', isAuthenticated, isAdmin, (req, res) => {
+            const scheduleId = req.params.id;
+
+            // Check if the schedule exists
+            const checkQuery = 'SELECT * FROM shuttle_schedules WHERE schedule_id = ?';
+            conn.query(checkQuery, [scheduleId], (err, result) => {
+                if (err) {
+                    console.error('Error fetching shuttle schedule:', err);
+                    return res.status(500).json({ error: 'Failed to retrieve shuttle schedule' });
+                }
+
+                if (result.length === 0) {
+                    return res.status(404).json({ error: 'Shuttle schedule not found' });
+                }
+
+                // Delete the shuttle schedule
+                const deleteQuery = 'DELETE FROM shuttle_schedules WHERE schedule_id = ?';
+                conn.query(deleteQuery, [scheduleId], (err, deleteResult) => {
+                    if (err) {
+                        console.error('Error deleting shuttle schedule:', err);
+                        return res.status(500).json({ error: 'Failed to delete shuttle schedule' });
+                    }
+
+                    res.status(200).json({ message: 'Shuttle schedule deleted successfully!' });
+                });
+            });
+        });
 
 // Sample route to check server
 app.get('/', (req, res) => {
