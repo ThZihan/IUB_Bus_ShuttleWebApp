@@ -9,11 +9,6 @@ CREATE TABLE iub_smart_shuttle_db.user_accounts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id)
 );
-// to add elements or insert data in table
-USE iub_smart_shuttle_db;
-
-INSERT INTO route_info (route_name, start_location, end_location, estimated_time, driver_id)
-VALUES ('Route 1', 'Campus Main Gate', 'City Center', 45, 'D001');
 
 //to delete entry from a table
 USE iub_smart_shuttle_db;
@@ -25,6 +20,3 @@ USE iub_smart_shuttle_db;
 UPDATE user_accounts
 SET profile_picture = 'http://fablabiub.com/wp-content/uploads/2024/11/Tahfizul-Hasan-Zihan.png'
 WHERE user_id = '1921629';
-
-//
-SET FOREIGN_KEY_CHECKS = 1;
