@@ -404,11 +404,12 @@
                         <h5 class="card-title mb-0">Manage Shuttles</h5>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="shuttlesTable">
                             <thead>
                             <tr>
                                 <th>Shuttle ID</th>
                                 <th>Route</th>
+                                <th>Shuttle Name-Plate Number</th>
                                 <th>Capacity</th>
                                 <th>Status</th>
                                 <th>Driver</th>
@@ -416,27 +417,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>S001</td>
-                                <td>IUB Campus - Airport</td>
-                                <td>30</td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td>Mohammad Ali</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editShuttleModal" title="Edit Shuttle">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" title="Delete Shuttle">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <!-- Dynamic Shuttle Rows Will Be Injected Here -->
                             </tbody>
-
                         </table>
-                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#placeNewShuttleModal"><i class="fas fa-plus"></i> Add New Shuttle</button>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#placeNewShuttleModal">
+                            <i class="fas fa-plus"></i> Add New Shuttle
+                        </button>
                     </div>
 
+                    <!-- Edit Shuttle Modal -->
                     <div class="modal fade" id="editShuttleModal" tabindex="-1" aria-labelledby="editShuttleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -445,25 +434,40 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form>
+                                    <form id="editShuttleForm">
                                         <div class="mb-3">
                                             <label for="editShuttleIdInput" class="form-label">Shuttle ID</label>
                                             <input type="text" class="form-control" id="editShuttleIdInput" readonly>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="editRouteInput" class="form-label">Route</label>
-                                            <input type="text" class="form-control" id="editRouteInput" placeholder="Enter Route">
+                                            <label for="editShuttleNumberInput" class="form-label">Shuttle Number</label>
+                                            <input type="text" class="form-control" id="editShuttleNumberInput" placeholder="Enter Shuttle Number" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="editStatusInput" class="form-label">Status</label>
-                                            <select class="form-control" id="editStatusInput">
-                                                <option value="Active">Active</option>
-                                                <option value="Inactive">Inactive</option>
+                                            <label for="editRouteSelect" class="form-label">Route</label>
+                                            <select class="form-control" id="editRouteSelect" required>
+                                                <option value="">Select Route</option>
+                                                <!-- Dynamic Route Options Will Be Injected Here -->
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="editDriverInput" class="form-label">Driver</label>
-                                            <input type="text" class="form-control" id="editDriverInput" placeholder="Enter Driver Name">
+                                            <label for="editCapacityInput" class="form-label">Capacity</label>
+                                            <input type="number" class="form-control" id="editCapacityInput" min="1" placeholder="Enter Capacity" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="editDriverSelect" class="form-label">Driver</label>
+                                            <select class="form-control" id="editDriverSelect" required>
+                                                <option value="">Select Driver</option>
+                                                <!-- Active Driver Options Populated Dynamically -->
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="editShuttleStatusSelect" class="form-label">Status</label>
+                                            <select class="form-control" id="editShuttleStatusSelect" required>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                                <option value="Under Maintenance">Under Maintenance</option>
+                                            </select>
                                         </div>
                                         <button type="submit" class="btn btn-primary w-100">Save Changes</button>
                                     </form>
@@ -472,6 +476,8 @@
                         </div>
                     </div>
 
+
+                    <!-- Add Shuttle Modal -->
                     <div id="placeNewShuttleModal" class="modal fade" tabindex="-1" aria-labelledby="placeNewShuttleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -480,26 +486,40 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form>
+                                    <form id="addShuttleForm">
                                         <div class="mb-3">
                                             <label for="shuttleIdInput" class="form-label">Shuttle ID</label>
                                             <input type="text" class="form-control" id="shuttleIdInput" placeholder="Enter Shuttle ID" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="routeInput" class="form-label">Route</label>
-                                            <input type="text" class="form-control" id="routeInput" placeholder="Enter Route" required>
+                                            <label for="shuttleNumberInput" class="form-label">Shuttle Number</label>
+                                            <input type="text" class="form-control" id="shuttleNumberInput" placeholder="Enter Shuttle Number" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="statusInput" class="form-label">Status</label>
-                                            <select class="form-control" id="statusInput" required>
-                                                <option value="">Select Status</option>
-                                                <option value="Active">Active</option>
-                                                <option value="Inactive">Inactive</option>
+                                            <label for="routeSelect" class="form-label">Route</label>
+                                            <select class="form-control" id="routeSelect" required>
+                                                <option value="">Select Route</option>
+                                                <!-- Dynamic Route Options Will Be Injected Here -->
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="driverInput" class="form-label">Driver Name</label>
-                                            <input type="text" class="form-control" id="driverInput" placeholder="Enter Driver Name" required>
+                                            <label for="capacityInput" class="form-label">Capacity</label>
+                                            <input type="number" class="form-control" id="capacityInput" min="1" placeholder="Enter Capacity" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="driverSelect" class="form-label">Driver</label>
+                                            <select class="form-control" id="driverSelect" required>
+                                                <option value="">Select Driver</option>
+                                                <!-- Active Driver Options Populated Dynamically -->
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="shuttleStatusSelect" class="form-label">Status</label>
+                                            <select class="form-control" id="shuttleStatusSelect" required>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                                <option value="Under Maintenance">Under Maintenance</option>
+                                            </select>
                                         </div>
                                         <button type="submit" class="btn btn-primary w-100">Add Shuttle</button>
                                     </form>
@@ -507,6 +527,7 @@
                             </div>
                         </div>
                     </div>
+
 
                 </div>
             </section>
@@ -794,7 +815,7 @@
                                     <input type="text" class="form-control" id="editSchedule_ShuttleIdInput" placeholder="Enter Shuttle ID" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="editRouteInput" class="form-label">Route</label>
+                                    <label for="editSchedule_RouteInput" class="form-label">Route</label>
                                     <input type="text" class="form-control" id="editSchedule_RouteInput" placeholder="Enter Route" required>
                                 </div>
                                 <div class="mb-3">
@@ -1368,6 +1389,292 @@
                     },
                     error: function(xhr) {
                         const error = xhr.responseJSON?.error || 'Failed to delete driver.';
+                        alert(error);
+                    }
+                });
+            }
+        });
+
+        // Function to fetch routes
+        function fetchRoutes(callback) {
+            $.ajax({
+                url: `${apiBaseUrl}/routes`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const routes = response.routes;
+                    callback(routes);
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch routes.';
+                    alert(error);
+                }
+            });
+        }
+
+        // Function to fetch active drivers
+        function fetchActiveDrivers(callback) {
+            $.ajax({
+                url: `${apiBaseUrl}/drivers?status=Active`, // Fetch only active drivers
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const drivers = response.drivers;
+                    callback(drivers);
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch drivers.';
+                    alert(error);
+                }
+            });
+        }
+
+
+
+// Populate Add Shuttle Modal Comboboxes with Active Drivers
+        $('#placeNewShuttleModal').on('show.bs.modal', function () {
+            fetchRoutes(function(routes) {
+                const routeSelect = $('#routeSelect');
+                routeSelect.empty().append('<option value="">Select Route</option>');
+                routes.forEach(route => {
+                    routeSelect.append(`<option value="${route.route_id}">${route.route_name} (${route.start_location} → ${route.end_location})</option>`);
+                });
+            });
+
+            fetchActiveDrivers(function(drivers) { // Fetch only active drivers
+                const driverSelect = $('#driverSelect');
+                driverSelect.empty().append('<option value="">Select Driver</option>');
+                drivers.forEach(driver => {
+                    driverSelect.append(`<option value="${driver.driver_id}">${driver.driver_name}</option>`);
+                });
+            });
+        });
+
+// Populate Edit Shuttle Modal Comboboxes with Active Drivers
+        $('#editShuttleModal').on('show.bs.modal', function () {
+            fetchRoutes(function(routes) {
+                const routeSelect = $('#editRouteSelect');
+                routeSelect.empty().append('<option value="">Select Route</option>');
+                routes.forEach(route => {
+                    routeSelect.append(`<option value="${route.route_id}">${route.route_name} (${route.start_location} → ${route.end_location})</option>`);
+                });
+            });
+
+            fetchActiveDrivers(function(drivers) { // Fetch only active drivers
+                const driverSelect = $('#editDriverSelect');
+                driverSelect.empty().append('<option value="">Select Driver</option>');
+                drivers.forEach(driver => {
+                    driverSelect.append(`<option value="${driver.driver_id}">${driver.driver_name}</option>`);
+                });
+            });
+        });
+
+
+
+        // Handle Add Shuttle Form Submission
+        $('#addShuttleForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const shuttleData = {
+                shuttle_id: $('#shuttleIdInput').val().trim(),
+                shuttle_number: $('#shuttleNumberInput').val().trim(),
+                capacity: parseInt($('#capacityInput').val(), 10),
+                current_status: $('#shuttleStatusSelect').val(),
+                driver_id: $('#driverSelect').val(),
+                route_id: $('#routeSelect').val()
+            };
+
+            // Validate required fields
+            if (!shuttleData.shuttle_id || !shuttleData.shuttle_number || isNaN(shuttleData.capacity) || !shuttleData.driver_id || !shuttleData.route_id) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to add a new shuttle
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles`,
+                method: 'POST',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(shuttleData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#placeNewShuttleModal').modal('hide');
+                    loadShuttles(); // Refresh the shuttle list
+                    $('#addShuttleForm')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to add shuttle.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Function to load shuttles
+        function loadShuttles() {
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const shuttles = response.shuttles;
+                    const tbody = $('#shuttleManagement table tbody');
+                    tbody.empty(); // Clear existing rows
+
+                    shuttles.forEach(shuttle => {
+                        const statusBadge = getStatusBadge(shuttle.current_status);
+                        const row = `
+                            <tr>
+                                <td>${shuttle.shuttle_id}</td>
+                                <td>${shuttle.route_name}</td>
+                                <td>${shuttle.shuttle_number}</td>
+                                <td>${shuttle.capacity}</td>
+                                <td>${statusBadge}</td>
+                                <td>${shuttle.driver_name}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary edit-shuttle-btn" data-shuttle-id="${shuttle.shuttle_id}" title="Edit Shuttle">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger delete-shuttle-btn" data-shuttle-id="${shuttle.shuttle_id}" title="Delete Shuttle">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        alert('Unauthorized access. Please log in as an admin.');
+                        window.location.href = 'index.html'; // Redirect to login
+                    } else {
+                        alert('Failed to fetch shuttles.');
+                    }
+                }
+            });
+        }
+
+        // Function to get status badge HTML
+        function getStatusBadge(status) {
+            let badgeClass = 'bg-secondary';
+            switch(status) {
+                case 'Active':
+                    badgeClass = 'bg-success';
+                    break;
+                case 'Inactive':
+                    badgeClass = 'bg-secondary';
+                    break;
+                case 'Under Maintenance':
+                    badgeClass = 'bg-warning';
+                    break;
+                default:
+                    badgeClass = 'bg-primary';
+            }
+            return `<span class="badge ${badgeClass}">${status}</span>`;
+        }
+
+        // Load shuttles on page load
+        loadShuttles();
+
+        // Handle Edit Shuttle Button Click
+        $(document).on('click', '.edit-shuttle-btn', function() {
+            const shuttleId = $(this).data('shuttle-id');
+
+            // Fetch shuttle details
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles/${shuttleId}`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const shuttle = response.shuttle;
+
+                    // Populate the Edit Shuttle Modal fields
+                    $('#editShuttleIdInput').val(shuttle.shuttle_id);
+                    $('#editShuttleNumberInput').val(shuttle.shuttle_number);
+                    $('#editCapacityInput').val(shuttle.capacity);
+                    $('#editShuttleStatusSelect').val(shuttle.current_status);
+                    $('#editDriverSelect').val(shuttle.driver_id);
+                    $('#editRouteSelect').val(shuttle.route_id);
+
+                    // Show the modal
+                    $('#editShuttleModal').modal('show');
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch shuttle details.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit Shuttle Form Submission
+        $('#editShuttleForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const shuttleId = $('#editShuttleIdInput').val().trim();
+            const updatedData = {
+                shuttle_number: $('#editShuttleNumberInput').val().trim(),
+                capacity: parseInt($('#editCapacityInput').val(), 10),
+                current_status: $('#editShuttleStatusSelect').val(),
+                driver_id: $('#editDriverSelect').val(),
+                route_id: $('#editRouteSelect').val()
+            };
+
+            // Validate required fields
+            if (!shuttleId || !updatedData.shuttle_number || isNaN(updatedData.capacity) || !updatedData.driver_id || !updatedData.route_id) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to update the shuttle
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles/${shuttleId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(updatedData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#editShuttleModal').modal('hide');
+                    loadShuttles(); // Refresh the shuttle list
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to update shuttle.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Delete Shuttle Button Click
+        $(document).on('click', '.delete-shuttle-btn', function() {
+            const shuttleId = $(this).data('shuttle-id');
+
+            if (confirm(`Are you sure you want to delete shuttle ${shuttleId}? This action cannot be undone.`)) {
+                // AJAX request to delete the shuttle
+                $.ajax({
+                    url: `${apiBaseUrl}/shuttles/${shuttleId}`,
+                    method: 'DELETE',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        loadShuttles(); // Refresh the shuttle list
+                    },
+                    error: function(xhr) {
+                        const error = xhr.responseJSON?.error || 'Failed to delete shuttle.';
                         alert(error);
                     }
                 });
