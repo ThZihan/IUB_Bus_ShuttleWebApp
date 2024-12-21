@@ -333,3 +333,46 @@ body {
     font-weight: 600;
     margin-right: 20px;
 }
+/* Add a scrollable container for management tables */
+.management-table-container {
+    max-height: 200px; /* Adjust this value as needed */
+    overflow-y: auto;
+    border: 1px solid #dee2e6; /* Optional: Adds a border to distinguish the scrollable area */
+    border-radius: 5px; /* Optional: Rounds the corners */
+    background-color: #f8f9fa; /* Optional: Adds a light background color */
+    margin-bottom: 10px;
+}
+
+/* Customize the scrollbar (optional, works in WebKit browsers) */
+.management-table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.management-table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.management-table-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.management-table-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Ensure tables take full width within the container */
+.management-table-container table {
+    width: 100%;
+    table-layout: fixed; /* Optional: Fixes the table layout */
+}
+
+/* Optional: Make table headers sticky */
+.management-table-container table thead th , thead{
+    position: sticky;
+    top: 0;
+    background-color: transparent; /* Bootstrap dark */
+    color: white;
+    z-index: 2;
+}

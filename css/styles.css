@@ -465,3 +465,8 @@ footer {
     background: linear-gradient(90deg, #007bff, #0056b3); /* Replace with your desired gradient colors */
     color: white; /* Ensure text is readable on the gradient background */
 }
+
+.bg-gradient-secondary {
+    background: linear-gradient(90deg, #2D3391, #812990); /* Replace with your desired gradient colors */
+    color: white; /* Ensure text is readable on the gradient background */
+}

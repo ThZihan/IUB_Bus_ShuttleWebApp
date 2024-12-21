@@ -20,3 +20,36 @@ USE iub_smart_shuttle_db;
 UPDATE user_accounts
 SET profile_picture = 'http://fablabiub.com/wp-content/uploads/2024/11/Tahfizul-Hasan-Zihan.png'
 WHERE user_id = '1921629';
+
+//show foreign keys
+SELECT 
+    TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM 
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE 
+    TABLE_NAME = 'user_trips'
+    AND TABLE_SCHEMA = 'iub_smart_shuttle_db'
+    AND REFERENCED_TABLE_NAME IS NOT NULL;
+
+//primary key
+SELECT 
+    TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME
+FROM 
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE 
+    TABLE_NAME = 'user_trips'
+    AND TABLE_SCHEMA = 'iub_smart_shuttle_db'
+    AND CONSTRAINT_NAME = 'PRIMARY';
+
+//insert data into table:
+USE iub_smart_shuttle_db;
+
+INSERT INTO route_info (route_id, route_name, start_location, end_location)
+VALUES ('R0002', 'UTTARA-IUB', 'Abdullahpur Bus Stand', 'IUB Campus Gate');
+

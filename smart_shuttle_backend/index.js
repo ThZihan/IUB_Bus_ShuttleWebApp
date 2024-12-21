@@ -1633,6 +1633,159 @@ app.post('/shuttle-schedules', isAuthenticated, isAdmin, (req, res) => {
                 });
             });
         });
+// GET /bookings - Retrieve all bookings (Admin only)
+app.get('/bookings', isAuthenticated, isAdmin, (req, res) => {
+    const query = `
+        SELECT 
+            ut.booking_id,
+            ut.user_id,
+            ua.full_name AS user_name,
+            ut.schedule_id,
+            ss.shuttle_id,
+            s.shuttle_number,
+            ss.route_id,
+            r.route_name,
+            ss.departure_time,
+            ss.arrival_time,
+            ut.booking_status,
+            ut.booking_date,
+            ut.number_of_passengers,
+            ut.created_at,
+            ut.updated_at
+        FROM 
+            user_trips ut
+        JOIN 
+            user_accounts ua ON ut.user_id = ua.user_id
+        JOIN 
+            shuttle_schedules ss ON ut.schedule_id = ss.schedule_id
+        JOIN 
+            shuttle_info s ON ss.shuttle_id = s.shuttle_id
+        JOIN 
+            route_info r ON ss.route_id = r.route_id
+        ORDER BY ut.created_at DESC
+    `;
+    conn.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching bookings:', err);
+            return res.status(500).json({ error: 'Failed to retrieve bookings' });
+        }
+        res.status(200).json({ bookings: results });
+    });
+});
+
+// GET /bookings/:id - Retrieve a specific booking (Admin only)
+app.get('/bookings/:id', isAuthenticated, isAdmin, (req, res) => {
+    const bookingId = req.params.id;
+    const query = `
+        SELECT 
+            ut.booking_id,
+            ut.user_id,
+            ua.full_name AS user_name,
+            ut.schedule_id,
+            ss.shuttle_id,
+            s.shuttle_number,
+            ss.route_id,
+            r.route_name,
+            ss.departure_time,
+            ss.arrival_time,
+            ut.booking_status,
+            ut.booking_date,
+            ut.number_of_passengers,
+            ut.created_at,
+            ut.updated_at
+        FROM 
+            user_trips ut
+        JOIN 
+            user_accounts ua ON ut.user_id = ua.user_id
+        JOIN 
+            shuttle_schedules ss ON ut.schedule_id = ss.schedule_id
+        JOIN 
+            shuttle_info s ON ss.shuttle_id = s.shuttle_id
+        JOIN 
+            route_info r ON ss.route_id = r.route_id
+        WHERE 
+            ut.booking_id = ?
+    `;
+    conn.query(query, [bookingId], (err, results) => {
+        if (err) {
+            console.error('Error fetching booking:', err);
+            return res.status(500).json({ error: 'Failed to retrieve booking' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+        res.status(200).json({ booking: results[0] });
+    });
+});
+
+// PUT /bookings/:id - Update booking status (Admin only)
+app.put('/bookings/:id', isAuthenticated, isAdmin, (req, res) => {
+    const bookingId = req.params.id;
+    const { booking_status } = req.body;
+
+    // Validate booking_status
+    const validStatuses = ['Pending', 'Approved', 'Rejected', 'Cancelled'];
+    if (!booking_status || !validStatuses.includes(booking_status)) {
+        return res.status(400).json({ error: 'Invalid or missing booking_status' });
+    }
+
+    // Check if booking exists
+    const checkQuery = 'SELECT * FROM user_trips WHERE booking_id = ?';
+    conn.query(checkQuery, [bookingId], (err, results) => {
+        if (err) {
+            console.error('Error checking booking:', err);
+            return res.status(500).json({ error: 'Failed to retrieve booking' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+
+        // Update booking_status
+        const updateQuery = `
+            UPDATE user_trips 
+            SET booking_status = ?, updated_at = NOW() 
+            WHERE booking_id = ?
+        `;
+        conn.query(updateQuery, [booking_status, bookingId], (err, updateResult) => {
+            if (err) {
+                console.error('Error updating booking status:', err);
+                return res.status(500).json({ error: 'Failed to update booking status' });
+            }
+
+            res.status(200).json({ message: 'Booking status updated successfully!' });
+        });
+    });
+});
+
+// DELETE /bookings/:id - Delete a booking (Admin only)
+app.delete('/bookings/:id', isAuthenticated, isAdmin, (req, res) => {
+    const bookingId = req.params.id;
+
+    // Check if booking exists
+    const checkQuery = 'SELECT * FROM user_trips WHERE booking_id = ?';
+    conn.query(checkQuery, [bookingId], (err, results) => {
+        if (err) {
+            console.error('Error fetching booking:', err);
+            return res.status(500).json({ error: 'Failed to retrieve booking' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+
+        // Delete the booking
+        const deleteQuery = 'DELETE FROM user_trips WHERE booking_id = ?';
+        conn.query(deleteQuery, [bookingId], (err, deleteResult) => {
+            if (err) {
+                console.error('Error deleting booking:', err);
+                return res.status(500).json({ error: 'Failed to delete booking' });
+            }
+
+            res.status(200).json({ message: 'Booking deleted successfully!' });
+        });
+    });
+});
+
 
 // Sample route to check server
 app.get('/', (req, res) => {
