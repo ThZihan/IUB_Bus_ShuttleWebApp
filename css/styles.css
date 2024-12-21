@@ -470,3 +470,10 @@ footer {
     background: linear-gradient(90deg, #2D3391, #812990); /* Replace with your desired gradient colors */
     color: white; /* Ensure text is readable on the gradient background */
 }
+
+#sticky-footer {
+    position: fixed; /* Sticks the footer to the bottom */
+    bottom: 0;
+    left: 0;
+    width: 100%; /* Ensures the footer spans the full width of the page */
+}

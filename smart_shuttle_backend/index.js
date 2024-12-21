@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session); // Import the session store
+const PDFDocument = require('pdfkit'); // For PDF generation
+const { body, validationResult } = require('express-validator'); // For input validation
 
 const app = express();
 const port = 3000;
@@ -842,8 +844,8 @@ app.delete('/schedules/:id', isAuthenticated, isAdmin, (req, res) => {
         });
     });
 });
-// GET /routes - Retrieve all routes (Admin only)
-app.get('/routes', isAuthenticated, isAdmin, (req, res) => {
+// GET /routes - Retrieve all routes
+app.get('/routes', isAuthenticated, (req, res) => {
     const query = 'SELECT route_id, route_name, start_location, end_location FROM route_info';
     conn.query(query, (err, results) => {
         if (err) {
@@ -1785,6 +1787,356 @@ app.delete('/bookings/:id', isAuthenticated, isAdmin, (req, res) => {
         });
     });
 });
+
+// GET /settings - Retrieve user settings (Authenticated Users)
+app.get('/settings', isAuthenticated, (req, res) => {
+    const userId = req.session.user.user_id;
+    const query = 'SELECT * FROM user_settings WHERE user_id = ?';
+    conn.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Error fetching settings:', err);
+            return res.status(500).json({ error: 'Failed to retrieve settings' });
+        }
+        if (results.length === 0) {
+            // If settings do not exist, create default settings
+            const insertDefault = `
+                INSERT INTO user_settings (user_id) VALUES (?)
+            `;
+            conn.query(insertDefault, [userId], (err, insertResult) => {
+                if (err) {
+                    console.error('Error inserting default settings:', err);
+                    return res.status(500).json({ error: 'Failed to create default settings' });
+                }
+                // Retrieve the newly created settings
+                conn.query(query, [userId], (err, newResults) => {
+                    if (err) {
+                        console.error('Error fetching settings:', err);
+                        return res.status(500).json({ error: 'Failed to retrieve settings' });
+                    }
+                    res.status(200).json({ settings: newResults[0] });
+                });
+            });
+        } else {
+            res.status(200).json({ settings: results[0] });
+        }
+    });
+});
+
+// PUT /settings - Update user settings (Authenticated Users)
+app.put('/settings',
+    isAuthenticated,
+    [
+        body('push_notifications').optional().isBoolean(),
+        body('units').optional().isIn(['metric', 'imperial']),
+        body('location_sharing').optional().isBoolean(),
+        body('pickup_stop').optional().isString().isLength({ max: 100 }),
+        body('dropoff_stop').optional().isString().isLength({ max: 100 })
+    ],
+    (req, res) => {
+        const userId = req.session.user.user_id;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { push_notifications, units, location_sharing, pickup_stop, dropoff_stop } = req.body;
+
+        // Build dynamic query based on provided fields
+        let query = 'UPDATE user_settings SET ';
+        const fields = [];
+        const params = [];
+
+        if (push_notifications !== undefined) {
+            fields.push('push_notifications = ?');
+            params.push(push_notifications);
+        }
+        if (units) {
+            fields.push('units = ?');
+            params.push(units);
+        }
+        if (location_sharing !== undefined) {
+            fields.push('location_sharing = ?');
+            params.push(location_sharing);
+        }
+        if (pickup_stop) {
+            fields.push('pickup_stop = ?');
+            params.push(pickup_stop);
+        }
+        if (dropoff_stop) {
+            fields.push('dropoff_stop = ?');
+            params.push(dropoff_stop);
+        }
+
+        if (fields.length === 0) {
+            return res.status(400).json({ error: 'No valid fields provided for update' });
+        }
+
+        query += fields.join(', ') + ' WHERE user_id = ?';
+        params.push(userId);
+
+        conn.query(query, params, (err, result) => {
+            if (err) {
+                console.error('Error updating settings:', err);
+                return res.status(500).json({ error: 'Failed to update settings' });
+            }
+            res.status(200).json({ message: 'Settings updated successfully!' });
+        });
+    }
+);
+
+// POST /settings/password-reset - Reset User Password (Authenticated Users)
+app.post('/settings/password-reset',
+    isAuthenticated,
+    [
+        body('currentPassword').isString().notEmpty(),
+        body('newPassword').isString().isLength({ min: 6 })
+    ],
+    (req, res) => {
+        const userId = req.session.user.user_id;
+        const { currentPassword, newPassword } = req.body;
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // Fetch current hashed password
+        const query = 'SELECT password FROM user_accounts WHERE user_id = ?';
+        conn.query(query, [userId], (err, results) => {
+            if (err) {
+                console.error('Error fetching user password:', err);
+                return res.status(500).json({ error: 'Failed to retrieve current password' });
+            }
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const hashedPassword = results[0].password;
+
+            // Compare currentPassword with hashedPassword
+            bcrypt.compare(currentPassword, hashedPassword, (err, isMatch) => {
+                if (err) {
+                    console.error('Error comparing passwords:', err);
+                    return res.status(500).json({ error: 'Failed to compare passwords' });
+                }
+
+                if (!isMatch) {
+                    return res.status(400).json({ error: 'Current password is incorrect' });
+                }
+
+                // Hash newPassword
+                bcrypt.hash(newPassword, 10, (err, newHashedPassword) => {
+                    if (err) {
+                        console.error('Error hashing new password:', err);
+                        return res.status(500).json({ error: 'Failed to hash new password' });
+                    }
+
+                    // Update password in the database
+                    const updateQuery = 'UPDATE user_accounts SET password = ? WHERE user_id = ?';
+                    conn.query(updateQuery, [newHashedPassword, userId], (err, updateResult) => {
+                        if (err) {
+                            console.error('Error updating password:', err);
+                            return res.status(500).json({ error: 'Failed to update password' });
+                        }
+
+                        res.status(200).json({ message: 'Password reset successfully!' });
+                    });
+                });
+            });
+        });
+    }
+);
+
+// DELETE /settings/delete-account - Delete User Account (Authenticated Users)
+app.delete('/settings/delete-account', isAuthenticated, (req, res) => {
+    const userId = req.session.user.user_id;
+
+    // Delete user account; cascades to user_settings and user_trips due to foreign key constraints
+    const deleteQuery = 'DELETE FROM user_accounts WHERE user_id = ?';
+    conn.query(deleteQuery, [userId], (err, result) => {
+        if (err) {
+            console.error('Error deleting user account:', err);
+            return res.status(500).json({ error: 'Failed to delete account' });
+        }
+
+        // Destroy session
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.status(500).json({ error: 'Account deleted but failed to log out' });
+            }
+            res.clearCookie('iub_bus_cookie'); // Correct cookie name
+            res.status(200).json({ message: 'Account deleted successfully!' });
+        });
+    });
+});
+
+/**
+ * Helper Function to Format Time from HH:MM:SS to HH:MM AM/PM
+ * @param {string} timeStr - Time string in HH:MM:SS format
+ * @returns {string} - Formatted time string in HH:MM AM/PM
+ */
+function formatTime(timeStr) {
+    const [hour, minute, second] = timeStr.split(':');
+    let period = 'AM';
+    let formattedHour = parseInt(hour, 10);
+
+    if (formattedHour >= 12) {
+        period = 'PM';
+        if (formattedHour > 12) {
+            formattedHour -= 12;
+        }
+    }
+    if (formattedHour === 0) {
+        formattedHour = 12;
+    }
+
+    return `${formattedHour.toString().padStart(2, '0')}:${minute} ${period}`;
+}
+
+// GET /settings/offline-schedule - Download Offline Schedule as PDF (Authenticated Users)
+app.get('/settings/offline-schedule', isAuthenticated, (req, res) => {
+    const userId = req.session.user.user_id;
+
+    // Fetch all shuttle schedules
+    const query = `
+        SELECT 
+            ss.schedule_id, 
+            s.shuttle_number, 
+            r.route_name, 
+            ss.departure_time, 
+            ss.arrival_time, 
+            ss.days_of_operation,
+            s.current_status,
+            r.start_location,
+            r.end_location
+        FROM 
+            shuttle_schedules ss
+        JOIN 
+            shuttle_info s ON ss.shuttle_id = s.shuttle_id
+        JOIN 
+            route_info r ON ss.route_id = r.route_id
+        ORDER BY 
+            r.route_name, s.shuttle_number
+    `;
+
+    conn.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching shuttle schedules:', err);
+            return res.status(500).json({ error: 'Failed to retrieve shuttle schedules' });
+        }
+
+        // Generate PDF
+        const doc = new PDFDocument({ size: 'A4', layout: 'landscape', margin: 30 }); // Landscape with margins
+        const filename = 'Offline_Schedule.pdf';
+        res.setHeader('Content-disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+        res.setHeader('Content-type', 'application/pdf');
+
+        doc.pipe(res);
+
+        // Title
+        doc
+            .fontSize(20)
+            .font('Helvetica-Bold')
+            .text('IUB Smart Shuttle - Offline Schedule', {
+                align: 'center',
+            });
+        doc.moveDown(2);
+
+        // Table Configurations
+        const tableTop = doc.y;
+        const columnWidths = [100, 100, 120, 120, 90, 90, 180]; // Adjust widths as needed
+        const rowHeight = 30; // Increased row height for wrapping
+        const headerHeight = 20;
+        const marginLeft = doc.page.margins.left;
+        const tableWidth = columnWidths.reduce((sum, width) => sum + width, 0);
+
+        // Table Headers
+        const headers = [
+            'Route Name',
+            'Shuttle Number',
+            'Start Location',
+            'End Location',
+            'Departure Time',
+            'Arrival Time',
+            'Days of Operation',
+        ];
+        let x = marginLeft;
+        const headerY = tableTop;
+
+        doc
+            .fontSize(12)
+            .font('Helvetica-Bold');
+
+        headers.forEach((header, i) => {
+            doc.text(header, x, headerY, {
+                width: columnWidths[i],
+                align: 'left',
+                valign: 'middle',
+            });
+            x += columnWidths[i];
+        });
+
+        // Draw Header Line
+        doc
+            .moveTo(marginLeft, headerY + headerHeight)
+            .lineTo(marginLeft + tableWidth, headerY + headerHeight)
+            .stroke();
+
+        let y = headerY + headerHeight + 10; // Add spacing after header
+
+        // Table Rows
+        doc.font('Helvetica').fontSize(10); // Reduced font size for data
+
+        results.forEach((schedule) => {
+            x = marginLeft;
+
+            const rowData = [
+                schedule.route_name,
+                schedule.shuttle_number,
+                schedule.start_location,
+                schedule.end_location,
+                formatTime(schedule.departure_time),
+                formatTime(schedule.arrival_time),
+                schedule.days_of_operation,
+            ];
+
+            rowData.forEach((data, i) => {
+                const textOptions = {
+                    width: columnWidths[i] - 20, // Add padding to the right
+                    align: 'center',
+                };
+
+                // Calculate the height required for the text
+                const textHeight = doc.heightOfString(data, textOptions);
+                const requiredHeight = Math.max(rowHeight, textHeight + 5); // Add some padding
+
+                doc.text(data, x, y, textOptions);
+                x += columnWidths[i];
+            });
+
+            // Draw a horizontal line after each row
+            doc
+                .moveTo(marginLeft, y + rowHeight - 5)
+                .lineTo(marginLeft + tableWidth, y + rowHeight - 5)
+                .stroke();
+
+            y += rowHeight + 10; // Add spacing between rows
+
+            // Check for page break
+            if (y + rowHeight > doc.page.height - doc.page.margins.bottom) {
+                doc.addPage({ size: 'A4', layout: 'landscape', margin: 10 });
+                y = doc.page.margins.top;
+            }
+        });
+
+        // Finalize PDF
+        doc.end();
+    });
+});
+
+
+
 
 
 // Sample route to check server
