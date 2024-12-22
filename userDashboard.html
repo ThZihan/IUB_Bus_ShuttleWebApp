@@ -241,11 +241,13 @@
                 <!-- Schedule & Booking Section -->
                 <section id="scheduleBooking" class="py-4">
                     <h2 class="section-title">Schedule & Booking</h2>
+                    <!-- Your Upcoming Rides -->
                     <div class="table-responsive mb-4">
                         <h5>Your Upcoming Rides</h5>
                         <table class="table table-striped">
                             <thead class="bg-gradient-primary text-white">
                             <tr>
+                                <th>Booking ID</th>
                                 <th>Shuttle ID</th>
                                 <th>Route</th>
                                 <th>Departure Time</th>
@@ -254,20 +256,13 @@
                                 <th>Action</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>S001</td>
-                                <td>Airport Bus Stop → IUB Campus</td>
-                                <td>08:00 AM</td>
-                                <td>08:45 AM</td>
-                                <td><span class="badge bg-success">Confirmed</span></td>
-                                <td><button class="btn btn-danger btn-sm">Cancel</button></td>
-                            </tr>
+                            <tbody id="upcomingRidesBody">
+                            <!-- Dynamic Booking Rows Will Be Injected Here -->
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive mb-4">
                         <h5>Available Schedules</h5>
                         <table class="table table-striped">
                             <thead class="bg-gradient-primary text-white">
@@ -280,48 +275,59 @@
                                 <th>Action</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>S002</td>
-                                <td>Uttara Housebuilding → IUB Campus</td>
-                                <td>09:00 AM</td>
-                                <td>09:45 AM</td>
-                                <td><span class="badge bg-warning">Few Seats</span></td>
-                                <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button></td>
-                            </tr>
+                            <tbody id="availableSchedulesBody">
+                            <!-- Dynamic Available Schedule Rows Will Be Injected Here -->
                             </tbody>
                         </table>
                     </div>
                 </section>
 
+
                 <!-- Booking Modal -->
                 <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header bg-gradient-primary text-white">
-                                <h5 class="modal-title" id="bookingModalLabel">Book Your Seat</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="userId" class="form-label">User ID</label>
-                                        <input type="text" class="form-control" id="userId" placeholder="Enter your User ID" required>
-                                    </div>
+                            <form id="bookingForm">
+                                <div class="modal-header bg-gradient-primary text-white">
+                                    <h5 class="modal-title" id="bookingModalLabel">Book Your Seat</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Hidden Fields to Store Shuttle Information -->
+                                    <input type="hidden" id="modalScheduleId" name="schedule_id">
+                                    <input type="hidden" id="modalShuttleId" name="shuttle_id">
+
                                     <div class="mb-3">
                                         <label for="shuttleId" class="form-label">Shuttle ID</label>
-                                        <input type="text" class="form-control" id="shuttleId" required>
+                                        <input type="text" class="form-control" id="shuttleId" readonly>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="seatNumber" class="form-label">Preferred Seat Number</label>
-                                        <input type="text" class="form-control" id="seatNumber" placeholder="Enter Seat Number" required>
+                                        <label for="routeName" class="form-label">Route</label>
+                                        <input type="text" class="form-control" id="routeName" readonly>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
-                                </form>
-                            </div>
+                                    <div class="mb-3">
+                                        <label for="departureTime" class="form-label">Departure Time</label>
+                                        <input type="text" class="form-control" id="departureTime" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="arrivalTime" class="form-label">Arrival Time</label>
+                                        <input type="text" class="form-control" id="arrivalTime" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="numberOfPassengers" class="form-label">Number of Passengers</label>
+                                        <input type="number" class="form-control" id="numberOfPassengers" name="number_of_passengers" min="1" value="1" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+
+
 
                 <section id="feedbackComplaints" class="py-4">
                     <h2 class="section-title">Feedback & Complaints</h2>
@@ -391,11 +397,317 @@
         </div>
     </div>
 </div>
-<!-- Existing scripts -->
+
 
 <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-NqajIvj_EVijypCm-4UVztEhWk135xI&callback=initMap"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Initialize the dashboard by fetching data
+        fetchAvailableSchedules();
+        fetchUserBookings();
+
+        // Handle sidebar toggle
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+        // Initialize Google Map
+        initMap();
+
+        // Handle Booking Form Submission
+        $('#bookingForm').on('submit', function(e) {
+            e.preventDefault();
+            submitBookingForm();
+        });
+
+        // Handle Feedback Form Submission
+        $('#feedbackModal form').on('submit', function(e) {
+            e.preventDefault();
+            submitFeedbackForm();
+        });
+
+        // Handle Logout
+        $('#logoutBtn').on('click', function(e) {
+            e.preventDefault();
+            logoutUser();
+        });
+    });
+
+    // Function to fetch available shuttle schedules
+    function fetchAvailableSchedules() {
+        $.ajax({
+            url: 'http://localhost:3000/user/shuttle-schedules', // Ensure full URL is used
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(response) {
+                populateAvailableSchedules(response.shuttleSchedules);
+            },
+            error: function(xhr) {
+                console.error('Error fetching shuttle schedules:', xhr.responseJSON.error);
+                alert('Failed to load shuttle schedules.');
+            }
+        });
+    }
+
+    // Function to populate the Available Schedules table
+    function populateAvailableSchedules(schedules) {
+        const tbody = $('#availableSchedulesBody');
+        tbody.empty(); // Clear existing data
+
+        schedules.forEach(schedule => {
+            const days = schedule.days_of_operation.split(',').join(', ');
+            const availableSeats = schedule.capacity - schedule.booked_seats;
+            let statusBadge = '';
+
+            if (availableSeats > 10) {
+                statusBadge = '<span class="badge bg-success">Available</span>';
+            } else if (availableSeats > 0) {
+                statusBadge = '<span class="badge bg-warning">Few Seats</span>';
+            } else {
+                statusBadge = '<span class="badge bg-danger">Full</span>';
+            }
+
+            const row = `
+            <tr>
+                <td>${schedule.shuttle_id}</td>
+                <td>${schedule.route_name} (${schedule.start_location} → ${schedule.end_location})</td>
+                <td>${formatTime(schedule.departure_time)}</td>
+                <td>${formatTime(schedule.arrival_time)}</td>
+                <td>${statusBadge}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm book-now-btn"
+                        data-schedule-id="${schedule.schedule_id}"
+                        data-shuttle-id="${schedule.shuttle_id}"
+                        data-route-name="${schedule.route_name}"
+                        data-departure-time="${schedule.departure_time}"
+                        data-arrival-time="${schedule.arrival_time}"
+                        data-days="${schedule.days_of_operation}">
+                        Book Now
+                    </button>
+                </td>
+            </tr>
+        `;
+            tbody.append(row);
+        });
+
+        // Attach event listeners to the new Book Now buttons
+        $('.book-now-btn').on('click', function() {
+            const scheduleId = $(this).data('schedule-id');
+            const shuttleId = $(this).data('shuttle-id');
+            const routeName = $(this).data('route-name');
+            const departureTime = $(this).data('departure-time');
+            const arrivalTime = $(this).data('arrival-time');
+            const days = $(this).data('days').split(',').join(', ');
+
+            // Populate the booking modal with schedule details
+            $('#modalScheduleId').val(scheduleId);
+            $('#modalShuttleId').val(shuttleId);
+            $('#shuttleId').val(shuttleId);
+            $('#routeName').val(routeName);
+            $('#departureTime').val(formatTime(departureTime));
+            $('#arrivalTime').val(formatTime(arrivalTime));
+
+            // Show the booking modal
+            $('#bookingModal').modal('show');
+        });
+    }
+
+    // Function to determine availability status based on shuttle capacity and bookings
+    function getAvailabilityStatus(schedule) {
+        // Assuming capacity and booked seats are included in the schedule object
+        // If not, you may need to modify the backend to include these details
+        const availableSeats = schedule.capacity - schedule.booked_seats;
+        if (availableSeats > 10) {
+            return '<span class="badge bg-success">Available</span>';
+        } else if (availableSeats > 0) {
+            return '<span class="badge bg-warning">Few Seats</span>';
+        } else {
+            return '<span class="badge bg-danger">Full</span>';
+        }
+    }
+
+    // Function to format time from HH:MM:SS to HH:MM AM/PM
+    function formatTime(timeStr) {
+        const [hour, minute, second] = timeStr.split(':');
+        let period = 'AM';
+        let hourInt = parseInt(hour, 10);
+
+        if (hourInt >= 12) {
+            period = 'PM';
+            if (hourInt > 12) hourInt -= 12;
+        }
+        if (hourInt === 0) {
+            hourInt = 12;
+        }
+
+        return `${hourInt}:${minute} ${period}`;
+    }
+
+    // Similarly, update other AJAX calls to include credentials
+    function fetchUserBookings() {
+        $.ajax({
+            url: 'http://localhost:3000/user/bookings', // Ensure full URL is used
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(response) {
+                populateUserBookings(response.bookings);
+            },
+            error: function(xhr) {
+                console.error('Error fetching user bookings:', xhr.responseJSON.error);
+                alert('Failed to load your bookings.');
+            }
+        });
+    }
+
+    // Function to populate the User's Bookings table
+    function populateUserBookings(bookings) {
+        const tbody = $('#upcomingRidesBody');
+        tbody.empty(); // Clear existing data
+
+        bookings.forEach(booking => {
+            const statusBadge = getBookingStatusBadge(booking.booking_status);
+            const row = `
+            <tr>
+                <td>${booking.booking_id}</td>
+                <td>${booking.shuttle_id}</td>
+                <td>${booking.route_name} (${booking.start_location} → ${booking.end_location})</td>
+                <td>${formatTime(booking.departure_time)}</td>
+                <td>${formatTime(booking.arrival_time)}</td>
+                <td>${statusBadge}</td>
+                <td>
+                    ${booking.booking_status !== 'Cancelled' ?
+                `<button class="btn btn-danger btn-sm cancel-booking-btn" data-booking-id="${booking.booking_id}">Cancel</button>`
+                : 'N/A'}
+                </td>
+            </tr>
+        `;
+            tbody.append(row);
+        });
+
+        // Attach event listeners to the new Cancel buttons
+        $('.cancel-booking-btn').on('click', function() {
+            const bookingId = $(this).data('booking-id');
+            cancelBooking(bookingId);
+        });
+    }
+
+    // Function to get booking status badge
+    function getBookingStatusBadge(status) {
+        let badgeClass = 'bg-secondary';
+        switch(status) {
+            case 'Pending':
+                badgeClass = 'bg-warning';
+                break;
+            case 'Approved':
+                badgeClass = 'bg-success';
+                break;
+            case 'Rejected':
+                badgeClass = 'bg-danger';
+                break;
+            case 'Cancelled':
+                badgeClass = 'bg-dark';
+                break;
+        }
+        return `<span class="badge ${badgeClass}">${status}</span>`;
+    }
+
+    // Function to handle booking form submission
+    function submitBookingForm() {
+        const scheduleId = $('#modalScheduleId').val();
+        const numberOfPassengers = parseInt($('#numberOfPassengers').val(), 10);
+
+        // Validate number of passengers
+        if (isNaN(numberOfPassengers) || numberOfPassengers <= 0) {
+            alert('Please enter a valid number of passengers.');
+            return;
+        }
+
+        // Prepare the data
+        const bookingData = {
+            schedule_id: scheduleId,
+            number_of_passengers: numberOfPassengers
+        };
+
+        // Send the booking request
+        $.ajax({
+            url: '/user/bookings',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(bookingData),
+            success: function(response) {
+                alert(response.message);
+                $('#bookingModal').modal('hide');
+                // Refresh the bookings and available schedules
+                fetchUserBookings();
+                fetchAvailableSchedules();
+            },
+            error: function(xhr) {
+                console.error('Error creating booking:', xhr.responseJSON.error);
+                alert(`Failed to create booking: ${xhr.responseJSON.error}`);
+            }
+        });
+    }
+
+    // Function to handle booking cancellation
+    function cancelBooking(bookingId) {
+        if (!confirm('Are you sure you want to cancel this booking?')) {
+            return;
+        }
+
+        $.ajax({
+            url: `/user/bookings/${bookingId}`,
+            method: 'DELETE',
+            success: function(response) {
+                alert(response.message);
+                // Refresh the bookings and available schedules
+                fetchUserBookings();
+                fetchAvailableSchedules();
+            },
+            error: function(xhr) {
+                console.error('Error cancelling booking:', xhr.responseJSON.error);
+                alert(`Failed to cancel booking: ${xhr.responseJSON.error}`);
+            }
+        });
+    }
+
+    // Function to handle feedback form submission
+    function submitFeedbackForm() {
+        const feedbackType = $('#feedbackType').val();
+        const feedbackMessage = $('#feedbackMessage').val().trim();
+
+        if (!feedbackType || !feedbackMessage) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        const feedbackData = {
+            type: feedbackType,
+            message: feedbackMessage
+        };
+
+        $.ajax({
+            url: '/user/feedback', // Ensure this endpoint exists on the backend
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(feedbackData),
+            success: function(response) {
+                alert('Feedback submitted successfully!');
+                $('#feedbackModal').modal('hide');
+                // Optionally, refresh the feedback table
+            },
+            error: function(xhr) {
+                console.error('Error submitting feedback:', xhr.responseJSON.error);
+                alert(`Failed to submit feedback: ${xhr.responseJSON.error}`);
+            }
+        });
+    }
+</script>
 <script src="js/dashboard.js"></script>
 
 <!-- New Script for Session Management -->

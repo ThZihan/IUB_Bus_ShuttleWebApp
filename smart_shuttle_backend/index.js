@@ -63,7 +63,13 @@ function isAuthenticated(req, res, next) {
         res.status(401).json({ error: 'Unauthorized' });
     }
 }
-
+function isUserAuthenticated(req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+}
 function isAdmin(req, res, next) {
     if (req.session.user && req.session.user.designation === 'Moderator') {
         next();
@@ -2136,7 +2142,203 @@ app.get('/settings/offline-schedule', isAuthenticated, (req, res) => {
 });
 
 
+// GET /user/shuttle-schedules - Retrieve all available shuttle schedules for users
+app.get('/user/shuttle-schedules', isUserAuthenticated, (req, res) => {
+    const query = `
+        SELECT 
+            ss.schedule_id, 
+            ss.shuttle_id, 
+            s.shuttle_number,
+            s.capacity,
+            (
+                SELECT COUNT(*) 
+                FROM user_trips ut 
+                WHERE ut.schedule_id = ss.schedule_id AND ut.booking_status IN ('Pending', 'Approved')
+            ) AS booked_seats,
+            ss.route_id, 
+            r.route_name,
+            r.start_location,
+            r.end_location,
+            ss.departure_time, 
+            ss.arrival_time, 
+            ss.days_of_operation
+        FROM 
+            shuttle_schedules ss
+        JOIN 
+            shuttle_info s ON ss.shuttle_id = s.shuttle_id
+        JOIN 
+            route_info r ON ss.route_id = r.route_id
+        WHERE 
+            s.current_status = 'Active'
+        ORDER BY 
+            ss.departure_time ASC
+    `;
+    conn.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching shuttle schedules:', err);
+            return res.status(500).json({ error: 'Failed to retrieve shuttle schedules' });
+        }
+        res.status(200).json({ shuttleSchedules: results });
+    });
+});
 
+// GET /user/bookings - Retrieve all bookings for the logged-in user
+app.get('/user/bookings', isUserAuthenticated, (req, res) => {
+    const userId = req.session.user.user_id;
+    const query = `
+        SELECT 
+            ut.booking_id,
+            ut.schedule_id,
+            ss.shuttle_id,
+            s.shuttle_number,
+            ss.route_id,
+            r.route_name,
+            r.start_location,
+            r.end_location,
+            ss.departure_time,
+            ss.arrival_time,
+            ut.booking_status,
+            ut.booking_date,
+            ut.number_of_passengers,
+            ut.created_at,
+            ut.updated_at
+        FROM 
+            user_trips ut
+        JOIN 
+            shuttle_schedules ss ON ut.schedule_id = ss.schedule_id
+        JOIN 
+            shuttle_info s ON ss.shuttle_id = s.shuttle_id
+        JOIN 
+            route_info r ON ss.route_id = r.route_id
+        WHERE 
+            ut.user_id = ?
+        ORDER BY 
+            ss.departure_time ASC
+    `;
+    conn.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Error fetching user bookings:', err);
+            return res.status(500).json({ error: 'Failed to retrieve bookings' });
+        }
+        res.status(200).json({ bookings: results });
+    });
+});
+
+
+// POST /user/bookings - Create a new booking for the logged-in user
+app.post('/user/bookings', isUserAuthenticated, (req, res) => {
+    const userId = req.session.user.user_id;
+    const { schedule_id, number_of_passengers } = req.body;
+
+    // Validate input
+    if (!schedule_id || !number_of_passengers) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    if (number_of_passengers <= 0) {
+        return res.status(400).json({ error: 'Number of passengers must be at least 1' });
+    }
+
+    // Check if the schedule exists and has available seats
+    const scheduleQuery = `
+        SELECT 
+            ss.schedule_id,
+            ss.shuttle_id,
+            s.capacity,
+            (
+                SELECT COUNT(*) 
+                FROM user_trips ut 
+                WHERE ut.schedule_id = ss.schedule_id AND ut.booking_status IN ('Pending', 'Approved')
+            ) AS booked_seats
+        FROM 
+            shuttle_schedules ss
+        JOIN 
+            shuttle_info s ON ss.shuttle_id = s.shuttle_id
+        WHERE 
+            ss.schedule_id = ?
+    `;
+    conn.query(scheduleQuery, [schedule_id], (err, scheduleResults) => {
+        if (err) {
+            console.error('Error fetching shuttle schedule:', err);
+            return res.status(500).json({ error: 'Failed to verify shuttle schedule' });
+        }
+
+        if (scheduleResults.length === 0) {
+            return res.status(404).json({ error: 'Shuttle schedule not found' });
+        }
+
+        const schedule = scheduleResults[0];
+        const availableSeats = schedule.capacity - schedule.booked_seats;
+
+        if (availableSeats < number_of_passengers) {
+            return res.status(400).json({ error: 'Not enough available seats' });
+        }
+
+        // Insert the booking
+        const insertQuery = `
+            INSERT INTO user_trips 
+            (user_id, schedule_id, booking_status, booking_date, number_of_passengers) 
+            VALUES (?, ?, 'Pending', CURDATE(), ?)
+        `;
+        conn.query(insertQuery, [userId, schedule_id, number_of_passengers], (err, insertResult) => {
+            if (err) {
+                console.error('Error creating booking:', err);
+                return res.status(500).json({ error: 'Failed to create booking' });
+            }
+
+            res.status(201).json({ message: 'Booking created successfully!', bookingId: insertResult.insertId });
+        });
+    });
+});
+
+// DELETE /user/bookings/:id - Cancel a booking (Users can cancel if status is Pending or Approved)
+app.delete('/user/bookings/:id', isUserAuthenticated, (req, res) => {
+    const userId = req.session.user.user_id;
+    const bookingId = req.params.id;
+
+    // Check if the booking exists and belongs to the user
+    const checkQuery = `
+        SELECT 
+            booking_status 
+        FROM 
+            user_trips 
+        WHERE 
+            booking_id = ? AND user_id = ?
+    `;
+    conn.query(checkQuery, [bookingId, userId], (err, results) => {
+        if (err) {
+            console.error('Error fetching booking:', err);
+            return res.status(500).json({ error: 'Failed to retrieve booking' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+
+        const bookingStatus = results[0].booking_status;
+        if (!['Pending', 'Approved'].includes(bookingStatus)) {
+            return res.status(400).json({ error: 'Only Pending or Approved bookings can be cancelled' });
+        }
+
+        // Update the booking status to 'Cancelled'
+        const updateQuery = `
+            UPDATE 
+                user_trips 
+            SET 
+                booking_status = 'Cancelled', updated_at = NOW() 
+            WHERE 
+                booking_id = ?
+        `;
+        conn.query(updateQuery, [bookingId], (err, updateResult) => {
+            if (err) {
+                console.error('Error cancelling booking:', err);
+                return res.status(500).json({ error: 'Failed to cancel booking' });
+            }
+
+            res.status(200).json({ message: 'Booking cancelled successfully!' });
+        });
+    });
+});
 
 
 // Sample route to check server
