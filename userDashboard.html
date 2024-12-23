@@ -398,12 +398,81 @@
     </div>
 </div>
 
+<script>
 
+    // Initialize the map with markers
+    let map;
+    let markers = [];
+
+    function initMap() {
+        const centerMap = { lat: 23.8158287, lng: 90.428023 };
+        const mapOptions = {
+            center: centerMap,
+            zoom: 16,
+            disableDefaultUI: true,
+        };
+
+        map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
+
+        // Add bus markers to the map
+        markers = markersData.map(markerData => {
+            return new google.maps.Marker({
+                position: { lat: markerData.latitude, lng: markerData.longitude },
+                map: map,
+                title: `Bus: ${markerData.shuttleID} - Route: ${markerData.routeNo} - Destination: ${markerData.destination}`,
+                icon: {
+                    url: "https://freesvg.org/img/Bus-Icon.png",
+                    scaledSize: new google.maps.Size(35, 32),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(16, 16)
+                }
+            });
+        });
+    }
+
+    // Marker data for shuttles
+    const markersData = [
+        {
+            shuttleID: 'S001',
+            routeNo: '5',
+            latitude: 23.819019,
+            longitude: 90.429707,
+            destination: 'IUB'
+        },
+        {
+            shuttleID: 'S002',
+            routeNo: '1',
+            latitude: 23.816817,
+            longitude: 90.435492,
+            destination: 'Badda'
+        },
+        {
+            shuttleID: 'S003',
+            routeNo: '2',
+            latitude: 23.814666,
+            longitude: 90.421198,
+            destination: 'Mirpur'
+        },
+        {
+            shuttleID: 'S004',
+            routeNo: '5',
+            latitude: 23.8158287,
+            longitude: 90.428023,
+            destination: 'Mohakhali'
+        }
+    ];
+
+    // Initialize map
+    initMap();
+
+</script>
 <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-NqajIvj_EVijypCm-4UVztEhWk135xI&callback=initMap"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
+        console.log('Document is ready.');
+
         // Initialize the dashboard by fetching data
         fetchAvailableSchedules();
         fetchUserBookings();
@@ -411,26 +480,27 @@
         // Handle sidebar toggle
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar').toggleClass('active');
+            console.log('Sidebar toggle clicked.');
         });
-
-        // Initialize Google Map
-        initMap();
 
         // Handle Booking Form Submission
         $('#bookingForm').on('submit', function(e) {
             e.preventDefault();
+            console.log('Booking form submitted.');
             submitBookingForm();
         });
 
         // Handle Feedback Form Submission
-        $('#feedbackModal form').on('submit', function(e) {
+        $('#feedbackForm').on('submit', function(e) {
             e.preventDefault();
+            console.log('Feedback form submitted.');
             submitFeedbackForm();
         });
 
         // Handle Logout
         $('#logoutBtn').on('click', function(e) {
             e.preventDefault();
+            console.log('Logout button clicked.');
             logoutUser();
         });
     });
@@ -444,6 +514,7 @@
                 withCredentials: true
             },
             success: function(response) {
+                console.log('Fetched shuttle schedules:', response.shuttleSchedules);
                 populateAvailableSchedules(response.shuttleSchedules);
             },
             error: function(xhr) {
@@ -457,6 +528,11 @@
     function populateAvailableSchedules(schedules) {
         const tbody = $('#availableSchedulesBody');
         tbody.empty(); // Clear existing data
+
+        if (schedules.length === 0) {
+            tbody.append('<tr><td colspan="7" class="text-center">No available schedules at the moment.</td></tr>');
+            return;
+        }
 
         schedules.forEach(schedule => {
             const days = schedule.days_of_operation.split(',').join(', ');
@@ -503,6 +579,8 @@
             const arrivalTime = $(this).data('arrival-time');
             const days = $(this).data('days').split(',').join(', ');
 
+            console.log(`Book Now clicked for Schedule ID: ${scheduleId}`);
+
             // Populate the booking modal with schedule details
             $('#modalScheduleId').val(scheduleId);
             $('#modalShuttleId').val(shuttleId);
@@ -513,21 +591,8 @@
 
             // Show the booking modal
             $('#bookingModal').modal('show');
+            console.log('Booking modal displayed.');
         });
-    }
-
-    // Function to determine availability status based on shuttle capacity and bookings
-    function getAvailabilityStatus(schedule) {
-        // Assuming capacity and booked seats are included in the schedule object
-        // If not, you may need to modify the backend to include these details
-        const availableSeats = schedule.capacity - schedule.booked_seats;
-        if (availableSeats > 10) {
-            return '<span class="badge bg-success">Available</span>';
-        } else if (availableSeats > 0) {
-            return '<span class="badge bg-warning">Few Seats</span>';
-        } else {
-            return '<span class="badge bg-danger">Full</span>';
-        }
     }
 
     // Function to format time from HH:MM:SS to HH:MM AM/PM
@@ -547,7 +612,7 @@
         return `${hourInt}:${minute} ${period}`;
     }
 
-    // Similarly, update other AJAX calls to include credentials
+    // Function to fetch user bookings
     function fetchUserBookings() {
         $.ajax({
             url: 'http://localhost:3000/user/bookings', // Ensure full URL is used
@@ -556,6 +621,7 @@
                 withCredentials: true
             },
             success: function(response) {
+                console.log('Fetched user bookings:', response.bookings);
                 populateUserBookings(response.bookings);
             },
             error: function(xhr) {
@@ -569,6 +635,11 @@
     function populateUserBookings(bookings) {
         const tbody = $('#upcomingRidesBody');
         tbody.empty(); // Clear existing data
+
+        if (bookings.length === 0) {
+            tbody.append('<tr><td colspan="7" class="text-center">No upcoming rides.</td></tr>');
+            return;
+        }
 
         bookings.forEach(booking => {
             const statusBadge = getBookingStatusBadge(booking.booking_status);
@@ -593,6 +664,7 @@
         // Attach event listeners to the new Cancel buttons
         $('.cancel-booking-btn').on('click', function() {
             const bookingId = $(this).data('booking-id');
+            console.log(`Cancel button clicked for Booking ID: ${bookingId}`);
             cancelBooking(bookingId);
         });
     }
@@ -634,13 +706,19 @@
             number_of_passengers: numberOfPassengers
         };
 
+        console.log('Booking Data:', bookingData);
+
         // Send the booking request
         $.ajax({
-            url: '/user/bookings',
+            url: 'http://localhost:3000/user/bookings', // Ensure full URL is used
             method: 'POST',
             contentType: 'application/json',
+            xhrFields: {
+                withCredentials: true
+            },
             data: JSON.stringify(bookingData),
             success: function(response) {
+                console.log('Booking success:', response);
                 alert(response.message);
                 $('#bookingModal').modal('hide');
                 // Refresh the bookings and available schedules
@@ -660,10 +738,16 @@
             return;
         }
 
+        console.log(`Cancelling Booking ID: ${bookingId}`);
+
         $.ajax({
-            url: `/user/bookings/${bookingId}`,
+            url: `http://localhost:3000/user/bookings/${bookingId}`, // Ensure full URL is used
             method: 'DELETE',
+            xhrFields: {
+                withCredentials: true
+            },
             success: function(response) {
+                console.log('Booking cancellation success:', response);
                 alert(response.message);
                 // Refresh the bookings and available schedules
                 fetchUserBookings();
@@ -691,12 +775,18 @@
             message: feedbackMessage
         };
 
+        console.log('Feedback Data:', feedbackData);
+
         $.ajax({
-            url: '/user/feedback', // Ensure this endpoint exists on the backend
+            url: 'http://localhost:3000/user/feedback', // Ensure this endpoint exists on the backend
             method: 'POST',
             contentType: 'application/json',
+            xhrFields: {
+                withCredentials: true
+            },
             data: JSON.stringify(feedbackData),
             success: function(response) {
+                console.log('Feedback submission success:', response);
                 alert('Feedback submitted successfully!');
                 $('#feedbackModal').modal('hide');
                 // Optionally, refresh the feedback table
