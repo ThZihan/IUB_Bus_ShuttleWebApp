@@ -1,0 +1,2500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IUB Smart Shuttle - Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts (Reused) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons (Reused) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Existing Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- Admin Dashboard Specific CSS -->
+    <link rel="stylesheet" href="css/adminDashboard.css">
+</head>
+<body>
+
+<div id="home" class="dashboard-container">
+
+    <!-- Sidebar -->
+    <nav id="sidebar" class="active">
+        <div class="sidebar-header">
+            <i class="fas fa-bus-alt fa-2x"></i>
+            <span style="display: none; " id="iconText">IUB Smart Bus Shuttle</span>
+        </div>
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="#home">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#userManagement" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#shuttleManagement" class="nav-link">
+                    <i class="fas fa-bus"></i>
+                    <span>Shuttle Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#driverManagement" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Driver Management</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#bookingManagement" class="nav-link">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Booking Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="#manageSchedules">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Manage Schedules</span>
+                </a>
+            </li>
+            <li>
+                <a href="#manageFeedback">
+                    <i class="fas fa-comments"></i>
+                    <span>Manage Feedback</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#reports" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li>
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand-lg navbar-fixed-top">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="d-flex align-items-center ms-auto">
+                    <!-- Clock -->
+                    <div class="clock me-3" id="realtime-clock"></div>
+                    <!-- Notifications -->
+                    <div class="dropdown notifications">
+                        <button class="btn position-relative" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">New user registered</a></li>
+                            <li><a class="dropdown-item" href="#">Shuttle schedule updated</a></li>
+                            <li><a class="dropdown-item" href="#">System maintenance scheduled</a></li>
+                        </ul>
+                    </div>
+                    <!-- User Profile -->
+                    <div class="dropdown ms-3">
+                        <button class="btn d-flex align-items-center" type="button" data-bs-toggle="dropdown">
+                            <img id="userPicture" src="" class="rounded-circle me-2" alt="Profile">
+                            <span id="userFullName">User</span> <!-- Updated dynamically -->
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a href="profile.html" class="dropdown-item">Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Welcome to IUB Smart Shuttle Dashboard</h1>
+                <p>Your shuttle schedules and bookings Assistant.</p>
+            </div>
+        </div>
+        <!-- Dashboard Content -->
+        <div class="container-fluid dashboard-content">
+            <!-- Quick Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Total Users</h6>
+                            <h3 id="total-users">150</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Active Shuttles</h6>
+                            <h3 id="active-shuttles">8</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-bus"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Pending Bookings</h6>
+                            <h3 id="pending-bookings">25</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-card-info">
+                            <h6>Reports Generated</h6>
+                            <h3 id="reports-generated">12</h3>
+                        </div>
+                        <div class="stat-card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Booking Management Section -->
+            <section id="manageBookings" class="py-4">
+                <h2 class="section-title">Manage Bookings</h2>
+
+                <!-- Booking Table -->
+                <div class="table-responsive">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">All Bookings</h5>
+                    </div>
+                    <div class="management-table-container">
+                        <table class="table table-hover table-striped" id="bookingsTable">
+                        <thead class="bg-gradient-secondary text-white">
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>User Name</th>
+                            <th>Shuttle Number</th>
+                            <th>Route</th>
+                            <th>Departure Time</th>
+                            <th>Arrival Time</th>
+                            <th>Booking Status</th>
+                            <th>Booking Date</th>
+                            <th>Passengers</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Dynamic Booking Rows Will Be Injected Here -->
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+
+                <!-- Action Modals -->
+
+                <!-- Approve Booking Modal -->
+                <div class="modal fade" id="approveBookingModal" tabindex="-1" aria-labelledby="approveBookingModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="approveBookingForm">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="approveBookingModalLabel">Approve Booking</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to approve this booking?</p>
+                                    <input type="hidden" id="approveBookingId" name="booking_id">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-success">Approve</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reject Booking Modal -->
+                <div class="modal fade" id="rejectBookingModal" tabindex="-1" aria-labelledby="rejectBookingModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="rejectBookingForm">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="rejectBookingModalLabel">Reject Booking</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to reject this booking?</p>
+                                    <input type="hidden" id="rejectBookingId" name="booking_id">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cancel Booking Modal -->
+                <div class="modal fade" id="cancelBookingModal" tabindex="-1" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="cancelBookingForm">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelBookingModalLabel">Cancel Booking</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to cancel this booking?</p>
+                                    <input type="hidden" id="cancelBookingId" name="booking_id">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-warning">Cancel Booking</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Booking Modal -->
+                <div class="modal fade" id="deleteBookingModal" tabindex="-1" aria-labelledby="deleteBookingModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="deleteBookingForm">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteBookingModalLabel">Delete Booking</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this booking? This action cannot be undone.</p>
+                                    <input type="hidden" id="deleteBookingId" name="booking_id">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Management Section -->
+            <section id="userManagement" class="mb-5">
+                <h2 class="section-title">User Management</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Manage Users</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="management-table-container">
+                            <table class="table table-hover table-striped" id="usersTable">
+                                <thead class="bg-gradient-secondary text-white">
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Designation</th>
+                                <th>Phone Number</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Dynamic User Rows Will Be Injected Here -->
+                            </tbody>
+                        </table>
+                        </div>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#registerUserModal"><i class="fas fa-user-plus"></i> Add New User</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Edit User Modal -->
+            <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-secondary text-white">
+                            <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="editUserIdInput" class="form-label">User ID</label>
+                                    <input type="text" class="form-control" id="editUserIdInput" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserNameInput" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="editUserNameInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserEmailInput" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="editUserEmailInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserDesignationInput" class="form-label">Designation</label>
+                                    <select class="form-control" id="editUserDesignationInput" required>
+                                        <option value="">Select Designation</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Student">Student</option>
+                                        <option value="Faculty">Faculty</option>
+                                        <option value="Staff">Staff</option>
+                                        <option value="Moderator">Moderator</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserGenderInput" class="form-label">Gender</label>
+                                    <select class="form-control" id="editUserGenderInput">
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserPhoneInput" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="editUserPhoneInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserStatusInput" class="form-label">Status</label>
+                                    <select class="form-control" id="editUserStatusInput" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Suspended">Suspended</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">NFC Status</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="nfcOptionEdit" id="editNfcAssigned" value="assigned">
+                                        <label class="form-check-label" for="editNfcAssigned">
+                                            RFID Already Registered
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="nfcOptionEdit" id="editNfcAssign" value="assign">
+                                        <label class="form-check-label" for="editNfcAssign">
+                                            Register RFID
+                                        </label>
+                                    </div>
+                                    <div class="text-center mt-3" id="editNfcGif" style="display: none;">
+                                        <img src="images/place_nfc.gif" alt="Place NFC Card" class="img-fluid">
+                                    </div>
+                                    <div id="editNfcCodeInput" class="mt-3" style="display: none;">
+                                        <label for="editUserRFIDInput" class="form-label">RFID Code</label>
+                                        <input type="text" class="form-control" id="editUserRFIDInput" placeholder="Enter RFID Code">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editUserPasswordInput" class="form-label">Password (Leave blank to keep unchanged)</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="editUserPasswordInput" placeholder="Enter new password if changing">
+                                        <button class="btn btn-outline-secondary" type="button" id="toggleEditPassword">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Register User Modal -->
+            <div id="registerUserModal" class="modal fade" tabindex="-1" aria-labelledby="registerUserModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="registerUserModalLabel">Create New User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="registration-form">
+                                <div class="form-group mb-3">
+                                    <label for="studentId" class="form-label">User ID</label>
+                                    <input type="text" class="form-control" id="studentId" placeholder="Enter User ID" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" placeholder="Enter full name" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="your.name@iub.edu.bd" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" placeholder="Create a strong password" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="designationSelect" class="form-label">Designation</label>
+                                    <select class="form-control" id="designationSelect" required>
+                                        <option value="">Select Designation</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Student">Student</option>
+                                        <option value="Faculty">Faculty</option>
+                                        <option value="Staff">Staff</option>
+                                        <option value="Moderator">Moderator</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="genderSelect" class="form-label">Gender</label>
+                                    <select class="form-control" id="genderSelect">
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" placeholder="Enter phone number" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">NFC Registration Method</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="nfcOption" id="scanNFC" checked>
+                                        <label class="form-check-label" for="scanNFC">
+                                            Scan NFC Card
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="nfcOption" id="enterNFCCode">
+                                        <label class="form-check-label" for="enterNFCCode">
+                                            Enter NFC Code Manually
+                                        </label>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <img src="images/place_nfc.gif" alt="Place NFC Card" id="nfcGif" class="img-fluid">
+                                    </div>
+                                    <div id="nfcCodeInput" class="mt-3" style="display: none;">
+                                        <label for="nfcCode" class="form-label">NFC Code</label>
+                                        <input type="text" class="form-control" id="nfcCode" placeholder="Enter NFC Code">
+                                    </div>
+                                </div>
+                                <div class="modal__footer mt-4">
+                                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                                    <button id="CreateAccountbtn" type="submit" class="btn btn-primary">Create Account</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shuttle Management Section -->
+            <section id="shuttleManagement" class="mb-5">
+                <h2 class="section-title">Shuttle Management</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Manage Shuttles</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="management-table-container">
+                            <table class="table table-hover table-striped" id="shuttlesTable">
+                                <thead class="bg-gradient-secondary text-white">
+                            <tr>
+                                <th>Shuttle ID</th>
+                                <th>Route</th>
+                                <th>Shuttle Name-Plate Number</th>
+                                <th>Capacity</th>
+                                <th>Status</th>
+                                <th>Driver</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Dynamic Shuttle Rows Will Be Injected Here -->
+                            </tbody>
+                        </table>
+                        </div>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#placeNewShuttleModal">
+                            <i class="fas fa-plus"></i> Add New Shuttle
+                        </button>
+                    </div>
+
+                    <!-- Edit Shuttle Modal -->
+                    <div class="modal fade" id="editShuttleModal" tabindex="-1" aria-labelledby="editShuttleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-gradient-primary text-white">
+                                    <h5 class="modal-title" id="editShuttleModalLabel">Edit Shuttle</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="editShuttleForm">
+                                        <div class="mb-3">
+                                            <label for="editShuttleIdInput" class="form-label">Shuttle ID</label>
+                                            <input type="text" class="form-control" id="editShuttleIdInput" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="editShuttleNumberInput" class="form-label">Shuttle Number</label>
+                                            <input type="text" class="form-control" id="editShuttleNumberInput" placeholder="Enter Shuttle Number" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="editRouteSelect" class="form-label">Route</label>
+                                            <select class="form-control" id="editRouteSelect" required>
+                                                <option value="">Select Route</option>
+                                                <!-- Dynamic Route Options Will Be Injected Here -->
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="editCapacityInput" class="form-label">Capacity</label>
+                                            <input type="number" class="form-control" id="editCapacityInput" min="1" placeholder="Enter Capacity" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="editDriverSelect" class="form-label">Driver</label>
+                                            <select class="form-control" id="editDriverSelect" required>
+                                                <option value="">Select Driver</option>
+                                                <!-- Active Driver Options Populated Dynamically -->
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="editShuttleStatusSelect" class="form-label">Status</label>
+                                            <select class="form-control" id="editShuttleStatusSelect" required>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                                <option value="Under Maintenance">Under Maintenance</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Add Shuttle Modal -->
+                    <div id="placeNewShuttleModal" class="modal fade" tabindex="-1" aria-labelledby="placeNewShuttleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-gradient-primary text-white">
+                                    <h5 class="modal-title" id="placeNewShuttleModalLabel">Add New Shuttle</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="addShuttleForm">
+                                        <div class="mb-3">
+                                            <label for="shuttleIdInput" class="form-label">Shuttle ID</label>
+                                            <input type="text" class="form-control" id="shuttleIdInput" placeholder="Enter Shuttle ID" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="shuttleNumberInput" class="form-label">Shuttle Number</label>
+                                            <input type="text" class="form-control" id="shuttleNumberInput" placeholder="Enter Shuttle Number" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="routeSelect" class="form-label">Route</label>
+                                            <select class="form-control" id="routeSelect" required>
+                                                <option value="">Select Route</option>
+                                                <!-- Dynamic Route Options Will Be Injected Here -->
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="capacityInput" class="form-label">Capacity</label>
+                                            <input type="number" class="form-control" id="capacityInput" min="1" placeholder="Enter Capacity" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="driverSelect" class="form-label">Driver</label>
+                                            <select class="form-control" id="driverSelect" required>
+                                                <option value="">Select Driver</option>
+                                                <!-- Active Driver Options Populated Dynamically -->
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="shuttleStatusSelect" class="form-label">Status</label>
+                                            <select class="form-control" id="shuttleStatusSelect" required>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                                <option value="Under Maintenance">Under Maintenance</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Add Shuttle</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+
+            <!-- Driver Management Section -->
+            <section id="driverManagement" class="mb-5">
+                <h2 class="section-title">Driver Management</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Manage Drivers</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="management-table-container">
+                            <table class="table table-hover table-striped" id="driversTable">
+                                <thead class="bg-gradient-secondary text-white">
+                            <tr>
+                                <th>Driver ID</th>
+                                <th>Name</th>
+                                <th>Phone Number</th>
+                                <th>License Number</th>
+                                <th>Experience (Years)</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Dynamic Driver Rows Will Be Injected Here -->
+                            </tbody>
+                        </table>
+                        </div>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#addDriverModal">
+                            <i class="fas fa-user-plus"></i> Add New Driver
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Add Driver Modal -->
+            <div id="addDriverModal" class="modal fade" tabindex="-1" aria-labelledby="addDriverModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="addDriverModalLabel">Add New Driver</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addDriverForm">
+                                <div class="mb-3">
+                                    <label for="driverIdInput" class="form-label">Driver ID</label>
+                                    <input type="text" class="form-control" id="driverIdInput" placeholder="Enter Driver ID" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverNameInput" class="form-label">Driver Name</label>
+                                    <input type="text" class="form-control" id="driverNameInput" placeholder="Enter Driver Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverPhoneInput" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="driverPhoneInput" placeholder="Enter Phone Number" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverLicenseInput" class="form-label">License Number</label>
+                                    <input type="text" class="form-control" id="driverLicenseInput" placeholder="Enter License Number" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverExperienceInput" class="form-label">Experience (Years)</label>
+                                    <input type="number" class="form-control" id="driverExperienceInput" min="0" placeholder="Enter Years of Experience" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="driverStatusInput" class="form-label">Status</label>
+                                    <select class="form-control" id="driverStatusInput" required>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                     </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Add Driver</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Driver Modal -->
+            <div id="editDriverModal" class="modal fade" tabindex="-1" aria-labelledby="editDriverModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="editDriverModalLabel">Edit Driver</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editDriverForm">
+                                <div class="mb-3">
+                                    <label for="editDriverIdInput" class="form-label">Driver ID</label>
+                                    <input type="text" class="form-control" id="editDriverIdInput" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverNameInput" class="form-label">Driver Name</label>
+                                    <input type="text" class="form-control" id="editDriverNameInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverPhoneInput" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="editDriverPhoneInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverLicenseInput" class="form-label">License Number</label>
+                                    <input type="text" class="form-control" id="editDriverLicenseInput" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverExperienceInput" class="form-label">Experience (Years)</label>
+                                    <input type="number" class="form-control" id="editDriverExperienceInput" min="0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDriverStatusInput" class="form-label">Status</label>
+                                    <select class="form-control" id="editDriverStatusInput" required>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Manage Schedules Section -->
+            <section id="manageSchedules" class="mb-5">
+                <h2 class="section-title">Manage Schedules</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Shuttle Schedules</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="management-table-container">
+                            <table class="table table-hover table-striped" id="shuttleSchedulesTable">
+                                <thead class="bg-gradient-secondary text-white">
+                            <tr>
+                                <th>Schedule ID</th>
+                                <th>Shuttle Number</th>
+                                <th>Route</th>
+                                <th>Days of Operation</th>
+                                <th>Departure Time</th>
+                                <th>Arrival Time</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Dynamic Schedule Rows Will Be Injected Here -->
+                            </tbody>
+                        </table>
+                        </div>
+                        <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#addShuttleScheduleModal">
+                            <i class="fas fa-plus"></i> Add New Schedule
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Add Shuttle Schedule Modal -->
+            <div id="addShuttleScheduleModal" class="modal fade" tabindex="-1" aria-labelledby="addShuttleScheduleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="addShuttleScheduleModalLabel">Add Shuttle Schedule</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addShuttleScheduleForm">
+                                <div class="mb-3">
+                                    <label for="scheduleShuttleSelect" class="form-label">Shuttle</label>
+                                    <select class="form-control" id="scheduleShuttleSelect" required>
+                                        <option value="">Select Shuttle</option>
+                                        <!-- Dynamic Shuttle Options Will Be Injected Here -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="scheduleRouteSelect" class="form-label">Route</label>
+                                    <select class="form-control" id="scheduleRouteSelect" required>
+                                        <option value="">Select Route</option>
+                                        <!-- Dynamic Route Options Will Be Injected Here -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Days of Operation</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Monday" id="dayMonday">
+                                        <label class="form-check-label" for="dayMonday">Monday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Tuesday" id="dayTuesday">
+                                        <label class="form-check-label" for="dayTuesday">Tuesday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Wednesday" id="dayWednesday">
+                                        <label class="form-check-label" for="dayWednesday">Wednesday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Thursday" id="dayThursday">
+                                        <label class="form-check-label" for="dayThursday">Thursday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Friday" id="dayFriday">
+                                        <label class="form-check-label" for="dayFriday">Friday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Saturday" id="daySaturday">
+                                        <label class="form-check-label" for="daySaturday">Saturday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Sunday" id="daySunday">
+                                        <label class="form-check-label" for="daySunday">Sunday</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="departureTimeSelect" class="form-label">Departure Time</label>
+                                    <select class="form-control" id="departureTimeSelect" required>
+                                        <option value="">Select Departure Time</option>
+                                        <!-- Dynamic Time Options Will Be Injected Here -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="arrivalTimeSelect" class="form-label">Arrival Time</label>
+                                    <select class="form-control" id="arrivalTimeSelect" required>
+                                        <option value="">Select Arrival Time</option>
+                                        <!-- Dynamic Time Options Will Be Injected Here -->
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Add Schedule</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Edit Shuttle Schedule Modal -->
+            <div id="editShuttleScheduleModal" class="modal fade" tabindex="-1" aria-labelledby="editShuttleScheduleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-gradient-primary text-white">
+                            <h5 class="modal-title" id="editShuttleScheduleModalLabel">Edit Shuttle Schedule</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editShuttleScheduleForm">
+                                <input type="hidden" id="editScheduleId">
+                                <div class="mb-3">
+                                    <label for="editScheduleShuttleSelect" class="form-label">Shuttle</label>
+                                    <select class="form-control" id="editScheduleShuttleSelect" required>
+                                        <option value="">Select Shuttle</option>
+                                        <!-- Dynamic Shuttle Options Will Be Injected Here -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editScheduleRouteSelect" class="form-label">Route</label>
+                                    <select class="form-control" id="editScheduleRouteSelect" required>
+                                        <option value="">Select Route</option>
+                                        <!-- Dynamic Route Options Will Be Injected Here -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Days of Operation</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Monday" id="editDayMonday">
+                                        <label class="form-check-label" for="editDayMonday">Monday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Tuesday" id="editDayTuesday">
+                                        <label class="form-check-label" for="editDayTuesday">Tuesday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Wednesday" id="editDayWednesday">
+                                        <label class="form-check-label" for="editDayWednesday">Wednesday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Thursday" id="editDayThursday">
+                                        <label class="form-check-label" for="editDayThursday">Thursday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Friday" id="editDayFriday">
+                                        <label class="form-check-label" for="editDayFriday">Friday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Saturday" id="editDaySaturday">
+                                        <label class="form-check-label" for="editDaySaturday">Saturday</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Sunday" id="editDaySunday">
+                                        <label class="form-check-label" for="editDaySunday">Sunday</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDepartureTimeSelect" class="form-label">Departure Time</label>
+                                    <select class="form-control" id="editDepartureTimeSelect" required>
+                                        <option value="">Select Departure Time</option>
+                                        <!-- Dynamic Time Options Will Be Injected Here -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editArrivalTimeSelect" class="form-label">Arrival Time</label>
+                                    <select class="form-control" id="editArrivalTimeSelect" required>
+                                        <option value="">Select Arrival Time</option>
+                                        <!-- Dynamic Time Options Will Be Injected Here -->
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <section id="manageFeedback" class="py-4">
+                <h2 class="section-title">Manage Feedback & Complaints</h2>
+
+                <!-- Feedback Table -->
+                <div class="table-responsive">
+
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">All Feedback & Complaints</h5>
+                    </div>
+                    <div class="management-table-container">
+                        <table class="table table-hover table-striped" id="feedbackTable">
+                            <thead class="bg-gradient-secondary text-white">
+                        <tr>
+                            <th>Date</th>
+                            <th>User ID</th>
+                            <th>Type</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>2024-11-14</td>
+                            <td>U001</td>
+                            <td>Complaint</td>
+                            <td>Shuttle S002 arrived late.</td>
+                            <td><span class="badge bg-warning">Pending</span></td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Resolve</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2024-11-10</td>
+                            <td>U002</td>
+                            <td>Feedback</td>
+                            <td>Excellent service on Shuttle S001!</td>
+                            <td><span class="badge bg-success">Resolved</span></td>
+                            <td>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="mb-5">
+                <h2 class="section-title">Reports</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Generate Reports</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card report-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">User Activity</h5>
+                                        <p class="card-text">View and analyze user engagement and activity within the shuttle system.</p>
+                                        <a href="userActivityReport.html" class="btn btn-outline-primary"><i class="fas fa-chart-pie"></i> View Report</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card report-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Shuttle Performance</h5>
+                                        <p class="card-text">Assess shuttle utilization, punctuality, and overall performance metrics.</p>
+                                        <a href="shuttlePerformance.html" class="btn btn-outline-primary"><i class="fas fa-chart-bar"></i> View Report</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+        </div>
+    </div>
+</div>
+<!-- Moment.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+<!-- Bootstrap JS and jQuery (Reused) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Existing Scripts -->
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+    // dashboard.js
+    $(document).ready(function() {
+        const apiBaseUrl = 'http://localhost:3000'; // Update if different
+
+        // Function to fetch and display users
+        function loadUsers() {
+            $.ajax({
+                url: `${apiBaseUrl}/users`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const users = response.users;
+                    const tbody = $('#usersTable tbody');
+                    tbody.empty(); // Clear existing rows
+
+                    users.forEach(user => {
+                        const statusBadge = getStatusBadge(user.account_status);
+                        const row = `
+                        <tr>
+                            <td>${user.user_id}</td>
+                            <td>${user.full_name}</td>
+                            <td>${user.iub_email}</td>
+                            <td>${user.designation}</td>
+                            <td>${user.phone_number}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary edit-user-btn" data-user-id="${user.user_id}" title="Edit User">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-user-btn" data-user-id="${user.user_id}" title="Delete User">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        alert('Unauthorized access. Please log in as an admin.');
+                        window.location.href = 'index.html'; // Redirect to login
+                    } else {
+                        alert('Failed to fetch users.');
+                    }
+                }
+            });
+        }
+
+        // Function to get status badge HTML
+        function getStatusBadge(status) {
+            let badgeClass = 'bg-secondary';
+            switch(status) {
+                case 'Active':
+                    badgeClass = 'bg-success';
+                    break;
+                case 'Inactive':
+                    badgeClass = 'bg-secondary';
+                    break;
+                case 'Suspended':
+                    badgeClass = 'bg-danger';
+                    break;
+                case 'Pending':
+                    badgeClass = 'bg-warning';
+                    break;
+                default:
+                    badgeClass = 'bg-primary';
+            }
+            return `<span class="badge ${badgeClass}">${status}</span>`;
+        }
+
+        // Load users on page load
+        loadUsers();
+
+        // Handle Add New User Form Submission
+        $('#registerUserModal form').on('submit', function(e) {
+            e.preventDefault();
+
+            const userData = {
+                user_id: $('#studentId').val().trim(),
+                full_name: $('#fullName').val().trim(),
+                iub_email: $('#email').val().trim(),
+                password: $('#password').val(),
+                designation: $('#designationSelect').val(), // Add a select input for designation
+                phone_number: $('#phone').val().trim(),
+                gender: $('#genderSelect').val(), // Add a select input for gender
+                rfID_code: $('#nfcCode').val().trim() || null,
+                account_status: 'Active' // Default status; can be modified as needed
+            };
+
+            // Validate required fields
+            if (!userData.user_id || !userData.full_name || !userData.iub_email || !userData.password || !userData.designation || !userData.phone_number) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to add a new user
+            $.ajax({
+                url: `${apiBaseUrl}/users`,
+                method: 'POST',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(userData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#registerUserModal').modal('hide');
+                    loadUsers(); // Refresh the user list
+                    $('#registerUserModal form')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to add user.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit User Button Click
+        $(document).on('click', '.edit-user-btn', function() {
+            const userId = $(this).data('user-id');
+
+            // Fetch user details
+            $.ajax({
+                url: `${apiBaseUrl}/users/${userId}`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const user = response.user;
+
+                    // Populate the Edit User Modal fields
+                    $('#editUserIdInput').val(user.user_id);
+                    $('#editUserNameInput').val(user.full_name);
+                    $('#editUserEmailInput').val(user.iub_email);
+                    $('#editUserDesignationInput').val(user.designation);
+                    $('#editUserPhoneInput').val(user.phone_number);
+                    $('#editUserStatusInput').val(user.account_status);
+                    $('#editUserGenderInput').val(user.gender);
+                    $('#editUserRFIDInput').val(user.rfID_code || '');
+
+                    // Show or hide NFC-related fields based on account status
+                    if (user.account_status === 'Pending' || user.rfID_code === null) {
+                        $('#editNfcAssign').prop('checked', true).trigger('change');
+                    } else {
+                        $('#editNfcAssigned').prop('checked', true).trigger('change');
+                    }
+
+                    // Show the modal
+                    $('#editUserModal').modal('show');
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch user details.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit User Form Submission
+        $('#editUserModal form').on('submit', function(e) {
+            e.preventDefault();
+
+            const userId = $('#editUserIdInput').val().trim();
+            const updatedData = {
+                full_name: $('#editUserNameInput').val().trim(),
+                iub_email: $('#editUserEmailInput').val().trim(),
+                designation: $('#editUserDesignationInput').val().trim(),
+                phone_number: $('#editUserPhoneInput').val().trim(),
+                account_status: $('#editUserStatusInput').val().trim(),
+                gender: $('#editUserGenderInput').val().trim(),
+                rfID_code: $('#editUserRFIDInput').val().trim() || null
+            };
+
+            const password = $('#editUserPasswordInput').val();
+            if (password) {
+                updatedData.password = password;
+            }
+
+            // Validate required fields
+            if (!updatedData.full_name || !updatedData.iub_email || !updatedData.designation || !updatedData.phone_number || !updatedData.account_status) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to update the user
+            $.ajax({
+                url: `${apiBaseUrl}/users/${userId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(updatedData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#editUserModal').modal('hide');
+                    loadUsers(); // Refresh the user list
+                    $('#editUserModal form')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to update user.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Delete User Button Click
+        $(document).on('click', '.delete-user-btn', function() {
+            const userId = $(this).data('user-id');
+
+            if (confirm(`Are you sure you want to delete user ${userId}? This action cannot be undone.`)) {
+                // AJAX request to delete the user
+                $.ajax({
+                    url: `${apiBaseUrl}/users/${userId}`,
+                    method: 'DELETE',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        loadUsers(); // Refresh the user list
+                    },
+                    error: function(xhr) {
+                        const error = xhr.responseJSON?.error || 'Failed to delete user.';
+                        alert(error);
+                    }
+                });
+            }
+        });
+
+        // Helper function to initialize Edit User Modal's NFC Options
+        function initializeEditUserModal() {
+            $('input[name="nfcOptionEdit"]').on('change', function () {
+                if ($('#editNfcAssign').is(':checked')) {
+                    $('#editNfcGif').show(); // Show the NFC GIF
+                    $('#editNfcCodeInput').show(); // Show the NFC code input
+                } else {
+                    $('#editNfcGif').hide(); // Hide the NFC GIF
+                    $('#editNfcCodeInput').hide(); // Hide the NFC code input
+                }
+            });
+        }
+
+        // Initialize NFC options in Edit User Modal
+        initializeEditUserModal();
+
+        // Function to reset Add User Modal upon closing
+        $('#registerUserModal').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+            $('#nfcGif').show();
+            $('#nfcCodeInput').hide();
+        });
+
+        // Function to reset Edit User Modal upon closing
+        $('#editUserModal').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+            $('#editNfcGif').hide();
+            $('#editNfcCodeInput').hide();
+        });
+
+
+
+        // Function to fetch and display drivers
+        function loadDrivers() {
+            $.ajax({
+                url: `${apiBaseUrl}/drivers`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const drivers = response.drivers;
+                    const tbody = $('#driversTable tbody');
+                    tbody.empty(); // Clear existing rows
+
+                    drivers.forEach(driver => {
+                        const statusBadge = getDriverStatusBadge(driver.status);
+                        const row = `
+                        <tr>
+                            <td>${driver.driver_id}</td>
+                            <td>${driver.driver_name}</td>
+                            <td>${driver.phone_number}</td>
+                            <td>${driver.license_number}</td>
+                            <td>${driver.experience_years}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary edit-driver-btn" data-driver-id="${driver.driver_id}" title="Edit Driver">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-driver-btn" data-driver-id="${driver.driver_id}" title="Delete Driver">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        alert('Unauthorized access. Please log in as an admin.');
+                        window.location.href = 'index.html'; // Redirect to login
+                    } else {
+                        alert('Failed to fetch drivers.');
+                    }
+                }
+            });
+        }
+
+        // Function to get driver status badge HTML
+        function getDriverStatusBadge(status) {
+            let badgeClass = 'bg-secondary';
+            switch(status) {
+                case 'Active':
+                    badgeClass = 'bg-success';
+                    break;
+                case 'Inactive':
+                    badgeClass = 'bg-secondary';
+                    break;
+                case 'Suspended':
+                    badgeClass = 'bg-danger';
+                    break;
+                default:
+                    badgeClass = 'bg-primary';
+            }
+            return `<span class="badge ${badgeClass}">${status}</span>`;
+        }
+
+        // Load drivers on page load
+        loadDrivers();
+
+        // Handle Add New Driver Form Submission
+        $('#addDriverForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const driverData = {
+                driver_id: $('#driverIdInput').val().trim(),
+                driver_name: $('#driverNameInput').val().trim(),
+                phone_number: $('#driverPhoneInput').val().trim(),
+                license_number: $('#driverLicenseInput').val().trim(),
+                experience_years: parseInt($('#driverExperienceInput').val(), 10),
+                status: $('#driverStatusInput').val()
+            };
+
+            // Validate required fields
+            if (!driverData.driver_id || !driverData.driver_name || !driverData.phone_number || !driverData.license_number || isNaN(driverData.experience_years) || !driverData.status) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to add a new driver
+            $.ajax({
+                url: `${apiBaseUrl}/drivers`,
+                method: 'POST',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(driverData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#addDriverModal').modal('hide');
+                    loadDrivers(); // Refresh the driver list
+                    $('#addDriverForm')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to add driver.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit Driver Button Click
+        $(document).on('click', '.edit-driver-btn', function() {
+            const driverId = $(this).data('driver-id');
+
+            // Fetch driver details
+            $.ajax({
+                url: `${apiBaseUrl}/drivers/${driverId}`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const driver = response.driver;
+
+                    // Populate the Edit Driver Modal fields
+                    $('#editDriverIdInput').val(driver.driver_id);
+                    $('#editDriverNameInput').val(driver.driver_name);
+                    $('#editDriverPhoneInput').val(driver.phone_number);
+                    $('#editDriverLicenseInput').val(driver.license_number);
+                    $('#editDriverExperienceInput').val(driver.experience_years);
+                    $('#editDriverStatusInput').val(driver.status);
+
+                    // Show the modal
+                    $('#editDriverModal').modal('show');
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch driver details.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit Driver Form Submission
+        $('#editDriverForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const driverId = $('#editDriverIdInput').val().trim();
+            const updatedData = {
+                driver_name: $('#editDriverNameInput').val().trim(),
+                phone_number: $('#editDriverPhoneInput').val().trim(),
+                license_number: $('#editDriverLicenseInput').val().trim(),
+                experience_years: parseInt($('#editDriverExperienceInput').val(), 10),
+                status: $('#editDriverStatusInput').val()
+            };
+
+            // Validate required fields
+            if (!updatedData.driver_name || !updatedData.phone_number || !updatedData.license_number || isNaN(updatedData.experience_years) || !updatedData.status) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to update the driver
+            $.ajax({
+                url: `${apiBaseUrl}/drivers/${driverId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(updatedData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#editDriverModal').modal('hide');
+                    loadDrivers(); // Refresh the driver list
+                    $('#editDriverForm')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to update driver.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Delete Driver Button Click
+        $(document).on('click', '.delete-driver-btn', function() {
+            const driverId = $(this).data('driver-id');
+
+            if (confirm(`Are you sure you want to delete driver ${driverId}? This action cannot be undone.`)) {
+                // AJAX request to delete the driver
+                $.ajax({
+                    url: `${apiBaseUrl}/drivers/${driverId}`,
+                    method: 'DELETE',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        loadDrivers(); // Refresh the driver list
+                    },
+                    error: function(xhr) {
+                        const error = xhr.responseJSON?.error || 'Failed to delete driver.';
+                        alert(error);
+                    }
+                });
+            }
+        });
+
+        // Function to fetch routes
+        function fetchRoutes(callback) {
+            $.ajax({
+                url: `${apiBaseUrl}/routes`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const routes = response.routes;
+                    callback(routes);
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch routes.';
+                    alert(error);
+                }
+            });
+        }
+
+        // Function to fetch active drivers
+        function fetchActiveDrivers(callback) {
+            $.ajax({
+                url: `${apiBaseUrl}/drivers?status=Active`, // Fetch only active drivers
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const drivers = response.drivers;
+                    callback(drivers);
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch drivers.';
+                    alert(error);
+                }
+            });
+        }
+
+
+
+// Populate Add Shuttle Modal Comboboxes with Active Drivers
+        $('#placeNewShuttleModal').on('show.bs.modal', function () {
+            fetchRoutes(function(routes) {
+                const routeSelect = $('#routeSelect');
+                routeSelect.empty().append('<option value="">Select Route</option>');
+                routes.forEach(route => {
+                    routeSelect.append(`<option value="${route.route_id}">${route.route_name} (${route.start_location} → ${route.end_location})</option>`);
+                });
+            });
+
+            fetchActiveDrivers(function(drivers) { // Fetch only active drivers
+                const driverSelect = $('#driverSelect');
+                driverSelect.empty().append('<option value="">Select Driver</option>');
+                drivers.forEach(driver => {
+                    driverSelect.append(`<option value="${driver.driver_id}">${driver.driver_name}</option>`);
+                });
+            });
+        });
+
+// Populate Edit Shuttle Modal Comboboxes with Active Drivers
+        $('#editShuttleModal').on('show.bs.modal', function () {
+            fetchRoutes(function(routes) {
+                const routeSelect = $('#editRouteSelect');
+                routeSelect.empty().append('<option value="">Select Route</option>');
+                routes.forEach(route => {
+                    routeSelect.append(`<option value="${route.route_id}">${route.route_name} (${route.start_location} → ${route.end_location})</option>`);
+                });
+            });
+
+            fetchActiveDrivers(function(drivers) { // Fetch only active drivers
+                const driverSelect = $('#editDriverSelect');
+                driverSelect.empty().append('<option value="">Select Driver</option>');
+                drivers.forEach(driver => {
+                    driverSelect.append(`<option value="${driver.driver_id}">${driver.driver_name}</option>`);
+                });
+            });
+        });
+
+
+
+        // Handle Add Shuttle Form Submission
+        $('#addShuttleForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const shuttleData = {
+                shuttle_id: $('#shuttleIdInput').val().trim(),
+                shuttle_number: $('#shuttleNumberInput').val().trim(),
+                capacity: parseInt($('#capacityInput').val(), 10),
+                current_status: $('#shuttleStatusSelect').val(),
+                driver_id: $('#driverSelect').val(),
+                route_id: $('#routeSelect').val()
+            };
+
+            // Validate required fields
+            if (!shuttleData.shuttle_id || !shuttleData.shuttle_number || isNaN(shuttleData.capacity) || !shuttleData.driver_id || !shuttleData.route_id) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to add a new shuttle
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles`,
+                method: 'POST',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(shuttleData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#placeNewShuttleModal').modal('hide');
+                    loadShuttles(); // Refresh the shuttle list
+                    $('#addShuttleForm')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to add shuttle.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Function to load shuttles
+        function loadShuttles() {
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const shuttles = response.shuttles;
+                    const tbody = $('#shuttleManagement table tbody');
+                    tbody.empty(); // Clear existing rows
+
+                    shuttles.forEach(shuttle => {
+                        const statusBadge = getStatusBadge(shuttle.current_status);
+                        const row = `
+                            <tr>
+                                <td>${shuttle.shuttle_id}</td>
+                                <td>${shuttle.route_name}</td>
+                                <td>${shuttle.shuttle_number}</td>
+                                <td>${shuttle.capacity}</td>
+                                <td>${statusBadge}</td>
+                                <td>${shuttle.driver_name}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary edit-shuttle-btn" data-shuttle-id="${shuttle.shuttle_id}" title="Edit Shuttle">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger delete-shuttle-btn" data-shuttle-id="${shuttle.shuttle_id}" title="Delete Shuttle">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        alert('Unauthorized access. Please log in as an admin.');
+                        window.location.href = 'index.html'; // Redirect to login
+                    } else {
+                        alert('Failed to fetch shuttles.');
+                    }
+                }
+            });
+        }
+
+        // Function to get status badge HTML
+        function getStatusBadge(status) {
+            let badgeClass = 'bg-secondary';
+            switch(status) {
+                case 'Active':
+                    badgeClass = 'bg-success';
+                    break;
+                case 'Inactive':
+                    badgeClass = 'bg-secondary';
+                    break;
+                case 'Under Maintenance':
+                    badgeClass = 'bg-warning';
+                    break;
+                default:
+                    badgeClass = 'bg-primary';
+            }
+            return `<span class="badge ${badgeClass}">${status}</span>`;
+        }
+
+        // Load shuttles on page load
+        loadShuttles();
+
+        // Handle Edit Shuttle Button Click
+        $(document).on('click', '.edit-shuttle-btn', function() {
+            const shuttleId = $(this).data('shuttle-id');
+
+            // Fetch shuttle details
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles/${shuttleId}`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const shuttle = response.shuttle;
+
+                    // Populate the Edit Shuttle Modal fields
+                    $('#editShuttleIdInput').val(shuttle.shuttle_id);
+                    $('#editShuttleNumberInput').val(shuttle.shuttle_number);
+                    $('#editCapacityInput').val(shuttle.capacity);
+                    $('#editShuttleStatusSelect').val(shuttle.current_status);
+                    $('#editDriverSelect').val(shuttle.driver_id);
+                    $('#editRouteSelect').val(shuttle.route_id);
+
+                    // Show the modal
+                    $('#editShuttleModal').modal('show');
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch shuttle details.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit Shuttle Form Submission
+        $('#editShuttleForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const shuttleId = $('#editShuttleIdInput').val().trim();
+            const updatedData = {
+                shuttle_number: $('#editShuttleNumberInput').val().trim(),
+                capacity: parseInt($('#editCapacityInput').val(), 10),
+                current_status: $('#editShuttleStatusSelect').val(),
+                driver_id: $('#editDriverSelect').val(),
+                route_id: $('#editRouteSelect').val()
+            };
+
+            // Validate required fields
+            if (!shuttleId || !updatedData.shuttle_number || isNaN(updatedData.capacity) || !updatedData.driver_id || !updatedData.route_id) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // AJAX request to update the shuttle
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles/${shuttleId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(updatedData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#editShuttleModal').modal('hide');
+                    loadShuttles(); // Refresh the shuttle list
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to update shuttle.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Delete Shuttle Button Click
+        $(document).on('click', '.delete-shuttle-btn', function() {
+            const shuttleId = $(this).data('shuttle-id');
+
+            if (confirm(`Are you sure you want to delete shuttle ${shuttleId}? This action cannot be undone.`)) {
+                // AJAX request to delete the shuttle
+                $.ajax({
+                    url: `${apiBaseUrl}/shuttles/${shuttleId}`,
+                    method: 'DELETE',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        loadShuttles(); // Refresh the shuttle list
+                    },
+                    error: function(xhr) {
+                        const error = xhr.responseJSON?.error || 'Failed to delete shuttle.';
+                        alert(error);
+                    }
+                });
+            }
+        });
+
+        // Function to fetch shuttles
+        function fetchShuttles(callback) {
+            $.ajax({
+                url: `${apiBaseUrl}/shuttles`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const shuttles = response.shuttles;
+                    callback(shuttles);
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch shuttles.';
+                    alert(error);
+                }
+            });
+        }
+
+        // Function to fetch routes
+        function fetchRoutes(callback) {
+            $.ajax({
+                url: `${apiBaseUrl}/routes`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const routes = response.routes;
+                    callback(routes);
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to fetch routes.';
+                    alert(error);
+                }
+            });
+        }
+
+        // Function to fetch shuttle schedules
+        function fetchShuttleSchedules() {
+            $.ajax({
+                url: `${apiBaseUrl}/shuttle-schedules`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const schedules = response.shuttleSchedules;
+                    const tbody = $('#shuttleSchedulesTable tbody');
+                    tbody.empty(); // Clear existing rows
+
+                    schedules.forEach(schedule => {
+                        const days = schedule.days_of_operation.split(',').join(', ');
+                        const row = `
+                            <tr>
+                                <td>${schedule.schedule_id}</td>
+                                <td>${schedule.shuttle_number}</td>
+                                <td>${schedule.route_name}</td>
+                                <td>${days}</td>
+                                <td>${formatTime(schedule.departure_time)}</td>
+                                <td>${formatTime(schedule.arrival_time)}</td>
+                                <td>
+                    <button class="btn btn-sm btn-primary edit-schedule-btn"
+        data-schedule-id="${schedule.schedule_id}"
+        data-bs-toggle="modal"
+        data-bs-target="#editShuttleScheduleModal"
+        title="Edit Schedule">
+    <i class="fas fa-edit"></i>
+</button>
+
+
+                                    <button class="btn btn-sm btn-danger delete-schedule-btn" data-schedule-id="${schedule.schedule_id}" title="Delete Schedule">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        alert('Unauthorized access. Please log in as an admin.');
+                        window.location.href = 'index.html'; // Redirect to login
+                    } else {
+                        alert('Failed to fetch shuttle schedules.');
+                    }
+                }
+            });
+        }
+
+        // Helper function to format time from HH:MM to HH:MM AM/PM
+        function formatTime(timeStr) {
+            const [hour, minute] = timeStr.split(':').map(Number);
+            let period = 'AM';
+            let formattedHour = hour;
+
+            if (hour >= 12) {
+                period = 'PM';
+                if (hour > 12) {
+                    formattedHour = hour - 12;
+                }
+            }
+            if (formattedHour === 0) {
+                formattedHour = 12;
+            }
+
+            return `${formattedHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} ${period}`;
+        }
+
+
+        // Populate Shuttle and Route Selects in Add Schedule Modal
+        $('#addShuttleScheduleModal').on('show.bs.modal', function () {
+            fetchShuttles(function(shuttles) {
+                const shuttleSelect = $('#scheduleShuttleSelect');
+                shuttleSelect.empty().append('<option value="">Select Shuttle</option>');
+                shuttles.forEach(shuttle => {
+                    shuttleSelect.append(`<option value="${shuttle.shuttle_id}">${shuttle.shuttle_number}</option>`);
+                });
+            });
+
+            fetchRoutes(function(routes) {
+                const routeSelect = $('#scheduleRouteSelect');
+                routeSelect.empty().append('<option value="">Select Route</option>');
+                routes.forEach(route => {
+                    routeSelect.append(`<option value="${route.route_id}">${route.route_name} (${route.start_location} → ${route.end_location})</option>`);
+                });
+            });
+
+            populateTimeDropdown('#departureTimeSelect');
+            populateTimeDropdown('#arrivalTimeSelect');
+        });
+
+        // Populate Shuttle and Route Selects in Edit Schedule Modal
+        $('#editShuttleScheduleModal').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const scheduleId = button.data('schedule-id');
+
+            if (!scheduleId) {
+                alert('Invalid schedule ID.');
+                return;
+            }
+
+            // Fetch shuttles and routes first
+            fetchShuttles(function(shuttles) {
+                const shuttleSelect = $('#editShuttleScheduleSelect');
+                shuttleSelect.empty().append('<option value="">Select Shuttle</option>');
+                shuttles.forEach(shuttle => {
+                    shuttleSelect.append(`<option value="${shuttle.shuttle_id}">${shuttle.shuttle_number}</option>`);
+                });
+
+                fetchRoutes(function(routes) {
+                    const routeSelect = $('#editScheduleRouteSelect');
+                    routeSelect.empty().append('<option value="">Select Route</option>');
+                    routes.forEach(route => {
+                        routeSelect.append(`<option value="${route.route_id}">${route.route_name} (${route.start_location} → ${route.end_location})</option>`);
+                    });
+
+                    // Now fetch the schedule details
+                    $.ajax({
+                        url: `${apiBaseUrl}/shuttle-schedules/${scheduleId}`,
+                        method: 'GET',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function(response) {
+                            const schedule = response.shuttleSchedule;
+
+                            // Populate form fields
+                            $('#editScheduleId').val(schedule.schedule_id);
+                            $('#editShuttleScheduleSelect').val(schedule.shuttle_id);
+                            $('#editScheduleRouteSelect').val(schedule.route_id);
+
+                            // Trim seconds from time strings
+                            const departureTime = schedule.departure_time.substring(0,5); // 'HH:MM'
+                            const arrivalTime = schedule.arrival_time.substring(0,5); // 'HH:MM'
+
+                            populateTimeDropdown('#editDepartureTimeSelect', departureTime);
+                            populateTimeDropdown('#editArrivalTimeSelect', arrivalTime);
+
+                            // Handle Days of Operation
+                            const days = schedule.days_of_operation.split(',');
+                            // Reset all checkboxes
+                            $('#editShuttleScheduleModal input[type="checkbox"]').prop('checked', false);
+                            days.forEach(day => {
+                                $(`#editDay${day}`).prop('checked', true);
+                            });
+                        },
+                        error: function(xhr) {
+                            const error = xhr.responseJSON?.error || 'Failed to fetch shuttle schedule details.';
+                            alert(error);
+                        }
+                    });
+                });
+            });
+        });
+
+        // Function to populate time dropdowns
+        function populateTimeDropdown(selector, selectedTime = '') {
+            const times = generateHourlyTimes('06:00', '22:00'); // 06:00 AM to 10:00 PM
+            const dropdown = $(selector);
+            dropdown.empty().append('<option value="">Select Time</option>');
+            times.forEach(time => {
+                const formattedTime = formatTime(`${time}:00`);
+                dropdown.append(`<option value="${time}">${formattedTime}</option>`);
+            });
+            if (selectedTime) {
+                dropdown.val(selectedTime);
+            }
+        }
+
+        // Function to generate hourly times between start and end
+        function generateHourlyTimes(start, end) {
+            const times = [];
+            let [startHour, startMinute] = start.split(':').map(Number);
+            const [endHour, endMinute] = end.split(':').map(Number);
+
+            while (startHour < endHour || (startHour === endHour && startMinute <= endMinute)) {
+                const hourStr = startHour.toString().padStart(2, '0');
+                const minuteStr = startMinute.toString().padStart(2, '0');
+                times.push(`${hourStr}:${minuteStr}`);
+                startHour += 1;
+                if (startHour > 23) break;
+            }
+
+            return times;
+        }
+        // Handle Add Shuttle Schedule Form Submission
+        $('#addShuttleScheduleForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const shuttle_id = $('#scheduleShuttleSelect').val();
+            const route_id = $('#scheduleRouteSelect').val();
+            const departure_time = $('#departureTimeSelect').val();
+            const arrival_time = $('#arrivalTimeSelect').val();
+            const days_of_operation = [];
+
+            $('#addShuttleScheduleModal input[type="checkbox"]:checked').each(function() {
+                days_of_operation.push($(this).val());
+            });
+
+            // Validate that at least one day is selected
+            if (days_of_operation.length === 0) {
+                alert('Please select at least one day of operation.');
+                return;
+            }
+
+            // Validate that departure time is before arrival time
+            if (departure_time >= arrival_time) {
+                alert('Departure time must be before arrival time.');
+                return;
+            }
+
+            const scheduleData = {
+                shuttle_id,
+                route_id,
+                departure_time,
+                arrival_time,
+                days_of_operation
+            };
+
+            // AJAX request to add a new shuttle schedule
+            $.ajax({
+                url: `${apiBaseUrl}/shuttle-schedules`,
+                method: 'POST',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(scheduleData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#addShuttleScheduleModal').modal('hide');
+                    fetchShuttleSchedules(); // Refresh the schedule table
+                    $('#addShuttleScheduleForm')[0].reset(); // Reset the form
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to add shuttle schedule.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Edit Shuttle Schedule Form Submission
+        $('#editShuttleScheduleForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const schedule_id = $('#editScheduleId').val();
+            const shuttle_id = $('#editScheduleShuttleSelect').val();
+            const route_id = $('#editScheduleRouteSelect').val();
+            const departure_time = $('#editDepartureTimeSelect').val();
+            const arrival_time = $('#editArrivalTimeSelect').val();
+            const days_of_operation = [];
+
+            $('#editShuttleScheduleModal input[type="checkbox"]:checked').each(function() {
+                days_of_operation.push($(this).val());
+            });
+
+            // Validate that at least one day is selected
+            if (days_of_operation.length === 0) {
+                alert('Please select at least one day of operation.');
+                return;
+            }
+
+            // Validate that departure time is before arrival time
+            if (departure_time >= arrival_time) {
+                alert('Departure time must be before arrival time.');
+                return;
+            }
+
+            const scheduleData = {
+                shuttle_id,
+                route_id,
+                departure_time,
+                arrival_time,
+                days_of_operation
+            };
+
+            // AJAX request to update the shuttle schedule
+            $.ajax({
+                url: `${apiBaseUrl}/shuttle-schedules/${schedule_id}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify(scheduleData),
+                success: function(response) {
+                    alert(response.message);
+                    $('#editShuttleScheduleModal').modal('hide');
+                    fetchShuttleSchedules(); // Refresh the schedule table
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to update shuttle schedule.';
+                    alert(error);
+                }
+            });
+        });
+
+        // Handle Delete Shuttle Schedule Button Click
+        $(document).on('click', '.delete-schedule-btn', function() {
+            const scheduleId = $(this).data('schedule-id');
+
+            if (confirm(`Are you sure you want to delete schedule ID ${scheduleId}? This action cannot be undone.`)) {
+                // AJAX request to delete the shuttle schedule
+                $.ajax({
+                    url: `${apiBaseUrl}/shuttle-schedules/${scheduleId}`,
+                    method: 'DELETE',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        fetchShuttleSchedules(); // Refresh the schedule table
+                    },
+                    error: function(xhr) {
+                        const error = xhr.responseJSON?.error || 'Failed to delete shuttle schedule.';
+                        alert(error);
+                    }
+                });
+            }
+        });
+
+        // Initial Fetch of Shuttle Schedules
+        fetchShuttleSchedules();
+
+        // Populate Shuttles and Routes in Add/Edit Modals on Page Load
+        fetchShuttles(function(shuttles) {
+            const shuttleSelect = $('#scheduleShuttleSelect');
+            shuttleSelect.empty().append('<option value="">Select Shuttle</option>');
+            shuttles.forEach(shuttle => {
+                shuttleSelect.append(`<option value="${shuttle.shuttle_id}">${shuttle.shuttle_number}</option>`);
+            });
+
+            // Also populate shuttles in edit modal if needed
+            const editShuttleSelect = $('#editScheduleShuttleSelect');
+            editShuttleSelect.empty().append('<option value="">Select Shuttle</option>');
+            shuttles.forEach(shuttle => {
+                editShuttleSelect.append(`<option value="${shuttle.shuttle_id}">${shuttle.shuttle_number}</option>`);
+            });
+        });
+
+        fetchRoutes(function(routes) {
+            const routeSelect = $('#scheduleRouteSelect');
+            routeSelect.empty().append('<option value="">Select Route</option>');
+            routes.forEach(route => {
+                routeSelect.append(`<option value="${route.route_id}">${route.route_name} (${route.start_location} → ${route.end_location})</option>`);
+            });
+
+            // Also populate routes in edit modal if needed
+            const editRouteSelect = $('#editScheduleRouteSelect');
+            editRouteSelect.empty().append('<option value="">Select Route</option>');
+            routes.forEach(route => {
+                editRouteSelect.append(`<option value="${route.route_id}">${route.route_name} (${route.start_location} → ${route.end_location})</option>`);
+            });
+        });
+
+        // Populate time dropdowns with options from 06:00 to 22:00
+        function initializeTimeDropdowns() {
+            const departureTimes = generateHourlyTimes("06:00", "22:00");
+            const arrivalTimes = generateHourlyTimes("06:00", "22:00");
+
+            departureTimes.forEach(time => {
+                const formattedTime = formatTime(time);
+                $('#departureTimeSelect').append(`<option value="${time}">${formattedTime}</option>`);
+                $('#editDepartureTimeSelect').append(`<option value="${time}">${formattedTime}</option>`);
+            });
+
+            arrivalTimes.forEach(time => {
+                const formattedTime = formatTime(time);
+                $('#arrivalTimeSelect').append(`<option value="${time}">${formattedTime}</option>`);
+                $('#editArrivalTimeSelect').append(`<option value="${time}">${formattedTime}</option>`);
+            });
+        }
+
+// Call the function to initialize time dropdowns
+        initializeTimeDropdowns();
+
+
+        // Function to load and display bookings
+        function loadBookings() {
+            $.ajax({
+                url: `${apiBaseUrl}/bookings`,
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    const bookings = response.bookings;
+                    const tbody = $('#bookingsTable tbody');
+                    tbody.empty(); // Clear existing rows
+
+                    bookings.forEach(booking => {
+                        const statusBadge = getBookingStatusBadge(booking.booking_status);
+                        const row = `
+                        <tr>
+                            <td>${booking.booking_id}</td>
+                            <td>${booking.user_name}</td>
+                            <td>${booking.shuttle_number}</td>
+                            <td>${booking.route_name}</td>
+                            <td>${formatTime(booking.departure_time)}</td>
+                            <td>${formatTime(booking.arrival_time)}</td>
+                            <td>${statusBadge}</td>
+                            <td>${booking.booking_date}</td>
+                            <td>${booking.number_of_passengers}</td>
+                            <td>
+                                ${getActionButtons(booking.booking_status, booking.booking_id)}
+                            </td>
+                        </tr>
+                    `;
+                        tbody.append(row);
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        showToast('Unauthorized access. Please log in as an admin.', false);
+                        window.location.href = 'index.html'; // Redirect to login
+                    } else {
+                        showToast('Failed to fetch bookings.', false);
+                    }
+                }
+            });
+        }
+
+        // Helper function to get booking status badge HTML
+        function getBookingStatusBadge(status) {
+            let badgeClass = 'bg-secondary';
+            switch(status) {
+                case 'Pending':
+                    badgeClass = 'bg-warning';
+                    break;
+                case 'Approved':
+                    badgeClass = 'bg-success';
+                    break;
+                case 'Rejected':
+                    badgeClass = 'bg-danger';
+                    break;
+                case 'Cancelled':
+                    badgeClass = 'bg-secondary';
+                    break;
+                default:
+                    badgeClass = 'bg-primary';
+            }
+            return `<span class="badge ${badgeClass}">${status}</span>`;
+        }
+
+        // Helper function to get action buttons based on booking status
+        function getActionButtons(status, bookingId) {
+            let actions = '';
+
+            if (status === 'Pending') {
+                actions += `
+                <button class="btn btn-sm btn-success approve-booking-btn" data-booking-id="${bookingId}" title="Approve Booking">
+                    <i class="fas fa-check"></i>
+                </button>
+                <button class="btn btn-sm btn-danger reject-booking-btn" data-booking-id="${bookingId}" title="Reject Booking">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button class="btn btn-sm btn-warning cancel-booking-btn" data-booking-id="${bookingId}" title="Cancel Booking">
+                    <i class="fas fa-ban"></i>
+                </button>
+            `;
+            } else if (status === 'Approved') {
+                actions += `
+                <button class="btn btn-sm btn-danger cancel-booking-btn" data-booking-id="${bookingId}" title="Cancel Booking">
+                    <i class="fas fa-ban"></i>
+                </button>
+            `;
+            } else if (status === 'Rejected' || status === 'Cancelled') {
+                actions += `
+                <button class="btn btn-sm btn-danger delete-booking-btn" data-booking-id="${bookingId}" title="Delete Booking">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            `;
+            }
+
+            return actions;
+        }
+
+        // Function to format time from HH:MM:SS to HH:MM AM/PM
+        function formatTime(timeStr) {
+            const [hour, minute, second] = timeStr.split(':');
+            let period = 'AM';
+            let formattedHour = parseInt(hour, 10);
+
+            if (formattedHour >= 12) {
+                period = 'PM';
+                if (formattedHour > 12) {
+                    formattedHour -= 12;
+                }
+            }
+            if (formattedHour === 0) {
+                formattedHour = 12;
+            }
+
+            return `${formattedHour.toString().padStart(2, '0')}:${minute} ${period}`;
+        }
+
+        // Approve Booking
+        $(document).on('click', '.approve-booking-btn', function() {
+            const bookingId = $(this).data('booking-id');
+            $('#approveBookingId').val(bookingId);
+            $('#approveBookingModal').modal('show');
+        });
+
+        // Reject Booking
+        $(document).on('click', '.reject-booking-btn', function() {
+            const bookingId = $(this).data('booking-id');
+            $('#rejectBookingId').val(bookingId);
+            $('#rejectBookingModal').modal('show');
+        });
+
+        // Cancel Booking
+        $(document).on('click', '.cancel-booking-btn', function() {
+            const bookingId = $(this).data('booking-id');
+            $('#cancelBookingId').val(bookingId);
+            $('#cancelBookingModal').modal('show');
+        });
+
+        // Delete Booking
+        $(document).on('click', '.delete-booking-btn', function() {
+            const bookingId = $(this).data('booking-id');
+            $('#deleteBookingId').val(bookingId);
+            $('#deleteBookingModal').modal('show');
+        });
+
+        // Handle Approve Booking Form Submission
+        $('#approveBookingForm').on('submit', function(e) {
+            e.preventDefault();
+            const bookingId = $('#approveBookingId').val();
+
+            $.ajax({
+                url: `${apiBaseUrl}/bookings/${bookingId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify({ booking_status: 'Approved' }),
+                success: function(response) {
+                    showToast(response.message, true);
+                    $('#approveBookingModal').modal('hide');
+                    loadBookings(); // Refresh bookings table
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to approve booking.';
+                    showToast(error, false);
+                }
+            });
+        });
+
+        // Handle Reject Booking Form Submission
+        $('#rejectBookingForm').on('submit', function(e) {
+            e.preventDefault();
+            const bookingId = $('#rejectBookingId').val();
+
+            $.ajax({
+                url: `${apiBaseUrl}/bookings/${bookingId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify({ booking_status: 'Rejected' }),
+                success: function(response) {
+                    showToast(response.message, true);
+                    $('#rejectBookingModal').modal('hide');
+                    loadBookings(); // Refresh bookings table
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to reject booking.';
+                    showToast(error, false);
+                }
+            });
+        });
+
+        // Handle Cancel Booking Form Submission
+        $('#cancelBookingForm').on('submit', function(e) {
+            e.preventDefault();
+            const bookingId = $('#cancelBookingId').val();
+
+            $.ajax({
+                url: `${apiBaseUrl}/bookings/${bookingId}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify({ booking_status: 'Cancelled' }),
+                success: function(response) {
+                    showToast(response.message, true);
+                    $('#cancelBookingModal').modal('hide');
+                    loadBookings(); // Refresh bookings table
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to cancel booking.';
+                    showToast(error, false);
+                }
+            });
+        });
+
+        // Handle Delete Booking Form Submission
+        $('#deleteBookingForm').on('submit', function(e) {
+            e.preventDefault();
+            const bookingId = $('#deleteBookingId').val();
+
+            $.ajax({
+                url: `${apiBaseUrl}/bookings/${bookingId}`,
+                method: 'DELETE',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    showToast(response.message, true);
+                    $('#deleteBookingModal').modal('hide');
+                    loadBookings(); // Refresh bookings table
+                },
+                error: function(xhr) {
+                    const error = xhr.responseJSON?.error || 'Failed to delete booking.';
+                    showToast(error, false);
+                }
+            });
+        });
+
+        // Initialize Booking Management on Page Load
+        loadBookings();
+
+    });
+
+</script>
+
+</body>
+</html>

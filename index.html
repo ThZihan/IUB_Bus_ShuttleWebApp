@@ -11,22 +11,96 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .hero-image {
+            position: relative; /* Ensure blobs are positioned within this container */
+            z-index: 3; /* Higher z-index to make sure image is on top */
+        }
+
+        .blob-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Ensure blobs stay behind the image */
+        }
+
+        .blob {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 44% 56% 53% 47% / 56% 37% 63% 44%;
+            animation: border-move 15s ease-in-out infinite;
+        }
+
+        .blob-1 {
+            background: linear-gradient(135deg, #394867, #6c7c96); /* Gradient background for a smooth look */
+            filter: blur(3px);
+            z-index: 1; /* Keep blobs behind the hero image */
+            animation: border-move-fluctuate 20s ease-in-out infinite;
+        }
+
+        .blob-2 {
+            background: linear-gradient(135deg, rgba(156, 175, 213, 0.8), #c9c9c9); /* Another gradient */
+            z-index: 1;
+            animation: border-move 15s ease-in-out infinite;
+            width: 90%;
+            height: 90%;
+            top: 5%;
+            left: 5%;
+        }
+
+        /* Keyframe for the main blob animation */
+        @keyframes border-move {
+            0% { border-radius: 44% 56% 53% 47% / 56% 37% 63% 44%; }
+            20% { border-radius: 55% 45% 66% 34% / 60% 53% 47% 40%; }
+            40% { border-radius: 53% 47% 56% 47% / 53% 56% 44% 47%; }
+            60% { border-radius: 60% 40% 50% 50% / 44% 50% 50% 56%; }
+            80% { border-radius: 66% 37% 34% 59% / 70% 39% 61% 30%; }
+            100% { border-radius: 44% 56% 53% 47% / 56% 37% 63% 44%; }
+        }
+
+        /* Keyframe for more fluctuating and wavy animation */
+        @keyframes border-move-fluctuate {
+            0% { border-radius: 35% 65% 55% 45% / 45% 65% 35% 55%; }
+            10% { border-radius: 50% 50% 60% 40% / 60% 50% 40% 50%; }
+            20% { border-radius: 60% 40% 65% 35% / 50% 60% 40% 50%; }
+            30% { border-radius: 45% 55% 40% 60% / 55% 45% 65% 35%; }
+            40% { border-radius: 50% 50% 60% 40% / 40% 65% 35% 60%; }
+            50% { border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%; }
+            60% { border-radius: 45% 55% 35% 65% / 65% 45% 60% 40%; }
+            70% { border-radius: 40% 60% 55% 45% / 50% 40% 65% 35%; }
+            80% { border-radius: 50% 50% 60% 40% / 60% 50% 40% 50%; }
+            90% { border-radius: 55% 45% 65% 35% / 35% 55% 60% 40%; }
+            100% { border-radius: 35% 65% 55% 45% / 45% 65% 35% 55%; }
+        }
+
+        .logo_image {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
 </head>
 <body>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#"><i class="fas fa-bus-alt"></i> IUB Smart Shuttle</a>
+    <div class="container-fluid container">
+        <a class="navbar-brand" href="index.html"><i class="fas fa-bus-alt"></i> IUB Smart Shuttle</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link" href="#achievements">Achievements</a></li>
                 <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
                 <li class="nav-item"><a class="nav-link" href="#overview">System Overview</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
             </ul>
         </div>
     </div>
@@ -34,24 +108,234 @@
 
 <!-- Hero Section -->
 <header class="hero-section d-flex align-items-center">
-    <div class="hero-image">
-        <img src="images/logobg.png" alt="Hero Image" class="img-fluid">
+    <div class="hero-image position-relative">
+        <!-- Blobs integrated into the hero-image div -->
+        <div class="blob-container">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
+        <img src="images/logobg.png" alt="Hero Image" class="img-fluid logo_image">
     </div>
-    <div class="hero-content text-end">
+    <div class="hero-content text-end ms-5">
         <h1>Welcome to IUB Smart Shuttle</h1>
         <p>Track Your Shuttle in Real-Time, Anytime, Anywhere</p>
 
-        <a href="" class="btn btn-primary btn-lg me-2">Sign In</a>
+        <a href="#login-modal" class="btn btn-primary orangebtn btn-lg me-2">Sign In</a>
+        <a href="#register-modal" class="btn btn-outline-light btn-lg">Register Now!</a>
 
-        <a href="" class="btn btn-outline-light btn-lg">Register Now!</a>
+
+        <!-- Login Modal -->
+        <div id="login-modal" class="custom-modal loginModal">
+            <div class="modal__content">
+                <h2 class="modal__title">Login to Your Account</h2>
+                <form class="login-form" id="loginForm">
+                    <div class="form-group mb-3">
+                        <label for="userId" class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="userId" placeholder="Enter your User ID" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+
+                    <a href="#" class="terms-link">Forgot Password?</a>
+
+                    <div class="modal__footer">
+                        <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='#'">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="loginBtn">Submit</button>
+                    </div>
+                </form>
+                <a href="#" class="modal__close" aria-label="Close">×</a>
+            </div>
+        </div>
+
     </div>
+
+    <!-- Registration Form -->
+    <div id="register-modal" class="custom-modal">
+        <div class="modal__content">
+            <h2 class="modal__title">Create Your Account</h2>
+            <form class="registration-form" id="registration-form">
+                <div class="form-group mb-3">
+                    <label for="registerUserId" class="form-label">User ID</label>
+                    <input type="text" class="form-control" id="registerUserId" name="user_id" placeholder="Enter your User ID" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="registerFullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="registerFullName" name="full_name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="registerEmail" class="form-label">IUB Email</label>
+                    <input type="email" class="form-control" id="registerEmail" name="iub_email" placeholder="your.credentials@iub.edu.bd" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="registerPassword" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="registerPassword" name="password" placeholder="Create a strong password" required>
+                        <button class="btn btn-outline-secondary" type="button" id="toggleRegisterPassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="designation" class="form-label">Designation/Identity Type:</label>
+                    <select id="designation" name="designation" class="form-control" required>
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="Student">Student</option>
+                        <option value="Faculty">Faculty</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Moderator">Moderator</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="registerPhone" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="registerPhone" name="phone_number" placeholder="Enter your phone number" required>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="registerTerms" required>
+                    <label class="form-check-label" for="registerTerms">
+                        <span style="color:#a12626;">I agree to the</span>  <a href="terms.html" class="terms-link">Terms & Conditions</a>
+                    </label>
+                </div>
+
+                <div class="modal__footer">
+                    <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='#'">Cancel</button>
+                    <button id="CreateAccountbtn" type="submit" class="btn btn-primary">Create Account</button>
+                </div>
+            </form>
+            <a href="#" class="modal__close" aria-label="Close">×</a>
+        </div>
+    </div>
+
+
 </header>
 
 <!-- About Section -->
-<section id="about" class="py-5">
+<section id="about">
     <div class="container text-center">
         <h2 class="section-title">About the Project</h2>
         <p class="section-description">The IUB Smart Shuttle project aims to provide a seamless transportation experience for IUB students and staff, featuring real-time GPS tracking, booking, and notifications.</p>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="bg-gradient">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Key Features</h2>
+        <div class="row g-4">
+
+            <!-- Real-time GPS Tracking -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Real-time GPS Tracking</h3>
+                    <p>Experience live updates on shuttle locations, accurate ETAs, and route visualizations for seamless travel.</p>
+                </div>
+            </div>
+
+            <!-- Trip Scheduling and Management -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Trip Scheduling <br> & Management</h3>
+                    <p>Plan trips in advance, receive notifications for upcoming schedules, and manage shuttle availability effortlessly.</p>
+                </div>
+            </div>
+
+            <!-- Hotspot Integration -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>Hotspot Integration</h3>
+                    <p>Stay connected with Wi-Fi hotspot availability on every shuttle for enhanced passenger convenience.</p>
+                </div>
+            </div>
+
+            <!-- Passenger Authentication -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3>Passenger Authentication</h3>
+                    <p>Seamless boarding with NFC or RFID-based authentication using employee or student ID cards.</p>
+                </div>
+            </div>
+
+            <!-- Seat Reservation System -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Occupancy Monitoring <br> & Reservation System</h3>
+                    <p>Reserve and select your seat through the app, complete with real-time availability updates.</p>
+                </div>
+            </div>
+            <!-- Route Optimization -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>Route Optimization</h3>
+                    <p>Advanced Algorithm based route optimization for faster and more efficient travel times.</p>
+                </div>
+            </div>
+            <!-- Analytics and Reporting -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Analytics & Reporting</h3>
+                    <p>Gain insights into passenger patterns, optimize routes, and access detailed performance reports for efficient management.</p>
+                </div>
+            </div>
+
+            <!-- Sustainability Features -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Sustainability Features</h3>
+                    <p>Reduce environmental impact with solar-powered tracking devices and eco-friendly operational designs.</p>
+                </div>
+            </div>
+
+            <!-- Security and Data Privacy -->
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Security & Data Privacy</h3>
+                    <p>Ensure secure data transmission with encryption and role-based access to sensitive features.</p>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
     </div>
 </section>
 
@@ -78,48 +362,88 @@
 
 
 
-<!-- Team Section -->
 <section id="team" class="py-5">
     <div class="container text-center">
-        <h2 class="section-title">Meet the Developer Team</h2>
-        <div class="team-grid">
+        <h2 class="section-title">Project Supervision</h2>
+        <!-- Supervisors Row -->
+        <div class="row justify-content-center mb-5 g-4">
+            <!-- Supervisor 1 -->
+            <div class="col-md-4">
+                <div class="team-member supervisor h-100">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROgr1vwldb69_EouT11CX08od2ppJTf_AtiQ&s" alt="Supervisor" class="rounded-circle mb-3">
+                    <h4>Sabrina Alam</h4>
+                    <p class="designation">Project Supervisor</p>
+                    <p>Department of Computer Science & Engineering</p>
+                </div>
+            </div>
+
+            <!-- Supervisor 2 -->
+            <div class="col-md-4">
+                <div class="team-member supervisor h-100">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2IsVmLXNbeoQTlCq9nL_s7yIcBYbUefp-uQ&s" alt="Supervisor" class="rounded-circle mb-3">
+                    <h4>Dr. Mahady Hasan</h4>
+                    <p class="designation">Co-Supervisor</p>
+                    <p>Department of Computer Science & Engineering</p>
+                </div>
+            </div>
+
+            <!-- Supervisor 3 -->
+            <div class="col-md-4">
+                <div class="team-member supervisor h-100">
+                    <img src="images/deap.jpg" alt="Mentor" class="rounded-circle mb-3">
+                    <h4>Shirazim Munir Deap</h4>
+                    <p class="designation">Project Mentor</p>
+                    <p>Department of Computer Science & Engineering</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title mt-5">Development Team</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
             <!-- Member 1 -->
-            <div class="team-member">
-                <a href="https://thzihan.github.io/portfolio">
-                    <img src="images/devimg.jpeg" alt="Team Member" class="rounded-circle mb-3">
-                </a>
-                <a href="http://www.facebook.com/tahfijulhassan.jehan">
-                    <h5>Tahfizul Hasan Zihan</h5>
-                </a>
-                <p>Strategic Team Lead - <a href="https://www.facebook.com/bongomarine1">IUB Bongomarine</a></p>
-                <p>Electronics and Sensor Subsystem Head - <a href="https://www.facebook.com/iubfabsat">IUB Fabsat</a></p>
-                <p>System Engineer - <a href="https://thzihan.github.io/waterQualityMonitor_Dashboard">Recirculating Aquaculture Monitoring System</a></p>
+            <div class="col">
+                <div class="team-member h-100">
+                    <a href="https://thzihan.github.io/portfolio">
+                        <img src="images/devimg.jpeg" alt="Team Member" class="rounded-circle mb-3">
+                    </a>
+                    <a href="http://www.facebook.com/tahfijulhassan.jehan">
+                        <h5>Tahfizul Hasan Zihan</h5>
+                    </a>
+                    <p>Strategic Team Lead - <a href="https://www.facebook.com/bongomarine1">IUB Bongomarine</a></p>
+                    <p>Electronics and Sensor Subsystem Head - <a href="https://www.facebook.com/iubfabsat">IUB Fabsat</a></p>
+                    <p>System Engineer - <a href="https://thzihan.github.io/waterQualityMonitor_Dashboard">Recirculating Aquaculture Monitoring System</a></p>
+                </div>
             </div>
 
             <!-- Member 2 -->
-            <div class="team-member">
-                <img src="images/placeholder.jpg" alt="Team Member" class="rounded-circle mb-3">
-                <h5>Tabriji Islam</h5>
-                <p>Project Manager</p>
+            <div class="col">
+                <div class="team-member h-100">
+                    <img src="images/tukli.jpg" alt="Team Member" class="rounded-circle mb-3">
+                    <h5>Tabriji Islam</h5>
+                    <p>Project Manager</p>
+                </div>
             </div>
 
             <!-- Member 3 -->
-            <div class="team-member">
-                <img src="images/placeholder.jpg" alt="Team Member" class="rounded-circle mb-3">
-                <h5>Umme Salma Khandakar</h5>
-                <p>Documentation</p>
+            <div class="col">
+                <div class="team-member h-100">
+                    <img src="images/salma.jpg" alt="Team Member" class="rounded-circle mb-3">
+                    <h5>Umme Salma Khandakar</h5>
+                    <p>Documentation</p>
+                </div>
             </div>
 
             <!-- Member 4 -->
-            <div class="team-member">
-                <img src="images/placeholder.jpg" alt="Team Member" class="rounded-circle mb-3">
-                <h5>Ishtaq Hossan</h5>
-                <p>Logistics Head</p>
+            <div class="col">
+                <div class="team-member h-100">
+                    <img src="images/isti.jpg" alt="Team Member" class="rounded-circle mb-3">
+                    <h5>Ishtiaq Hossen</h5>
+                    <p>Logistics & Public Relations</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
-
 
 <!-- System Overview Section -->
 <section id="overview" class="bg-light py-5">
@@ -134,8 +458,10 @@
 
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-4">
-    <p>&copy; 2024 IUB Smart Shuttle. All rights reserved.</p>
-    <p><i class="fas fa-envelope"></i> contact@iubshuttle.com</p>
+    <div class="container">
+        <p>&copy; 2024 IUB Smart Shuttle. All rights reserved.</p>
+
+    </div>
 </footer>
 
 <!-- Bootstrap JS and jQuery -->
@@ -145,6 +471,21 @@
 <script>
     // Smooth Scroll for Navigation Links
     $(document).ready(function(){
+        const loginBtn = document.getElementById("loginBtn")
+        loginBtn.addEventListener('click', () => {
+            Notification.requestPermission().then(perm => {
+                if(perm === "granted"){
+                    const notification = new Notification("Example Notification", {
+                        body:"Hello World",
+                        data:{hello: "world"},
+                    })
+                    notification.addEventListener('show', e => {
+                        console.log(e)
+                    })
+                }
+            })
+        })
+
         $('a.nav-link').on('click', function(event){
             if (this.hash !== "") {
                 event.preventDefault();
@@ -156,6 +497,91 @@
                 });
             }
         });
+    });
+
+    document.getElementById('CreateAccountbtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        const userId = document.getElementById('registerUserId').value.trim();
+        const fullName = document.getElementById('registerFullName').value.trim();
+        const email = document.getElementById('registerEmail').value.trim();
+        const password = document.getElementById('registerPassword').value;
+        const designation = document.getElementById('designation').value;
+        const phone = document.getElementById('registerPhone').value.trim();
+
+        const userData = {
+            user_id: userId,
+            full_name: fullName,
+            iub_email: email,
+            password: password,
+            designation: designation,
+            phone_number: phone
+        };
+
+        // Send a POST request to the backend
+        fetch('http://localhost:3000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message); // User created successfully
+                    document.getElementById('registration-form').reset(); // Clear the form
+                    // Optionally, close the modal or redirect the user
+                } else if (data.error) {
+                    alert(data.error); // Show error if validation fails
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+    });
+
+
+
+    // JavaScript to handle login form submission
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const userId = document.getElementById('userId').value;
+        const password = document.getElementById('password').value;
+
+        const loginData = {
+            user_id: userId,
+            password: password
+        };
+
+        // Send login data to the backend for validation
+        fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include', // Include cookies in the request
+            body: JSON.stringify(loginData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Login successful") {
+                    // Redirect based on designation
+                    if (data.designation === "Admin" || data.designation === "Moderator") {
+                        window.location.href = 'adminDashboard.html';
+                    } else {
+                        window.location.href = 'userDashboard.html';
+                    }
+                } else {
+                    alert(data.error || 'Login failed. Please check your credentials.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
     });
 </script>
 </body>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Shuttle - My Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary sticky-top">
+        <div class="container-fluid container-width90">
+            <a class="navbar-brand" href="index.html"><i class="fas fa-bus-alt"></i> IUB Smart Shuttle</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="userDashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="settings.html">Settings</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Profile</a></li>
+                    <li class="nav-item"><a id="logoutBtn" class="nav-link" href="#">Logout</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Content -->
+    <div class="container mt-4">
+        <h2 class="centered-section-title text-center mb-4">My Profile</h2>
+
+        <!-- Profile Details Card -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-gradient-primary text-white">
+                <h5 class="card-title mb-0">Personal Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Full Name:</strong> <span id="displayFullName">Loading...</span></p>
+                <p><strong>Email:</strong> <span id="displayEmail">Loading...</span></p>
+                <p><strong>Phone:</strong> <span id="displayPhone">Loading...</span></p>
+                <p><strong>Designation:</strong> <span id="displayDesignation">Loading...</span></p>
+                <p><strong>Gender:</strong> <span id="displayGender">Loading...</span></p>
+                <p>
+                    To change your preferred Pickup and Drop-Off locations, please visit the
+                    <a href="settings.html" class="btn btn-primary btn-sm"><i class="fas fa-cog me-2"></i>Settings</a>
+                    page.
+                </p>
+                <!-- Add this inside the Profile Details Card -->
+                <div class="text-left mb-4">
+                    <button class="btn btn-secondary mt-2" data-bs-toggle="modal" data-bs-target="#uploadPictureModal">
+                        <i class="fas fa-camera me-2"></i> Change Your Profile Picture
+                    </button>
+                </div>
+
+                <!-- New Modal: Update Profile Picture via URL -->
+                <div class="modal fade" id="uploadPictureModal" tabindex="-1" aria-labelledby="uploadPictureModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-gradient-primary text-white">
+                                <h5 class="modal-title" id="uploadPictureModalLabel">Update Profile Picture</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="updatePictureForm">
+                                    <div class="mb-3">
+                                        <label for="profilePictureURL" class="form-label">Profile Picture URL:</label>
+                                        <input type="url" class="form-control" id="profilePictureURL" placeholder="https://example.com/image.jpg" required>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-2"></i> Update
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <button class="btn orangebtn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        <i class="fas fa-edit me-2"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commute History Section -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-gradient-primary text-white">
+                <h5 class="card-title mb-0">Commute History</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Pickup Stop</th>
+                        <th>Pickup Time</th>
+                        <th>Drop-Off Stop</th>
+                        <th>Drop-Off Time</th>
+                        <th>Duration</th>
+                        <th>Internet Usage</th>
+                    </tr>
+                    </thead>
+                    <tbody id="commuteHistoryBody">
+                    <!-- Dynamic Commute History Rows -->
+                    </tbody>
+                </table>
+                <div class="text-end">
+                    <button class="btn btn-danger mt-3" id="clearHistoryBtn">
+                        <i class="fas fa-trash me-2"></i> Clear History
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-primary text-white">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editFullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="editFullName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="editPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDesignation" class="form-label">Designation</label>
+                            <input type="text" class="form-control" id="editDesignation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGender" class="form-label">Gender</label>
+                            <select class="form-select" id="editGender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4" id="sticky-footer">
+    <div class="container">
+        <p>&copy; 2024 IUB Smart Shuttle. All rights reserved.</p>
+    </div>
+</footer>
+
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Function to handle profile picture URL update
+    function updateProfilePicture(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const profilePictureURL = document.getElementById('profilePictureURL').value.trim();
+
+        if (!profilePictureURL) {
+            alert('Please enter a valid URL.');
+            return;
+        }
+
+        // Simple URL validation
+        const urlPattern = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$/i;
+        if (!urlPattern.test(profilePictureURL)) {
+            alert('Please enter a valid image URL (png, jpg, jpeg, gif, svg).');
+            return;
+        }
+
+        const updatedData = {
+            profile_picture: profilePictureURL
+        };
+
+        // Send the updated profile_picture to the backend
+        fetch('http://localhost:3000/update-profile-picture-url', { // New route
+            method: 'POST',
+            credentials: 'include', // Include cookies in the request
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    // Update the displayed profile picture
+                    document.getElementById('displayProfilePicture').src = data.profile_picture_url + '?t=' + new Date().getTime(); // Cache busting
+                    // Optionally, close the modal
+                    $('#uploadPictureModal').modal('hide');
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating profile picture:', error);
+                alert('An error occurred while updating the profile picture. Please try again.');
+            });
+    }
+
+    // Attach event listener to the update picture form
+    document.getElementById('updatePictureForm').addEventListener('submit', updateProfilePicture);
+
+
+    // Function to fetch user information from the backend
+        function fetchUserInfo() {
+            fetch('http://localhost:3000/user', {
+                method: 'GET',
+                credentials: 'include', // Include cookies in the request
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    if (response.status === 401) {
+                        // If not authenticated, redirect to login
+                        window.location.href = 'index.html';
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.user) {
+                        // Update the user's profile information in the display
+                        document.getElementById('displayFullName').textContent = data.user.full_name;
+                        document.getElementById('displayEmail').textContent = data.user.iub_email;
+                        document.getElementById('displayPhone').textContent = data.user.phone_number;
+                        document.getElementById('displayDesignation').textContent = data.user.designation;
+                        document.getElementById('displayGender').textContent = data.user.gender;
+
+                        // Populate the edit form fields with current data
+                        document.getElementById('editFullName').value = data.user.full_name;
+                        document.getElementById('editEmail').value = data.user.iub_email;
+                        document.getElementById('editPhone').value = data.user.phone_number;
+                        document.getElementById('editDesignation').value = data.user.designation;
+                        document.getElementById('editGender').value = data.user.gender || '';
+
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user info:', error);
+                    alert('An error occurred while fetching user information. Please try again.');
+                    // Optionally, redirect to login page
+                    window.location.href = 'index.html';
+                });
+        }
+
+        // Function to handle profile update
+        function updateProfile(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Gather updated profile data from the form
+            const full_name = document.getElementById('editFullName').value.trim();
+            const iub_email = document.getElementById('editEmail').value.trim();
+            const phone_number = document.getElementById('editPhone').value.trim();
+            const designation = document.getElementById('editDesignation').value.trim();
+            const gender = document.getElementById('editGender').value;
+            const pickup_location = document.getElementById('editPickUpLocation').value;
+            const drop_location = document.getElementById('editDropLocation').value;
+
+            const updatedData = {
+                full_name,
+                iub_email,
+                phone_number,
+                designation,
+                gender,
+                pickup_location,
+                drop_location
+            };
+
+            // Send updated data to the backend
+            fetch('http://localhost:3000/update-profile', {
+                method: 'POST',
+                credentials: 'include', // Include cookies in the request
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        // Update the displayed profile information
+                        document.getElementById('displayFullName').textContent = data.user.full_name;
+                        document.getElementById('displayEmail').textContent = data.user.iub_email;
+                        document.getElementById('displayPhone').textContent = data.user.phone_number;
+                        document.getElementById('displayDesignation').textContent = data.user.designation;
+                        document.getElementById('displayGender').textContent = data.user.gender;
+
+                        // Optionally, close the modal
+                        $('#editProfileModal').modal('hide');
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating profile:', error);
+                    alert('An error occurred while updating your profile. Please try again.');
+                });
+        }
+
+        // Function to handle clearing commute history (Optional)
+        function clearCommuteHistory() {
+            if (confirm('Are you sure you want to clear your commute history? This action cannot be undone.')) {
+                // Implement backend endpoint to clear history if needed
+                // For now, we'll just clear the table body
+                document.getElementById('commuteHistoryBody').innerHTML = '';
+                alert('Commute history cleared.');
+            }
+        }
+
+        // Attach event listeners
+        document.getElementById('editProfileForm').addEventListener('submit', updateProfile);
+        document.getElementById('clearHistoryBtn').addEventListener('click', clearCommuteHistory);
+
+        // Fetch user info when the page loads
+        fetchUserInfo();
+
+    // Function to handle logout
+    function handleLogout() {
+        fetch('http://localhost:3000/logout', {
+            method: 'POST',
+            credentials: 'include', // Include cookies in the request
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Logout successful') {
+                    // Redirect to login page after successful logout
+                    window.location.href = 'index.html';
+                } else {
+                    alert(data.error || 'Failed to log out. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+                alert('An error occurred during logout. Please try again.');
+            });
+    }
+
+    // Attach event listener to the logout button
+    const logoutButton = document.getElementById('logoutBtn');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior
+            // Confirm logout action (optional)
+            if (confirm('Are you sure you want to logout?')) {
+                handleLogout();
+            }
+        });
+    }
+</script>
+</body>
+</html>
